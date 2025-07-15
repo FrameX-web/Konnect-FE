@@ -1,0 +1,4 @@
+/* Navigation button styles */
+.nav-button {
+  @apply text-black font-medium text-sm px-5 py-2.5 bg-white rounded-full shadow-sm hover:shadow-md transition-all duration-300;
+}

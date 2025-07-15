@@ -1,0 +1,290 @@
+// Chatbot.jsx (fully integrated with ElevenLabs)
+import { useState, useEffect } from 'react';
+import OpenAI from "openai";
+import ChatbotUI from './ChatbotUI';
+
+// Emotion detection utilities
+const emotions = {
+  HAPPY: 'happy',
+  SAD: 'sad',
+  ANGRY: 'angry',
+  ANXIOUS: 'anxious',
+  NEUTRAL: 'neutral',
+  EXCITED: 'excited',
+  CONFUSED: 'confused',
+};
+
+const emotionKeywords = {
+  [emotions.HAPPY]: ['happy', 'joy', 'delighted', 'glad', 'pleased', 'thrilled', '😊', '😄', '🙂', 'excellent', 'amazing'],
+  [emotions.SAD]: ['sad', 'unhappy', 'upset', 'depressed', 'down', 'miserable', '😢', '😭', '😞', 'disappointed', 'lonely'],
+  [emotions.ANGRY]: ['angry', 'mad', 'furious', 'annoyed', 'irritated', 'frustrated', '😠', '😡', 'terrible', 'worst', 'hate'],
+  [emotions.ANXIOUS]: ['anxious', 'worried', 'nervous', 'stressed', 'concerned', 'afraid', 'scared', 'fear', '😰', '😨'],
+  [emotions.EXCITED]: ['excited', 'enthusiastic', 'eager', 'looking forward', 'can\'t wait', 'thrilled', '🎉', '🤩', 'awesome'],
+  [emotions.CONFUSED]: ['confused', 'unsure', 'not clear', 'don\'t understand', 'what do you mean', 'clarify', 'explain', '🤔']
+};
+
+const systemContext = `You are Konnect Bot, a Helping bot for various tasks...
+IMPORTANT LANGUAGE INSTRUCTION:
+- If user writes in Hindi (Devanagari): Respond in Hindi (Devanagari) only
+- If user writes in Hinglish (Hindi words in English letters): ALWAYS respond in Hindi (Devanagari) script only
+- If user writes in English: Respond in English
+- For any other language: Respond in that same language
+
+
+ABOUT KONNECT PACKAGING WEBSITE & COMPANY:
+- This is the official website for KONNECT Packaging International LLP, a leader in innovative and sustainable packaging solutions for Food & Agro Packaging, VCI Packaging, and more.
+- Based in Borgaon, Chhindwara, Madhya Pradesh, India (Pin code: 480106).
+- KONNECT is committed to packaging excellence, quality, and customer satisfaction.
+
+PRODUCTS & SERVICES:
+- Main product categories include:
+  - VCI Kraft Paper: Specialty paper that prevents rust on metals.
+  - VCI PE Laminated Paper: Provides moisture and corrosion protection.
+  - SMP Bags: Multi-layer bags for food and dairy with strong barriers.
+  - Bulk Tea Packaging Bags: Designed for freshness and aroma retention in bulk tea storage and transport.
+- Many more solutions for Food & Agro, industrial, and specialty packaging. (For more, see Product Analysis or ask for details.)
+
+CONTACT INFORMATION:
+- General Enquiries: info@konnectpackaging.com
+- Sales/Material Requirements: sales@konnectpackaging.com
+- Phone: +91-7774031665
+- Address: Plot no J/60, KONNECT Packaging International LLP, Borgaon, Chhindwara, Madhya Pradesh, 480106, India
+
+NAVIGATION & WEBSITE SECTIONS:
+- Key sections: Why Choose Us, Vision and Mission, Product Analysis, Brochure download, Contact Us
+- Social media: YouTube, WhatsApp, Facebook, Instagram, LinkedIn, Twitter
+- Some pages (like Career and Catalog) may be under construction—inform users politely if they ask about these.
+
+BRAND TONE & STYLE:
+- Be professional, friendly, and helpful.
+- Use clear, concise, and positive language.
+- If the user writes in Hindi (Devanagari) or Hinglish, always respond in Hindi (Devanagari) script.
+- If the user writes in English, respond in English. For other languages, respond in that language.
+
+EMOTIONAL RESPONSE GUIDELINES:
+- If user seems happy: Match their positive energy
+- If user seems sad: Be empathetic and supportive
+- If user seems angry: Be calm and solution-oriented
+- If user seems anxious: Be reassuring and clear
+- If user seems excited: Match their enthusiasm
+- If user seems confused: Be extra clear and offer additional help
+
+Always answer as a knowledgeable representative of KONNECT Packaging, using the above information to help users with their queries about the company, products, contact, and website navigation.
+
+IMPORTANT: All your responses must be concise and brief within (150-200 words). Only give detailed answers when asked. Do not use markdown or asterisks for bullet points—use plain text. Always use a smaller font for your responses in the UI to distinguish AI replies.`;
+
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY || "your_default_api_key",
+  dangerouslyAllowBrowser: true,
+});
+
+const Chatbot = ({ onClose }) => {
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [isTextToSpeech, setIsTextToSpeech] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState('english');
+  const [userEmotion, setUserEmotion] = useState(emotions.NEUTRAL);
+  const [emotionHistory, setEmotionHistory] = useState([]);
+  
+  // Detect emotion from text
+  const detectEmotion = (text) => {
+    if (!text) return emotions.NEUTRAL;
+    
+    text = text.toLowerCase();
+    
+    // Create a score for each emotion
+    const scores = Object.entries(emotionKeywords).reduce((acc, [emotion, keywords]) => {
+      const score = keywords.reduce((count, keyword) => {
+        return text.includes(keyword.toLowerCase()) ? count + 1 : count;
+      }, 0);
+      acc[emotion] = score;
+      return acc;
+    }, {});
+    
+    // Find the emotion with the highest score
+    let highestScore = 0;
+    let detectedEmotion = emotions.NEUTRAL;
+    
+    Object.entries(scores).forEach(([emotion, score]) => {
+      if (score > highestScore) {
+        highestScore = score;
+        detectedEmotion = emotion;
+      }
+    });
+    
+    return highestScore > 0 ? detectedEmotion : emotions.NEUTRAL;
+  };
+  
+  const detectLanguage = (text) => {
+    const patterns = {
+      hindi: /[\u0900-\u097F]/,
+      english: /^[a-zA-Z\s.,!?"'()\-]+$/,
+      french: /^[a-zA-ZÀ-ÿ\s.,!?"'()\-]+$/,
+      spanish: /^[a-zA-ZÀ-ÿ\s.,!?"'()\-]+$/,
+      german: /^[a-zA-ZÀ-ÿ\s.,!?"'()\-]+$/,
+      italian: /^[a-zA-ZÀ-ÿ\s.,!?"'()\-]+$/
+    };
+    if (patterns.hindi.test(text)) return 'hindi';
+    if (patterns.french.test(text)) return 'french';
+    if (patterns.spanish.test(text)) return 'spanish';
+    if (patterns.german.test(text)) return 'german';
+    if (patterns.italian.test(text)) return 'italian';
+    if (patterns.english.test(text)) return 'english';
+    if (patterns.hindi.test(text) && /[a-zA-Z]/.test(text)) return 'hinglish';
+    return 'english';
+  };
+
+  useEffect(() => {
+    setMessages([{
+      message: selectedLanguage.toLowerCase() === 'hindi' 
+        ? "नमस्ते! मैं Konnect हूँ, आपकी सहायता के लिए यहाँ हूँ। मैं आपके प्रश्नों का उत्तर देने के लिए तत्पर हूँ।"
+        : "Hi, I'm Konnect! I'm here to help you with any questions you may have about this website.",
+      sentTime: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+      sender: "ChatGPT"
+    }]);
+  }, [selectedLanguage]);
+
+ const fetchElevenLabsTTS = async (text) => {
+  try {
+    const res = await fetch("http://localhost:3001/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+
+    if (!res.ok) {
+      console.error("Backend TTS failed:", await res.text());
+      return;
+    }
+
+    const blob = await res.blob();
+    const audioUrl = URL.createObjectURL(blob);
+    const audio = new Audio(audioUrl);
+    audio.play();
+  } catch (err) {
+    console.error("TTS Error:", err);
+  }
+};
+
+  const speakMessage = (text) => {
+    if (!isTextToSpeech || !text) return;
+    const detectedLang = detectLanguage(text);
+    const langToUse = selectedLanguage.toLowerCase();
+    console.log("TTS Detected Lang:", detectedLang, "Selected:", langToUse);
+    fetchElevenLabsTTS(text, langToUse);
+  };
+
+  const handleSend = async (message) => {
+    if (!message.trim()) return;
+    const detectedLanguage = detectLanguage(message);
+    setSelectedLanguage(detectedLanguage === 'hinglish' ? 'hindi' : detectedLanguage);
+    
+    // Detect user emotion from message
+    const detectedEmotion = detectEmotion(message);
+    setUserEmotion(detectedEmotion);
+    
+    // Track emotion history (keep last 5 emotions)
+    setEmotionHistory(prev => {
+      const newHistory = [...prev, detectedEmotion];
+      return newHistory.slice(-5); // Keep only the last 5 emotions
+    });
+
+    const newMessage = {
+      message,
+      direction: 'outgoing',
+      sender: "user",
+      sentTime: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+      status: "sending",
+      emotion: detectedEmotion
+    };
+    const newMessages = [...messages, newMessage];
+    setMessages(newMessages);
+    setInputValue('');
+    setIsTyping(true);
+
+    setTimeout(() => {
+      setMessages(prev => prev.map((msg, i) => i === prev.length - 1 ? {...msg, status: "sent"} : msg));
+    }, 500);
+
+    await processMessageToChatGPT(newMessages);
+  };
+
+  const processMessageToChatGPT = async (chatMessages) => {
+    try {
+      const lastUserMessage = chatMessages[chatMessages.length - 1].message;
+      const lastDetectedLang = detectLanguage(lastUserMessage);
+      
+      // Create emotional context
+      const emotionalContext = `The user appears to be feeling ${userEmotion}. ` +
+        (emotionHistory.length > 1 ? 
+          `Their recent emotional pattern: ${emotionHistory.slice(-5).join(' → ')}. ` : '') +
+        `Respond appropriately to their emotional state.`;
+
+      const openAIMessages = [
+        { role: "system", content: systemContext },
+        { role: "system", content: emotionalContext },
+        ...(lastDetectedLang === 'hinglish' || selectedLanguage.toLowerCase() === 'hindi'
+          ? [{ role: "system", content: "\u0915\u0943\u092A\u092F\u093E \u0915\u0947\u0935\u0932 \u0939\u093F\u0902\u0926\u0940 \u092E\u0947\u0902 \u0909\u0924\u094d\u0924\u0930 \u0926\u0947\u0902।" }]
+          : []),
+        ...chatMessages.slice(1).map(msg => ({
+          role: msg.sender === "user" ? "user" : "assistant",
+          content: msg.message
+        }))
+      ];
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: openAIMessages,
+        temperature: 0.7,
+      });
+      
+      const responseText = completion.choices[0]?.message?.content?.trim();
+      if (responseText) {
+        setMessages([...chatMessages, {
+          message: responseText,
+          sender: "ChatGPT",
+          sentTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          status: "received",
+          respondingToEmotion: userEmotion, // Track which emotion the bot is responding to
+        }]);
+        setTimeout(() => speakMessage(responseText), 100);
+      } else {
+        throw new Error("Empty response from OpenAI API");
+      }
+    } catch (error) {
+      console.error("Chatbot error:", error);
+      const errorMessage = "I'm sorry, I can't help right now. Please try again later.";
+      setMessages([...chatMessages, {
+        message: errorMessage,
+        sender: "ChatGPT",
+        sentTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        status: "error"
+      }]);
+      setTimeout(() => speakMessage(errorMessage), 100);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  return (
+    <ChatbotUI
+      messages={messages}
+      isTyping={isTyping}
+      isTextToSpeech={false} // Always false, disables voice feedback
+      inputValue={inputValue}
+      onInputChange={setInputValue}
+      onSend={handleSend}
+      onToggleTextToSpeech={() => {}} // No-op
+      onEmojiSelect={emoji => setInputValue(prev => prev + emoji)}
+      onClose={() => onClose?.()}
+      selectedLanguage={selectedLanguage}
+      onLanguageChange={setSelectedLanguage}
+      userEmotion={userEmotion}
+      emotionHistory={emotionHistory}
+    />
+  );
+};
+
+export default Chatbot;
+  
