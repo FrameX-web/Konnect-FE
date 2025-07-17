@@ -59,6 +59,11 @@ const certificates = [
     title: "GPSD-certified",
     description: "GPSD-certified products meet EU safety standards (2001/95/EC), ensuring safe, risk-free use and compliance for the EU market.",
     image: "/Cetificates/GPSD.jpg"
+  },
+  {
+    title: "PQC-certified",
+    description: "PQC-certified products meet global quality standards, ensuring safe, reliable use and full compliance for international markets.",
+    image: "/Cetificates/51418_KONNECT PACKAGING INTERNATIONAL LLP_US- FDA_PQC (1).pdf"
   }
 ];
 

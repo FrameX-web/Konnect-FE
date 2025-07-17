@@ -26,6 +26,36 @@ const certifications = [
     id: "gpsd",
     title: "GPSD",
     description: "GPSD-certified products meet EU safety standards (2001/95/EC), ensuring safe, risk-free use and compliance for the EU market. They are tested for consumer safety, durability, and environmental impact.",
+  },
+  {
+    id: "pqc",
+    title: "PQC",
+    description: "PQC-certified products ensure quality, safety, and durability through strict testing and global compliance. They meet international standards, ensuring reliable use across industries.",
+  },
+   {
+    id: "zed",
+    title: "ZED",
+    description: "ZED‑certified enterprises follow India's \"Zero Defect Zero Effect\" standards, delivering defect‑free products while minimizing environmental impact and meeting global quality and sustainability expectations.",
+  },
+  {
+    id: "rohs",
+    title: "ROHS",
+    description: "RoHS-certified products are free from harmful substances like lead and mercury, making them safe and eco-friendly. This certification ensures compliance with global standards, especially in electronics and packaging.",
+  },
+  {
+    id: "ce",
+    title: "CE",
+    description: "CE‑certified products meet the European Union's safety, health, and environmental protection standards, ensuring they are reliable, consumer‑safe, and eligible for sale across the EU single market.",
+  },
+  {
+    id: "gpsd",
+    title: "GPSD",
+    description: "GPSD-certified products meet EU safety standards (2001/95/EC), ensuring safe, risk-free use and compliance for the EU market. They are tested for consumer safety, durability, and environmental impact.",
+  },
+  {
+    id: "pqc",
+    title: "PQC",
+    description: "PQC-certified products ensure quality, safety, and durability through strict testing and global compliance. They meet international standards, ensuring reliable use across industries.",
   }
 ];
 

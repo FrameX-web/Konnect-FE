@@ -72,7 +72,7 @@ const Model = ({ url, onBoundingBox }) => {
   return <primitive object={scene} />;
 };
 
-const Viewer360 = ({ open, onClose, modelUrl, productName }) => {
+const Viewer360 = ({ open, onClose, modelUrl, productName, productCode }) => {
   const [modelBox, setModelBox] = React.useState(null);
   const controlsRef = React.useRef();
 
@@ -86,28 +86,56 @@ const Viewer360 = ({ open, onClose, modelUrl, productName }) => {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 overflow-auto">
-      <div className="absolute top-2 left-2 sm:top-4 sm:left-4">
+      {/* Mobile: Close button outside canvas */}
+      <div className="absolute top-2 left-2 sm:hidden">
         <button
           onClick={onClose}
-          className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black bg-opacity-70 hover:bg-opacity-90 text-white text-xl sm:text-2xl shadow-lg focus:outline-none"
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-black bg-opacity-70 hover:bg-opacity-90 text-white text-xl shadow-lg focus:outline-none"
           aria-label="Close"
         >
           ×
         </button>
       </div>
       <div className="w-full max-w-3xl mx-auto flex flex-col items-center px-2 sm:px-0">
-        <div className="mb-2 mt-6 sm:mb-4 sm:mt-8">
-          <span className="px-4 py-1.5 sm:px-6 sm:py-2 rounded-lg bg-black bg-opacity-80 text-white text-base sm:text-lg font-semibold shadow">
+        {/* Mobile: Product name and code above canvas */}
+        <div className="flex flex-col items-center mb-2 mt-6 sm:hidden">
+          <span className="px-4 py-1.5 rounded-lg bg-black bg-opacity-80 text-white text-base font-semibold shadow">
             {productName}
           </span>
+          {productCode && (
+            <span className="px-3 py-0.5 mt-1 rounded bg-black bg-opacity-60 text-white text-xs font-mono tracking-wide shadow">
+              {productCode}
+            </span>
+          )}
         </div>
         <div className="
           w-full
           max-w-[98vw] max-h-[70vh]
-          sm:w-[95vw] sm:h-[55vw] sm:max-w-6xl sm:max-h-[85vh]
+          sm:w-[95vw] sm:h-[55vw] sm:max-w-[90vw] sm:max-h-[90vh]
           bg-white rounded-xl flex items-center justify-center shadow-lg relative
           aspect-[4/3]
         ">
+          {/* Desktop: Close button inside canvas, top left */}
+          <div className="hidden sm:block absolute top-4 left-4 z-20">
+            <button
+              onClick={onClose}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-black bg-opacity-70 hover:bg-opacity-90 hover:scale-110 duration-500 text-white text-2xl shadow-lg focus:outline-none"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+          {/* Desktop: Product name and code inside canvas, top center */}
+          <div className="hidden sm:flex absolute top-0 left-1/2 -translate-x-1/2 flex-col items-center z-10">
+            <span className="px-6 py-2 rounded-b-lg bg-black bg-opacity-80 text-white text-lg font-semibold shadow mb-1">
+              {productName}
+            </span>
+            {productCode && (
+              <span className="px-4 py-1 rounded bg-black bg-opacity-60 text-white text-sm font-mono tracking-wide shadow">
+                {productCode}
+              </span>
+            )}
+          </div>
           <Canvas
             key={canvasKey}
             camera={{ position: [0, 0, 8], near: 0.01, far: 100, fov: 50 }}

@@ -292,6 +292,20 @@ export function Carousel({
     touchMoved.current = false;
   };
 
+  // Autoplay: advance to next slide every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isTransitioning) {
+        setIsTransitioning(true);
+        if (listRef.current) {
+          listRef.current.style.transition = TRANSITION_STYLE;
+        }
+        setCurrent(prev => prev + 1);
+      }
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [isTransitioning, TRANSITION_STYLE]);
+
   return (
     <div
       className="relative w-[70vmin] h-[50vmin] mx-auto"

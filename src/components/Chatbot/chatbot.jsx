@@ -26,8 +26,8 @@ const emotionKeywords = {
 const systemContext = `You are Konnect Bot, a Helping bot for various tasks...
 IMPORTANT LANGUAGE INSTRUCTION:
 - If user writes in Hindi (Devanagari): Respond in Hindi (Devanagari) only
-- If user writes in Hinglish (Hindi words in English letters): ALWAYS respond in Hindi (Devanagari) script only
-- If user writes in English: Respond in English
+- If user writes in English: Respond in English only!.
+- If user writes in Hinglish: Respond in Hinglish only.
 - For any other language: Respond in that same language
 
 
@@ -116,22 +116,19 @@ const Chatbot = ({ onClose }) => {
     return highestScore > 0 ? detectedEmotion : emotions.NEUTRAL;
   };
   
+  // Improved language detection: prioritize Hindi/Devanagari, then Hinglish, then English
   const detectLanguage = (text) => {
-    const patterns = {
-      hindi: /[\u0900-\u097F]/,
-      english: /^[a-zA-Z\s.,!?"'()\-]+$/,
-      french: /^[a-zA-ZÀ-ÿ\s.,!?"'()\-]+$/,
-      spanish: /^[a-zA-ZÀ-ÿ\s.,!?"'()\-]+$/,
-      german: /^[a-zA-ZÀ-ÿ\s.,!?"'()\-]+$/,
-      italian: /^[a-zA-ZÀ-ÿ\s.,!?"'()\-]+$/
-    };
-    if (patterns.hindi.test(text)) return 'hindi';
-    if (patterns.french.test(text)) return 'french';
-    if (patterns.spanish.test(text)) return 'spanish';
-    if (patterns.german.test(text)) return 'german';
-    if (patterns.italian.test(text)) return 'italian';
-    if (patterns.english.test(text)) return 'english';
-    if (patterns.hindi.test(text) && /[a-zA-Z]/.test(text)) return 'hinglish';
+    if (!text) return 'english';
+    // Hindi (Devanagari)
+    if (/[\u0900-\u097F]/.test(text)) return 'hindi';
+    // Hinglish: mixture of Hindi words in Latin script (basic heuristic)
+    // If contains common Hindi words in Latin script and no Devanagari
+    const hinglishWords = ['hai', 'kya', 'nahi', 'kaise', 'kyun', 'kyon', 'main', 'tum', 'aap', 'mera', 'mera', 'bhi', 'sab', 'par', 'ke', 'se', 'ko', 'mein', 'hoon', 'ho', 'raha', 'rhi', 'rha', 'tha', 'thi', 'the'];
+    const lower = text.toLowerCase();
+    if (!/[\u0900-\u097F]/.test(text) && hinglishWords.some(w => lower.split(/\s+/).includes(w))) return 'hinglish';
+    // English: only a-z, A-Z, spaces, and common punctuation
+    if (/^[a-zA-Z0-9\s.,!?"'()\-]+$/.test(text)) return 'english';
+    // Fallback
     return 'english';
   };
 
@@ -178,6 +175,7 @@ const Chatbot = ({ onClose }) => {
   const handleSend = async (message) => {
     if (!message.trim()) return;
     const detectedLanguage = detectLanguage(message);
+    // Always set selectedLanguage to detectedLanguage (Hinglish maps to Hindi)
     setSelectedLanguage(detectedLanguage === 'hinglish' ? 'hindi' : detectedLanguage);
     
     // Detect user emotion from message
@@ -207,10 +205,11 @@ const Chatbot = ({ onClose }) => {
       setMessages(prev => prev.map((msg, i) => i === prev.length - 1 ? {...msg, status: "sent"} : msg));
     }, 500);
 
-    await processMessageToChatGPT(newMessages);
+    await processMessageToChatGPT(newMessages, detectedLanguage);
   };
 
-  const processMessageToChatGPT = async (chatMessages) => {
+  // Update processMessageToChatGPT to accept detectedLanguage
+  const processMessageToChatGPT = async (chatMessages, lastDetectedLang) => {
     try {
       const lastUserMessage = chatMessages[chatMessages.length - 1].message;
       const lastDetectedLang = detectLanguage(lastUserMessage);
@@ -221,12 +220,20 @@ const Chatbot = ({ onClose }) => {
           `Their recent emotional pattern: ${emotionHistory.slice(-5).join(' → ')}. ` : '') +
         `Respond appropriately to their emotional state.`;
 
+      // Always set language system prompt based on detected language
+      let languageSystemPrompt = '';
+      if (lastDetectedLang === 'hindi' || lastDetectedLang === 'hinglish') {
+        languageSystemPrompt = "कृपया केवल हिंदी (देवनागरी) में उत्तर दें।";
+      } else if (lastDetectedLang === 'english') {
+        languageSystemPrompt = "Please respond only in English.";
+      } else {
+        languageSystemPrompt = "Please respond in the user's language.";
+      }
+
       const openAIMessages = [
         { role: "system", content: systemContext },
         { role: "system", content: emotionalContext },
-        ...(lastDetectedLang === 'hinglish' || selectedLanguage.toLowerCase() === 'hindi'
-          ? [{ role: "system", content: "\u0915\u0943\u092A\u092F\u093E \u0915\u0947\u0935\u0932 \u0939\u093F\u0902\u0926\u0940 \u092E\u0947\u0902 \u0909\u0924\u094d\u0924\u0930 \u0926\u0947\u0902।" }]
-          : []),
+        { role: "system", content: languageSystemPrompt },
         ...chatMessages.slice(1).map(msg => ({
           role: msg.sender === "user" ? "user" : "assistant",
           content: msg.message
@@ -287,4 +294,3 @@ const Chatbot = ({ onClose }) => {
 };
 
 export default Chatbot;
-  

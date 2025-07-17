@@ -25,9 +25,9 @@ const LandingPage = () => {
             width: "100%",
             backgroundImage: "url('/mapbg.png')",
             backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
+            backgroundSize: "70% auto", // reduced image width
             backgroundPosition: "center",
-            backgroundAttachment: "fixed", // Parallax effect
+            backgroundAttachment: "scroll", // Parallax effect
             zIndex: 0,
           }}
         >
@@ -37,6 +37,7 @@ const LandingPage = () => {
               @media (max-width: 768px) {
                 .ww-bg {
                   background-image: url('/mapm.png') !important;
+                  background-size: 95% auto !important; /* slightly larger for mobile */
                   background-attachment: scroll !important;
                 }
               }
@@ -56,8 +57,8 @@ const LandingPage = () => {
               zIndex: 0,
               backgroundImage: "url('/back1.png')",
               backgroundRepeat: "no-repeat",
-              backgroundSize: "100% 100%",
-              backgroundPosition: "0 -40px",
+              backgroundSize: "80% auto", // reduced image width
+              backgroundPosition: "center 0", // center horizontally
               opacity: 0.7, // only background is faded
               pointerEvents: "none",
             }}
@@ -78,8 +79,8 @@ const LandingPage = () => {
               zIndex: 0,
               backgroundImage: "url('/back2.png')",
               backgroundRepeat: "no-repeat",
-              backgroundSize: "100% 100%",
-              backgroundPosition: "0 0",
+              backgroundSize: "80% auto", // reduced image width
+              backgroundPosition: "center 0", // center horizontally
               opacity: 1,
               pointerEvents: "none",
             }}
