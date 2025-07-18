@@ -12,7 +12,9 @@ function Worldwide() {
       imageStyle: { width: '80%', height: '87%', left: '11%', top: '5%' },
       description: "Konnect Packaging Proudly Rooted in India, Delivering Globally.",
       personName: "Parth Chandra",
-      personTitle: "Head of Operations - India"
+      personTitle: "Head of Operations - India",
+      email: "info@konnectpackaging.com",
+      contact: "+917774031655"
     },
     {
       id: "2015:50",
@@ -22,7 +24,9 @@ function Worldwide() {
       imageStyle: { width: '80%', height: '80%', left: '10%', top: '10%' },
       description: "",
       personName: "Omar Azzam",
-      personTitle: "Head of Operations – France"
+      personTitle: "Head of Operations – France",
+      email: "",
+      contact: "+33 7 83 53 35 12"
     },
     {
       id: "2015:37",
@@ -32,7 +36,9 @@ function Worldwide() {
       imageStyle: { width: '53%', height: '76%', left: '24%', top: '12%' },
       description: "Delivering quality products across Serbia",
       personName: "Marko Ristovski",
-      personTitle: "Head of Operations - Serbia"
+      personTitle: "Head of Operations",
+      email: "marko@konnectpackaging.com",
+      contact: "+381693226316"
     },
     {
       id: "2015:42",
@@ -42,13 +48,15 @@ function Worldwide() {
       imageStyle: { width: '87%', height: '65%', left: '7%', top: '19%' },
       description: "Delivering quality products across Lithuania",
       personName: "Suchitra Gupta",
-      personTitle: "Head of Operations - Lithuania"
+      personTitle: "Head of Operations",
+      email: "Sales@konnectpackaging.com",
+      contact: ""
     }
   ];
 
   // Reusable CountryCard component
   const CountryCard = ({ country }) => {
-    const { id, name, type, image, imageStyle, description, personName, personTitle } = country;
+    const { id, name, type, image, imageStyle, description, personName, personTitle, email, contact } = country;
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -127,10 +135,11 @@ function Worldwide() {
               className="absolute z-3"
               style={{
                 left: '50%',
-                top: '48%',
+                top: isHovered ? '44%' : '48%', // Move up on hover for all cards
                 transform: 'translate(-50%, -50%)',
                 textAlign: 'center',
-                width: '70%'
+                width: '70%',
+                transition: 'top 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
               <div className="text-sm md:text-lg font-bold text-white leading-tight mb-1" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}>
@@ -171,17 +180,34 @@ function Worldwide() {
                 transitionDelay: '0.2s'
               }}
             >
-              <div className="text-black font-bold text-[12px] md:text-base mb-1 leading-tight">
+              <div className="text-black font-bold text-[13px] md:text-base leading-tight" style={{ marginBottom: '-2px' }}>
                 {personName}
               </div>
               <p 
-                className="text-black text-xs md:text-sm leading-relaxed"
+                className="text-black text-[10px] md:text-sm leading-relaxed"
                 style={{
-                  fontFamily: "'Montserrat', sans-serif"
+                  fontFamily: "'Montserrat', sans-serif",
+                  marginTop: '-4px',
+                  marginBottom: '0px'
                 }}
               >
                 {personTitle}
               </p>
+              {/* Show email and contact for any country if present and only on hover */}
+              {isHovered && (
+                <>
+                  {email && (
+                    <div className="text-black font-medium text-[10px] md:text-sm leading-relaxed" style={{ fontFamily: "'Montserrat', sans-serif", marginBottom: '-4px' }}>
+                      {email}
+                    </div>
+                  )}
+                  {contact && (
+                    <div className="text-black font-medium text-[10px] md:text-sm leading-relaxed" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                     contact: {contact}
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
