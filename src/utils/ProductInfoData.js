@@ -565,6 +565,46 @@ during storage and transportation.`,
       ['VCI Treatment', 'Available for rust-sensitive applications'],
       ['Laminate Structure', 'PET/Alu/PE, Nylon/Alu/PE, etc.']
     ]
+  },
+  24: {
+    overview: `VCI Eco Paper (K101 G) is a sustainable, corrosion-resistant packaging solution replacing traditional PE laminates. It offers superior protection for both ferrous and non-ferrous metals and is 100% recyclable and biodegradable.`,
+    composition: [
+      'Base Paper: Kraft (Brown/White), 70 GSM',
+      'Water-Resistant Coating (WRP): 7-10 GSM, external side (USFDA approved)',
+      'VCI Coating: 8-10 GSM, inner side, multi-metal protection'
+    ],
+    layerStructure: [
+      'Single-layer Kraft base with:',
+      'External side: Water-resistant WRP coating',
+      'Internal side: VCI corrosion inhibitor coating'
+    ],
+    application: [
+      'Suitable for packaging metal parts, electronics, and export goods.',
+      'Ideal for automotive, military, and aerospace components.',
+      'Store in a cool, dry place away from direct sunlight.',
+      'Avoid exposure to extreme humidity before use.'
+    ],
+    features: [
+      'Eco-Friendly: Biodegradable & recyclable (plastic-free)',
+      'Corrosion Protection: Up to 8 months',
+      'Moisture Resistance: USFDA-approved WRP coating',
+      'Customizable: Printable & heat-sealable options'
+    ],
+    specs: [
+      ['Base Paper GSM', '70 GSM (Brown/White Kraft)'],
+      ['WRP Coating', '7-10 GSM (External Side)'],
+      ['VCI Coating', '8-10 GSM (Internal Side)'],
+      ['Total GSM', '85-90 GSM (Customizable)'],
+      ['Corrosion Protection', 'Up to 8 Months'],
+      ['Recyclability', 'Fully Eco-Friendly'],
+      ['Certifications', 'USFDA, CE, ISO Certified'],
+      ['Available Formats', 'Rolls (500-3000mm) / Cut Sheets']
+    ],
+    ordering: [
+      ['Product Code', 'K101 G'],
+      ['MOQ', '3 Tons'],
+      ['Lead Time', '21 Days']
+    ]
   }
 };
 

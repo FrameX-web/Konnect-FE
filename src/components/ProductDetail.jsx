@@ -240,15 +240,23 @@ const ProductDetail = () => {
       name: 'Multiwall Paper Bags',
       code: '(F106 MPB)',
       image: '/Food/9.png'
+    },
+    // VCI Eco Paper (24)
+    {
+      id: 24,
+      name: 'VCI Eco Paper',
+      code: '(K101 G)',
+      image: '/VCI/24.png'
     }
   ];
 
   const product = allProducts.find(p => p.id === parseInt(productId));
   
   // Get details from appropriate data file based on product ID
-  const details = parseInt(productId) >= 14 
-    ? foodProductInfoData[productId] || foodProductInfoData[14]
-    : productInfoData[productId] || productInfoData[1];
+  const details =
+    parseInt(productId) >= 14 && parseInt(productId) <= 22
+      ? foodProductInfoData[productId] || foodProductInfoData[14]
+      : productInfoData[productId] || productInfoData[1];
 
   const handleBack = () => {
     navigate('/');
@@ -258,7 +266,14 @@ const ProductDetail = () => {
   const getGlbFileName = (product) => {
     // Return the .glb file name based on product id (after renaming)
     if (!product) return null;
-    if (product.id >= 1 && product.id <= 22) {
+    // Update this to include 24 as a valid VCI product
+    if (
+      (product.id >= 1 && product.id <= 13) ||
+      product.id === 24
+    ) {
+      return `${product.id}.glb`;
+    }
+    if (product.id >= 14 && product.id <= 22) {
       return `${product.id}.glb`;
     }
     return null;
@@ -289,8 +304,16 @@ const ProductDetail = () => {
       <div className="relative p-4 md:p-6">
         {/* Top Right Badge */}
         <div className="absolute top-4 right-4 bg-gradient-to-r from-slate-900 to-slate-700 text-white px-3 py-2 md:px-5 md:py-2.5 rounded-xl text-xs md:text-sm font-medium shadow-lg border border-white/10">
-          {parseInt(productId) >= 14 ? 'Food & Agro Packaging' : 'VCI Packaging Solutions'}
+          {(parseInt(productId) >= 14 && parseInt(productId) <= 22)
+            ? 'Food & Agro Packaging'
+            : 'VCI Packaging Solutions'}
         </div>
+        {/* Show VCI badge for product 24 */}
+        {parseInt(productId) === 24 && (
+          <div className="absolute top-16 right-4 bg-gradient-to-r from-yellow-700 to-yellow-500 text-white px-3 py-2 md:px-5 md:py-2.5 rounded-xl text-xs md:text-sm font-bold shadow-lg border border-white/10">
+            VCI Packaging Solutions
+          </div>
+        )}
       </div>
 
       {/* Main Content */}
@@ -486,33 +509,60 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Custom GSM Options Section */}
-            <div className="mb-8">
-              <div className="flex items-center gap-1 mb-1">
-                <img src="/details/7.png" alt="Custom GSM Options" className="w-14 h-14 rounded" />
-                <h2 className="text-lg md:text-2xl font-bold text-gray-800">Custom GSM Options</h2>
-              </div>
-              
-              {/* GSM Options Table */}
-              <div className="bg-transparent rounded-lg overflow-hidden border border-black">
-                <table className="w-full text-sm md:text-base bg-transparent">
-                  <thead>
-                    <tr className="bg-transparent text-gray-800">
-                      <th className="text-left p-3 text-base md:text-xl font-bold border-r border-b border-black">Component</th>
-                      <th className="text-left p-3 text-sm md:text-xl font-bold border-b border-black">GSM Range</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-gray-800 bg-transparent">
-                    {details.gsm && details.gsm.map(([comp, gsm], i) => (
-                      <tr key={i} className="">
-                        <td className="p-3 border-r  border-b border-black font-medium">{comp}</td>
-                        <td className="p-3 border-b border-black font-medium">{gsm}</td>
+            {/* Ordering Details Section for product 24 */}
+            {parseInt(productId) === 24 ? (
+              <div className="mb-8">
+                <div className="flex items-center gap-1 mb-1">
+                  {/* Use the same icon as Custom GSM Options */}
+                  <img src="/details/7.png" alt="Ordering Details" className="w-14 h-14 rounded" />
+                  <h2 className="text-lg md:text-2xl font-bold text-gray-800">Ordering Details</h2>
+                </div>
+                <div className="bg-transparent rounded-lg overflow-hidden border border-black">
+                  <table className="w-full text-sm md:text-base bg-transparent">
+                    <thead>
+                      <tr className="bg-transparent text-gray-800">
+                        <th className="text-left p-3 text-base md:text-xl font-bold border-r border-b border-black">Detail</th>
+                        <th className="text-left p-3 text-base md:text-xl font-bold border-b border-black">Information</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="text-gray-800 bg-transparent">
+                      {details.ordering && details.ordering.map(([detail, info], i) => (
+                        <tr key={i}>
+                          <td className="p-3 border-r border-b border-black font-medium">{detail}</td>
+                          <td className="p-3 border-b border-black font-medium">{info}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            ) : (
+              // Custom GSM Options Section for other products
+              <div className="mb-8">
+                <div className="flex items-center gap-1 mb-1">
+                  <img src="/details/7.png" alt="Custom GSM Options" className="w-14 h-14 rounded" />
+                  <h2 className="text-lg md:text-2xl font-bold text-gray-800">Custom GSM Options</h2>
+                </div>
+                <div className="bg-transparent rounded-lg overflow-hidden border border-black">
+                  <table className="w-full text-sm md:text-base bg-transparent">
+                    <thead>
+                      <tr className="bg-transparent text-gray-800">
+                        <th className="text-left p-3 text-base md:text-xl font-bold border-r border-b border-black">Component</th>
+                        <th className="text-left p-3 text-sm md:text-xl font-bold border-b border-black">GSM Range</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-gray-800 bg-transparent">
+                      {details.gsm && details.gsm.map(([comp, gsm], i) => (
+                        <tr key={i}>
+                          <td className="p-3 border-r border-b border-black font-medium">{comp}</td>
+                          <td className="p-3 border-b border-black font-medium">{gsm}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
           {/* Custom Scroll Indicator */}
           <div className="absolute top-4 right-8 lg:right-12 h-[calc(100%-2rem)] w-1 flex items-center">
@@ -541,9 +591,10 @@ const ProductDetail = () => {
               open={show360}
               onClose={() => setShow360(false)}
               modelUrl={
-                product.id >= 14
-                  ? `/KONNECT PRODUCT/Food & Agro Packaging/${getGlbFileName(product)}`
-                  : `/KONNECT PRODUCT/VCI Packaging Solutions/${getGlbFileName(product)}`
+                // Use VCI folder for id 24
+                (product.id >= 1 && product.id <= 13) || product.id === 24
+                  ? `/KONNECT PRODUCT/VCI Packaging Solutions/${getGlbFileName(product)}`
+                  : `/KONNECT PRODUCT/Food & Agro Packaging/${getGlbFileName(product)}`
               }
               productName={`${product.name} ${product.code}`}
             />

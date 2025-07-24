@@ -106,6 +106,12 @@ const Products = () => {
         name: 'Alu Barrier Bags',
         code: '(K108 ABB)',
         image: '/VCI/Alu Barrier Bags (K108 ABB) 1.png'
+      },
+      {
+        id: 24, // Use 24, not 14
+        name: 'VCI Eco Paper',
+        code: '(K101 G)',
+        image: '/VCI/vci-eco-paper-k101-g.png' // Use your actual image path
       }
     ]
   ];
@@ -403,18 +409,18 @@ const Products = () => {
                         </div>
                       </div>
                     ) : (
-                      // Second slide layout (2 cards centered)
-                      <div className="w-full md:max-w-[700px]">
-                        {/* Mobile Layout */}
-                        <div className="grid grid-cols-2 gap-4 mb-8 md:mb-0 md:hidden">
+                      // Second slide layout (now same as first slide)
+                      <div className="w-full md:max-w-[1000px]">
+                        {/* Mobile Layout - 2 columns */}
+                        <div className="grid grid-cols-2 gap-2 md:hidden">
                           {productData[currentSlide].slice(4, 6).map((product) => (
                             <div
                               key={product.id}
-                              className="rounded-2xl p-3 w-full max-w-[160px] relative group mx-auto cursor-pointer"
+                              className="rounded-2xl p-2 w-full max-w-[180px] relative group mx-auto cursor-pointer"
                               onClick={() => handleViewClick(product)}
                             >
                               {/* View Button */}
-                              <div className="absolute -top-2 -right-2 z-10">
+                              <div className="absolute -top-2 right-1 z-10">
                                 <ViewButton
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -424,7 +430,7 @@ const Products = () => {
                               </div>
                               
                               {/* Product Image Container */}
-                              <div className="bg-white rounded-xl p-2 mb-2 border-2 border-black aspect-square">
+                              <div className="bg-white rounded-2xl p-2 mb-2 border-2 border-black aspect-square">
                                 <div className="w-full h-full flex items-center justify-center">
                                   <img 
                                     src={product.image} 
@@ -447,9 +453,53 @@ const Products = () => {
                           ))}
                         </div>
                         
-                        {/* Desktop Layout - 2 columns with original size */}
-                        <div className="hidden md:grid md:grid-cols-2 md:gap-8">
-                          {productData[currentSlide].slice(4, 6).map((product) => (
+                        {/* Last card centered on mobile */}
+                        {productData[currentSlide].slice(6, 7).length > 0 && (
+                          <div className="flex justify-center mt-2 mb-8 md:mb-0 md:hidden">
+                            {productData[currentSlide].slice(6, 7).map((product) => (
+                              <div
+                                key={product.id}
+                                className="rounded-2xl p-2 w-full max-w-[180px] relative group cursor-pointer"
+                                onClick={() => handleViewClick(product)}
+                              >
+                                {/* View Button */}
+                                <div className="absolute -top-2 -right-2 z-10">
+                                  <ViewButton
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleViewClick(product);
+                                    }}
+                                  />
+                                </div>
+                                
+                                {/* Product Image Container */}
+                                <div className="bg-white rounded-2xl mb-2 border-2 border-black aspect-square">
+                                  <div className="w-full h-full flex items-center justify-center p-2">
+                                    <img 
+                                      src={product.image} 
+                                      alt={product.name}
+                                      className="w-4/5 h-4/5 object-contain transform group-hover:scale-110 transition-transform duration-300"
+                                    />
+                                  </div>
+                                </div>
+                                
+                                {/* Product Info */}
+                                <div className="text-center">
+                                  <h4 className="font-bold text-black text-xs mb-1 font-['Montserrat'] leading-tight">
+                                    {product.name}
+                                  </h4>
+                                  <p className="text-gray-600 text-xs font-['Krona_One']">
+                                    {product.code}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Desktop Layout - 3 columns with original size */}
+                        <div className="hidden md:grid md:grid-cols-3 md:gap-8">
+                          {productData[currentSlide].slice(4, 7).map((product) => (
                             <div
                               key={product.id}
                               className="rounded-2xl p-6 w-80 relative group cursor-pointer"
@@ -467,7 +517,7 @@ const Products = () => {
                               </div>
                               
                               {/* Product Image Container */}
-                              <div className="bg-white rounded-xl p-4 mb-4 border-2 border-black aspect-square">
+                              <div className="bg-white rounded-4xl p-4 mb-4 border-2 border-black aspect-square">
                                 <div className="w-full h-full flex items-center justify-center">
                                   <img 
                                     src={product.image} 

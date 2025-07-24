@@ -197,7 +197,7 @@ function Worldwide() {
               {isHovered && (
                 <>
                   {email && (
-                    <div className="text-black font-medium text-[10px] md:text-sm leading-relaxed" style={{ fontFamily: "'Montserrat', sans-serif", marginBottom: '-4px' }}>
+                    <div className="text-black font-medium text-[10px] md:text-sm leading-normal" style={{ fontFamily: "'Montserrat', sans-serif", marginBottom: '-4px' }}>
                       {email}
                     </div>
                   )}
