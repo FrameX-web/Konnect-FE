@@ -135,7 +135,8 @@ function Worldwide() {
               className="absolute z-3"
               style={{
                 left: '50%',
-                top: isHovered ? '44%' : '48%', // Move up on hover for all cards
+                // Remove top change on hover, keep it fixed for both states
+                top: '48%',
                 transform: 'translate(-50%, -50%)',
                 textAlign: 'center',
                 width: '70%',
@@ -197,13 +198,26 @@ function Worldwide() {
               {isHovered && (
                 <>
                   {email && (
-                    <div className="text-black font-medium text-[10px] md:text-sm leading-normal" style={{ fontFamily: "'Montserrat', sans-serif", marginBottom: '-4px' }}>
+                    <div
+                      className="text-black font-medium text-[10px] md:text-sm leading-normal w-full flex justify-center"
+                      style={{
+                        fontFamily: "'Montserrat', sans-serif",
+                        marginBottom: '-4px',
+                        textAlign: 'center'
+                      }}
+                    >
                       {email}
                     </div>
                   )}
                   {contact && (
-                    <div className="text-black font-medium text-[10px] md:text-sm leading-relaxed" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                     contact: {contact}
+                    <div
+                      className="text-black font-medium text-[10px] md:text-sm leading-relaxed w-full flex justify-center"
+                      style={{
+                        fontFamily: "'Montserrat', sans-serif",
+                        textAlign: 'center'
+                      }}
+                    >
+                      contact: {contact}
                     </div>
                   )}
                 </>
