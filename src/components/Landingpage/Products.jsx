@@ -111,7 +111,7 @@ const Products = () => {
         id: 24, // Use 24, not 14
         name: 'VCI Eco Paper',
         code: '(K101 G)',
-        image: '/VCI/vci-eco-paper-k101-g.png' // Use your actual image path
+        image: '/VCI/24.png' // Use your actual image path
       }
     ]
   ];
