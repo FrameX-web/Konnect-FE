@@ -116,7 +116,9 @@ function Worldwide() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                // Prevent any movement or resizing on hover
+                transition: 'none'
               }}
             >
               <img
@@ -126,16 +128,16 @@ function Worldwide() {
                   width: '100%',
                   height: '100%',
                   objectFit: 'contain',
+                  // Prevent any scaling or movement on hover
+                  transition: 'none'
                 }}
               />
             </div>
-
             {/* Country name and type overlay - stays in original circular position */}
             <div 
               className="absolute z-3"
               style={{
                 left: '50%',
-                // Remove top change on hover, keep it fixed for both states
                 top: '48%',
                 transform: 'translate(-50%, -50%)',
                 textAlign: 'center',
@@ -158,7 +160,6 @@ function Worldwide() {
               </div>
             </div>
           </div>
-
           {/* Rectangle extension area - only visible on hover */}
           <div 
             className="absolute bottom-0 left-0 w-full"
