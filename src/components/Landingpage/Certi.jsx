@@ -32,7 +32,12 @@ const certifications = [
     title: "PQC",
     description: "PQC-certified products ensure quality, safety, and durability through strict testing and global compliance. They meet international standards, ensuring reliable use across industries.",
   },
-   {
+  {
+    id: "usfda",
+    title: "US- FDA",
+    description: "USFDA-certified products ensure safety, quality, and regulatory compliance through rigorous testing and approval. They meet strict U.S. Food and Drug Administration standards, ensuring trusted and reliable use across healthcare and consumer industries.",
+  },
+  {
     id: "zed",
     title: "ZED",
     description: "ZED‑certified enterprises follow India's \"Zero Defect Zero Effect\" standards, delivering defect‑free products while minimizing environmental impact and meeting global quality and sustainability expectations.",
@@ -56,6 +61,11 @@ const certifications = [
     id: "pqc",
     title: "PQC",
     description: "PQC-certified products ensure quality, safety, and durability through strict testing and global compliance. They meet international standards, ensuring reliable use across industries.",
+  },
+   {
+    id: "usfda",
+    title: "US- FDA",
+    description: "USFDA-certified products ensure safety, quality, and regulatory compliance through rigorous testing and approval. They meet strict U.S. Food and Drug Administration standards, ensuring trusted and reliable use across healthcare and consumer industries.",
   }
 ];
 

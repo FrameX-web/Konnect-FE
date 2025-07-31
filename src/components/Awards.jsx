@@ -64,6 +64,11 @@ const certificates = [
     title: "PQC-certified",
     description: "PQC-certified products meet global quality standards, ensuring safe, reliable use and full compliance for international markets.",
     image: "/Cetificates/51418_KONNECT PACKAGING INTERNATIONAL LLP_US- FDA_PQC (1).pdf"
+  },
+  {
+    title: "US- FDA certified",
+    description: "USFDA-certified products meet strict regulatory standards, ensuring safe, effective, and compliant use across global healthcare and consumer markets.",
+      image: "/Cetificates/51418_KONNECT PACKAGING INTERNATIONAL LLP_US- FDA_PQC (1).pdf"
   }
 ];
 

@@ -1,6 +1,7 @@
 import Header from './Header'; // Import the Header component
 import '@fontsource/montserrat'; // Import Montserrat font
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const TITLES = [
   {
@@ -49,6 +50,8 @@ const Hero = ({ scrollToProducts }) => {
   const [textIndex, setTextIndex] = useState(0);
   const [nextTextIndex, setNextTextIndex] = useState(1);
   const [textAnimating, setTextAnimating] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const imageInterval = setInterval(() => {
@@ -113,7 +116,8 @@ const Hero = ({ scrollToProducts }) => {
               <img
                 src="/hero/1.png"
                 alt="Certification Badge"
-                className="w-36 lg:w-44 xl:w-50 2xl:w-46 h-auto object-contain transition-transform duration-500 hover:scale-105"
+                className="w-36 lg:w-44 xl:w-50 2xl:w-46 h-auto object-contain transition-transform duration-500 hover:scale-105 cursor-pointer"
+                onClick={() => navigate('/awards-certifications')}
               />
             </div>
 
@@ -176,7 +180,8 @@ const Hero = ({ scrollToProducts }) => {
                 <img
                   src="/hero/1.png"
                   alt="Certification Badge"
-                  className="w-36 md:w-35 h-auto object-contain transition-transform duration-500 hover:scale-105"
+                  className="w-36 md:w-35 h-auto object-contain transition-transform duration-500 hover:scale-105 cursor-pointer"
+                  onClick={() => navigate('/certi')}
                 />
               </div>
             </div>
