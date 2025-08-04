@@ -5,6 +5,7 @@ import productInfoData from '../utils/ProductInfoData';
 import foodProductInfoData from '../utils/FoodProductInfoData';
 import BackButton from './BackButton';
 import Viewer360 from './360';
+import VideoPlayer from './VideoPlayer';
 import '@fontsource/montserrat/400.css';
 import '@fontsource/montserrat/500.css';
 import '@fontsource/montserrat/600.css';
@@ -13,6 +14,7 @@ const ProductDetail = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const [show360, setShow360] = React.useState(false);
+  const [showVideo, setShowVideo] = React.useState(false);
 
   // Scroll to top when productId changes
   useEffect(() => {
@@ -279,6 +281,56 @@ const ProductDetail = () => {
     return null;
   };
 
+  // Video URL mapping
+  const productVideos = {
+    1: "1miL2ycwDWZ2cHcr1HWxMucDuAXkohE59", // VCI Kraft Paper
+    4: "1rKziZkSpHM1ikzq0KkcC0hM5yw6US6bS", // VCI LDPE Film
+    15: "1k1uPOtgB5VbpjzamC3BmfqgPJZPP6Yn9", // Bulk Tea Packaging Bags
+    20: "1fCmFhk4SuZuMp3caUahVG_nVJTCQn53z", // HDPE Laminated Paper Bags
+    21: "1vjBEydTTxG50-xVGwMZKCZBA3IRzv7uJ", // Sugar Paper
+    19: "15mwUKOB5j11vbFclj8cbpOnVziePBK0h", // Standing Pouches
+    17: "1QPyPUD2xubPeDqhvRLL-3DdlZVeKTq9Q", // Wax-Coated Paper
+    14: "1EDZaYbw3Gzup2j3v-HquigV0gQf_8F4J", // SMP Bags
+    // Add more video IDs for other products
+  };
+
+  // Add useCallback for video handling
+  const handleVideoClose = React.useCallback(() => {
+    setShowVideo(false);
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'auto';
+  }, []);
+
+  const handleVideoOpen = React.useCallback(() => {
+    setShowVideo(true);
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+  }, []);
+
+  React.useEffect(() => {
+    // Cleanup function to reset body overflow
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  // Update the Watch Now button onClick:
+  // Find the Watch Now button and update its onClick:
+  <button 
+    className="group relative overflow-hidden bg-[#E9C77F]"
+    onClick={handleVideoOpen}
+  >
+  // ...existing button content...
+  </button>
+
+  // Update the Video Player Modal:
+  {showVideo && productVideos[product.id] && (
+    <VideoPlayer
+      videoUrl={productVideos[product.id]}
+      onClose={handleVideoClose}
+    />
+  )}
+
   if (!product) {
     return (
       <div className="min-h-screen bg-black text-white font-['Krona_One'] flex items-center justify-center">
@@ -362,18 +414,22 @@ const ProductDetail = () => {
               </div>
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-700"></div>
             </button>
-            {/* 
-            <button className="group relative overflow-hidden bg-[#E9C77F] hover:[#E9C77F] text-white px-4 py-3.5 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex-1 border border-amber-500/30">
-              <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative flex items-center gap-2">
-                <div className="p-1 bg-white/10 rounded-md group-hover:bg-white/20 transition-colors duration-300">
-                  <FaPlay className="w-3.5 h-3.5 text-white transform group-hover:scale-110 transition-transform duration-300" />
+            {/* Show WATCH NOW button for any product with a video URL */}
+            {productVideos[product.id] && (
+              <button 
+                className="group relative overflow-hidden bg-[#E9C77F] hover:bg-[#E9C77F] text-white px-4 py-3.5 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex-1 border border-amber-500/30 ml-2"
+                onClick={handleVideoOpen}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative flex items-center gap-2">
+                  <div className="p-1 bg-white/10 rounded-md group-hover:bg-white/20 transition-colors duration-300">
+                    <FaPlay className="w-3.5 h-3.5 text-white transform group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <span className="text-xs sm:text-sm font-medium">WATCH NOW</span>
                 </div>
-                <span className="text-xs sm:text-sm font-medium">WATCH NOW</span>
-              </div>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-black/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-700"></div>
-            </button>
-            */}
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-black/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-700"></div>
+              </button>
+            )}
           </div>
         </div>
 
@@ -603,6 +659,14 @@ const ProductDetail = () => {
             />
           </div>
         </div>
+      )}
+
+      {/* Video Player Modal */}
+      {showVideo && productVideos[product.id] && (
+        <VideoPlayer
+          videoUrl={productVideos[product.id]}
+          onClose={handleVideoClose}
+        />
       )}
     </div>
   );
