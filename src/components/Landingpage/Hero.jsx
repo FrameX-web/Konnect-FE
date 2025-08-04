@@ -206,7 +206,7 @@ const Hero = ({ scrollToProducts }) => {
             <div className="block lg:hidden flex flex-col text-white/70 leading-none pointer-events-none select-none text-left space-y-0.5 relative -top-4 z-10 w-[90vw]">
               <div className="text-[8vw] font-normal">KONNECT</div>
               <div className="text-[8vw] font-normal">PACKAGING</div>
-              <div className="relative flex justify-end items-center w-full h-auto -mt-15" style={{ minHeight: '60vw' }}>
+              <div className="relative flex justify-end items-center w-full h-auto -mt-[15vw]" style={{ minHeight: '65vw' }}>
                 {renderHeroImage(HERO_IMAGES[prevImgIndex], isAnimating ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100", 10)}
                 {renderHeroImage(HERO_IMAGES[imgIndex], isAnimating ? "translate-x-0 opacity-100" : "translate-x-full opacity-0", 20)}
               </div>
