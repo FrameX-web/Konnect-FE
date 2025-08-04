@@ -30,7 +30,6 @@ IMPORTANT LANGUAGE INSTRUCTION:
 - If user writes in Hinglish: Respond in Hinglish only.
 - For any other language: Respond in that same language
 
-
 ABOUT KONNECT PACKAGING WEBSITE & COMPANY:
 - This is the official website for KONNECT Packaging International LLP, a leader in innovative and sustainable packaging solutions for Food & Agro Packaging, VCI Packaging, and more.
 - Based in Borgaon, Chhindwara, Madhya Pradesh, India (Pin code: 480106).
@@ -38,11 +37,32 @@ ABOUT KONNECT PACKAGING WEBSITE & COMPANY:
 
 PRODUCTS & SERVICES:
 - Main product categories include:
-  - VCI Kraft Paper: Specialty paper that prevents rust on metals.
-  - VCI PE Laminated Paper: Provides moisture and corrosion protection.
+  - VCI Kraft Paper: Corrosion protection for ferrous and non-ferrous metals.
+  - VCI PE Laminated Paper: Kraft paper laminated with PE for moisture and corrosion protection.
+  - VCI 3-Ply Paper: Heavy-duty, multi-layer corrosion inhibitive paper.
+  - VCI LDPE Film: Polyethylene film with VCI for rust prevention.
+  - VCI HDPE Laminated Strength Fabric: Heavy-duty woven fabric with VCI and HDPE lamination.
+  - VCI MET PET Laminated Paper: Kraft paper with metallized PET and VCI for high barrier.
+  - VCI 4-Ply Fabric: Multi-layered VCI composite for long-term corrosion protection.
+  - VCI Shrink Film: Shrinkable film with VCI for tamper-resistant, rust-proof packaging.
+  - VCI Desiccant: Dual-action moisture absorber and corrosion inhibitor.
+  - VCI Masterbatch: Additive for imparting VCI properties to plastics.
+  - VCI Power Stretch Film: Stretch wrap film with VCI for pallet and industrial packaging.
+  - Industrial Wax Paper: Wax-coated kraft paper for moisture and oil barrier.
+  - Alu Barrier Bags: Aluminum foil-based high-barrier bags for moisture, oxygen, and UV protection.
+  - VCI Eco Paper: Sustainable, recyclable, and biodegradable VCI paper.
   - SMP Bags: Multi-layer bags for food and dairy with strong barriers.
-  - Bulk Tea Packaging Bags: Designed for freshness and aroma retention in bulk tea storage and transport.
+  - Bulk Tea Packaging Bags: High-strength kraft or woven bags with moisture barrier for tea.
+  - PE-Coated Paper (Food Grade): Kraft or MG paper with food-safe PE coating.
+  - Wax-Coated Paper: Moisture-resistant, grease-repellent paper for food and industrial use.
+  - Paper Aluminum Pouches: Kraft paper with aluminum foil for high-barrier food and pharma packaging.
+  - Standing Pouches: Stand-up pouches for food, personal care, and more.
+  - HDPE Laminated Paper Bags: Kraft paper laminated with HDPE for agricultural and industrial use.
+  - Sugar Paper: Food-grade paper for sugar and granular food packaging.
+  - Multiwall Paper Bags: Multi-layer kraft bags for industrial, chemical, and food products.
+  - Chromo Paper is our offering.
 - Many more solutions for Food & Agro, industrial, and specialty packaging. (For more, see Product Analysis or ask for details.)
+- If you tell me your requirements, I can also suggest the most suitable product for your needs.
 
 CONTACT INFORMATION:
 - General Enquiries: info@konnectpackaging.com
