@@ -1,6 +1,6 @@
 // Chatbot.jsx (fully integrated with ElevenLabs)
 import { useState, useEffect } from 'react';
-import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 import ChatbotUI from './ChatbotUI';
 
 // Emotion detection utilities
@@ -93,9 +93,8 @@ Always answer as a knowledgeable representative of KONNECT Packaging, using the 
 
 IMPORTANT: All your responses must be concise and brief within (150-200 words). Only give detailed answers when asked. Do not use markdown or asterisks for bullet points—use plain text. Always use a smaller font for your responses in the UI to distinguish AI replies.`;
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY || "your_default_api_key",
-  dangerouslyAllowBrowser: true,
+const ai = new GoogleGenAI({
+  apiKey: import.meta.env.VITE_GEMINI_API_KEY || "your_default_api_key"
 });
 
 const Chatbot = ({ onClose }) => {
@@ -250,23 +249,28 @@ const Chatbot = ({ onClose }) => {
         languageSystemPrompt = "Please respond in the user's language.";
       }
 
-      const openAIMessages = [
-        { role: "system", content: systemContext },
-        { role: "system", content: emotionalContext },
-        { role: "system", content: languageSystemPrompt },
-        ...chatMessages.slice(1).map(msg => ({
-          role: msg.sender === "user" ? "user" : "assistant",
-          content: msg.message
-        }))
-      ];
+      // Build conversation history for Gemini
+      const conversationHistory = chatMessages.slice(1).map(msg => ({
+        role: msg.sender === "user" ? "user" : "model",
+        parts: [{ text: msg.message }]
+      }));
 
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: openAIMessages,
-        temperature: 0.7,
+      // Combine system prompts
+      const systemPrompt = `${systemContext}\n\n${emotionalContext}\n\n${languageSystemPrompt}`;
+
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: [
+          { role: "user", parts: [{ text: systemPrompt }] },
+          ...conversationHistory
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 500,
+        }
       });
       
-      const responseText = completion.choices[0]?.message?.content?.trim();
+      const responseText = response.text?.trim();
       if (responseText) {
         setMessages([...chatMessages, {
           message: responseText,
@@ -277,7 +281,7 @@ const Chatbot = ({ onClose }) => {
         }]);
         setTimeout(() => speakMessage(responseText), 100);
       } else {
-        throw new Error("Empty response from OpenAI API");
+        throw new Error("Empty response from Gemini API");
       }
     } catch (error) {
       console.error("Chatbot error:", error);
