@@ -3,7 +3,6 @@ import { useState } from "react";
 import '@fontsource/krona-one/400.css';
 import '@fontsource/montserrat';
 import { Carousel } from "../ui/Carousal";
-import { ArrowRight } from "lucide-react"; // Use Lucide React icon
 
 // Certification data array
 const certifications = [
@@ -69,46 +68,79 @@ const certifications = [
   }
 ];
 
-// Reusable Card component
+// Reusable Card component with fixed sizes for zoom stability
 const CertificationCard = ({ certification }) => {
   const { id, title, description } = certification;
 
   return (
     <div
-      className="relative max-w-full mx-auto h-[320px] w-[550px] max-md:h-[220px] max-md:w-[380px] max-sm:h-[45vw] max-sm:w-[350px] duration-400 ease-in-out"
+      className="relative mx-auto duration-400 ease-in-out"
+      style={{
+        width: '550px',
+        height: '320px',
+        maxWidth: '90vw'
+      }}
     >
       {/* Card background with rounded corners and gradient */}
-      <div className="w-full h-full bg-gradient-to-tr from-[#FFD57F] to-[#F6DFAB] rounded-[20px] border-2 border-black/60"></div>
+      <div 
+        className="w-full h-full rounded-[20px] border-2 border-black/60"
+        style={{
+          background: 'linear-gradient(to top right, #FFD57F, #F6DFAB)'
+        }}
+      ></div>
       
-      {/* Title */}
-      <div className="absolute top-[30px] left-0 right-0 text-center text-[32px] max-md:text-[24px] max-sm:text-[20px] text-black font-bold max-sm:top-[18px]">
+      {/* Title - using clamp for smooth scaling */}
+      <div 
+        className="absolute left-0 right-0 text-center text-black font-bold"
+        style={{
+          top: '30px',
+          fontSize: 'clamp(20px, 3vw, 32px)'
+        }}
+      >
         {title}
       </div>
       
       {/* Horizontal line under title with fade effect */}
       <div 
-        className="absolute top-[80px] left-[30px] right-[30px] h-[2px] max-md:top-[65px] max-sm:top-[43px] max-md:left-[20px] max-md:right-[20px]"
+        className="absolute left-[30px] right-[30px]"
         style={{
+          top: '80px',
+          height: '2px',
           background: 'linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.8) 70%, rgba(0,0,0,0))'
         }}
       ></div>
       
       {/* Description text container with fixed height */}
-      <div className="absolute top-[110px] left-[25px] right-[25px] h-[100px] max-md:top-[80px] max-md:h-[90px] max-sm:top-[60px] max-sm:h-[85px] max-md:left-[15px] max-md:right-[15px] flex items-center justify-center">
+      <div 
+        className="absolute left-[25px] right-[25px] flex items-center justify-center"
+        style={{
+          top: '110px',
+          height: '140px'
+        }}
+      >
         <div
-          className="text-[1.2rem] max-md:text-[12px] max-sm:text-[2.7vw] font-medium text-black text-center leading-[1.3] px-4 overflow-hidden"
-          style={{ fontFamily: "'Montserrat', sans-serif" }}
+          className="font-medium text-black text-center leading-[1.4] px-4 overflow-hidden"
+          style={{ 
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: 'clamp(14px, 1.5vw, 18px)' // Increased size with dynamic scaling
+          }}
         >
           {description}
         </div>
       </div>
       
       {/* Check mark icon at the bottom of the card */}
-      <div className="absolute bottom-[15px] left-1/2 transform -translate-x-1/2 max-md:bottom-[8px] max-sm:bottom-[6px]">
+      <div 
+        className="absolute left-1/2 transform -translate-x-1/2"
+        style={{ bottom: '15px' }}
+      >
         <img 
           src="/hero/check.png" 
           alt="Certification check" 
-          className="w-[140px] h-[40px] max-md:w-[100px] max-md:h-[20px] max-sm:w-[16vw] max-sm:h-[5vw]" 
+          style={{
+            width: 'clamp(100px, 10vw, 140px)',
+            height: 'auto'
+          }}
         />
       </div>
     </div>
@@ -117,10 +149,9 @@ const CertificationCard = ({ certification }) => {
 
 // Main Certifications component
 function Certi() {
-  const [currentCardIndex, setCurrentCardIndex] = useState(1); // Sync with Carousel initial index
+  const [currentCardIndex, setCurrentCardIndex] = useState(1);
 
-  // Prepare slides for Carousel (both mobile and desktop)
-  // Add multiple clones for infinite effect
+  // Prepare slides for Carousel
   const carouselSlides = [
     // Add two clones from the end at the start
     {
@@ -167,31 +198,44 @@ function Certi() {
     },
   ];
 
-  // Mobile navigation handlers (wrap around for infinite effect)
+  // Mobile navigation handlers
   const goPrev = () => setCurrentCardIndex(prev => (prev <= 0 ? carouselSlides.length - 2 : prev - 1));
   const goNext = () => setCurrentCardIndex(prev => (prev >= carouselSlides.length - 2 ? 1 : prev + 1));
 
   return (
-    <div className="box-border py-6 md:pb-14 pt-0 w-full font-['Krona_One']">
-      <div className="text-5xl text-center text-black mb-2 md:mb-12 max-md:text-4xl max-sm:text-3xl">
+    <div className="box-border py-8 md:py-12 lg:py-14 w-full font-['Krona_One']">
+      {/* Heading - using clamp for smooth scaling */}
+      <div 
+        className="text-center text-black mb-8 md:mb-12 lg:mb-16"
+        style={{
+          fontSize: 'clamp(24px, 4vw, 48px)'
+        }}
+      >
         Certifications
       </div>
 
       {/* Desktop view - use Carousel with infinite auto-scroll */}
       <div className="hidden sm:flex w-full justify-center items-center">
-        <div className="w-[70vw] max-w-[700px] mx-auto">
+        <div 
+          className="mx-auto"
+          style={{
+            width: 'clamp(500px, 70vw, 700px)'
+          }}
+        >
           <Carousel slides={carouselSlides} infinite autoScroll autoScrollInterval={3500} />
         </div>
       </div>
 
-      {/* Mobile view - use Carousel with infinite auto-scroll, only one card visible at a time, with navigation buttons */}
-      <div className="sm:hidden w-full px-4 pt-8 pb-8"> {/* Increased pt-8 and added pb-8 for more vertical space */}
-        <div className="relative overflow-visible w-full py-8 flex flex-col items-center justify-center"> {/* Increased py-8 and set overflow-visible */}
-          <div className="w-[100vw] max-w-[70vw] mx-auto relative"> {/* Increased max-w for more space */}
+      {/* Mobile view - use Carousel with infinite auto-scroll */}
+      <div className="sm:hidden w-full px-4 py-8">
+        <div className="relative overflow-visible w-full py-8 flex flex-col items-center justify-center">
+          <div 
+            className="mx-auto relative"
+            style={{
+              width: 'min(90vw, 400px)'
+            }}
+          >
             <Carousel slides={carouselSlides} infinite autoScroll autoScrollInterval={3500} />
-            {/* Navigation buttons for mobile */}
-            <div className="flex justify-center w-full mt-12">
-            </div>
           </div>
         </div>
       </div>

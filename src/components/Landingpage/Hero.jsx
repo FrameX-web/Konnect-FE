@@ -53,6 +53,32 @@ const Hero = ({ scrollToProducts }) => {
 
   const navigate = useNavigate();
 
+  // Add: safe viewport handling for pixel-perfect height at any zoom/orientation
+  const getVhUnit = () => window.innerHeight / 100;
+  const getIsLg = () => window.matchMedia('(min-width: 1024px)').matches;
+
+  const [vh, setVh] = useState(getVhUnit());
+  const [isLg, setIsLg] = useState(getIsLg());
+
+  useEffect(() => {
+    const onResize = () => {
+      setVh(getVhUnit());
+      setIsLg(getIsLg());
+    };
+    onResize();
+    window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('orientationchange', onResize, { passive: true });
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+    };
+  }, []);
+
+  // Derived stable heights (keep layout same, just resilient to zoom/mobile UI)
+  const containerMinH = `${(isLg ? 110 : 65) * vh}px`; // mirrors lg:min-h-[110vh] / min-h-[65vh]
+  const headerOffsetPx = isLg ? 150 : 80; // mirrors calc offsets used in classes
+  const gridMinH = `${((isLg ? 100 : 65) * vh) - headerOffsetPx}px`; // mirrors lg:calc(100vh-150px) / calc(65vh-80px)
+
   useEffect(() => {
     const imageInterval = setInterval(() => {
       setIsAnimating(true);
@@ -82,13 +108,20 @@ const Hero = ({ scrollToProducts }) => {
       key={src}
       src={src}
       alt="Konnect Packaging Bags"
+      decoding="async"
+      loading="eager"
+      draggable={false}
       className={`
-        w-full h-auto object-contain transform origin-center
+        w-full h-auto object-contain transform transform-gpu origin-center
         absolute top-[-60px] md:top-0 lg:top-30 left-2 md:left-0
-        transition-all duration-[900ms] ease-in-out
+        transition-all duration-[900ms] ease-in-out will-change-transform
         ${className}
       `}
-      style={{ zIndex: z }}
+      style={{
+        zIndex: z,
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden'
+      }}
     />
   );
 
@@ -96,12 +129,18 @@ const Hero = ({ scrollToProducts }) => {
     <div
       className="min-h-[65vh] lg:min-h-[110vh] rounded-[1rem] lg:rounded-[3rem] font-['Krona_One'] overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #FAE5B5 0%, #EECF8E 100%)'
+        background: 'linear-gradient(135deg, #FAE5B5 0%, #EECF8E 100%)',
+        // Add: inline minHeight using safe vh to eliminate zoom/orientation jumps
+        minHeight: containerMinH
       }}
     >
       <Header />
       <div className="max-w-7xl mx-auto px-2 lg:px-8 py-2 lg:py-8">
-        <div className="flex flex-col lg:grid grid-cols-1 lg:grid-cols-2 gap-1 lg:gap-16 items-center min-h-[calc(65vh-80px)] lg:min-h-[calc(100vh-150px)]">
+        <div
+          className="flex flex-col lg:grid grid-cols-1 lg:grid-cols-2 gap-1 lg:gap-16 items-center min-h-[calc(65vh-80px)] lg:min-h-[calc(100vh-150px)]"
+          // Add: inline minHeight using safe vh (preserves same layout, more stable)
+          style={{ minHeight: gridMinH }}
+        >
           {/* Left Column - Product Image */}
           <div className="hidden lg:flex order-2 lg:order-1 flex-col items-start lg:items-start space-y-4 pt-2 lg:pt-8 relative">
             <div
@@ -128,11 +167,11 @@ const Hero = ({ scrollToProducts }) => {
 
           {/* Right Column - Main Content */}
           <div className="order-1 lg:order-2 flex flex-col items-start lg:items-start text-left lg:text-left relative">
-            <div className="hidden lg:block absolute -top-25 -left-180 z-30">
+            <div className="hidden lg:block absolute 2xl:-top-25 lg:-left-130 lg:-top-20 xl:-top-20 xl:-left-160  2xl:-left-180 z-30">
               <img
                 src="/hero/1.png"
                 alt="Certification Badge"
-                className="w-32 lg:w-44 xl:w-50 2xl:w-46 h-auto object-contain transition-transform duration-500 hover:scale-105 cursor-pointer"
+                className="w-32 lg:w-44 xl:w-40 2xl:w-46 h-auto object-contain transition-transform duration-500 hover:scale-105 cursor-pointer"
                 onClick={() => navigate('/awards-certifications')}
               />
             </div>
@@ -143,28 +182,28 @@ const Hero = ({ scrollToProducts }) => {
               </div>
 
               {/* Title Animation */}
-              <div className="relative overflow-hidden h-[20vw] lg:h-32 xl:h-40 2xl:h-35 w-full lg:w-[30rem] xl:w-[37rem] 2xl:w-[40rem]">
+              <div className="relative overflow-hidden h-[20vw] lg:h-[5rem] xl:h-[7.5rem] 2xl:h-[7.5rem] w-full lg:w-[30rem] xl:w-[40rem] 2xl:w-[40rem]">
                 <div className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
-                  <h1 className="text-[7vw] lg:text-[2.5rem] xl:text-[3.5rem] font-normal text-black leading-snug lg:leading-tight font-['Krona_One'] break-words max-w-full">
+                  <h1 className="text-[7vw] lg:text-[2rem] xl:text-[3rem] font-normal text-black leading-snug lg:leading-tight font-['Krona_One'] break-words max-w-full">
                     {TITLES[textIndex].title}
                   </h1>
                 </div>
                 <div className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
-                  <h1 className="text-[7vw] lg:text-[2.5rem] xl:text-[3.5rem] font-normal text-black leading-snug lg:leading-tight font-['Krona_One'] break-words max-w-full">
+                  <h1 className="text-[7vw] lg:text-[2rem] xl:text-[3rem] font-normal text-black leading-snug lg:leading-tight font-['Krona_One'] break-words max-w-full">
                     {TITLES[nextTextIndex].title}
                   </h1>
                 </div>
               </div>
 
               {/* Subtitle Animation */}
-              <div className="relative overflow-hidden h-[10vw] lg:h-8 xl:h-8 2xl:h-12 w-full 2xl:w-[40vw] mb-1 2xl:mb-12">
+              <div className="relative overflow-hidden h-[10vw] lg:h-[5rem] xl:h-[4rem] 2xl:h-12 w-full xl:w-[50rem] 2xl:w-[40vw] mb-1 2xl:mb-12">
                 <div className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
-                  <p className="text-black 2xl:text-nowrap font-medium text-[2.5vw] lg:text-[1rem] xl:text-[1rem] 2xl:text-[0.9rem] leading-snug lg:leading-relaxed max-w-full lg:max-w-md px-1 font-['Montserrat'] break-words">
+                  <p className="text-black 2xl:text-nowrap xl:text-nowrap font-medium text-[2.5vw] lg:text-[0.8rem] xl:text-[0.8rem] 2xl:text-[0.9rem] leading-snug lg:leading-relaxed max-w-full lg:max-w-md px-1 font-['Montserrat'] break-words">
                     {TITLES[textIndex].subtitle}
                   </p>
                 </div>
                 <div className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
-                   <p className="text-black 2xl:text-nowrap  font-medium text-[2.5vw] lg:text-[1rem] xl:text-[1rem] 2xl:text-[0.9rem] leading-snug lg:leading-relaxed max-w-full lg:max-w-md px-1 font-['Montserrat'] break-words">
+                   <p className="text-black 2xl:text-nowrap xl:text-nowrap font-medium text-[2.5vw] lg:text-[0.8rem] xl:text-[0.8rem] 2xl:text-[0.9rem] leading-snug lg:leading-relaxed max-w-full lg:max-w-md px-1 font-['Montserrat'] break-words">
                    {TITLES[nextTextIndex].subtitle}
                   </p>
                 </div>
@@ -181,13 +220,13 @@ const Hero = ({ scrollToProducts }) => {
                       if (el) el.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="bg-black text-white 2xl:pr-[0.5vw] px-[2vw] py-[1.5vw] lg:py-2.5 xl:py-3 2xl:py-2 rounded-full flex items-center space-x-1 hover:bg-neutral-900 transition-all duration-300 font-['Krona_One'] font-normal text-[2.7vw] lg:text-sm xl:text-base transition-transform duration-500 hover:scale-105"
+                  className="bg-black text-white 2xl:pr-[0.5vw] xl:pr-[0.5rem] xl:px-[1rem] xl:py-[0.5rem] px-[2vw] py-[1.5vw] lg:py-2.5 2xl:py-2 rounded-full flex items-center space-x-1 hover:bg-neutral-900 transition-all duration-300 font-['Krona_One'] font-normal text-[2.7vw] lg:text-sm xl:text-base transition-transform duration-500 hover:scale-105"
                 >
                   <span>Explore Our Products</span>
                   <img
                     src="/arrow.png"
                     alt="Arrow"
-                    className="w-[5vw] h-[5vw] lg:w-6 lg:h-6 xl:w-8 xl:h-8 2xl:w-10 2xl:h-10 ml-0.5"
+                    className="w-[5vw] h-[5vw] lg:w-6 lg:h-6 xl:w-10 xl:h-10  2xl:w-10 2xl:h-10 ml-0.5"
                   />
                 </button>
               </div>
@@ -212,10 +251,15 @@ const Hero = ({ scrollToProducts }) => {
               </div>
             </div>
 
-            <div className="hidden lg:flex absolute right-30 top-35 opacity-60 flex flex-col text-white leading-none pointer-events-none select-none z-0 space-y-6 xl:space-y-8 2xl:space-y-10">
-              <div className="text-[3.5rem] lg:text-[4.5rem] xl:text-[6.5rem] 2xl:text-[9rem] font-light">KONNECT</div>
-              <div className="text-[3.5rem] lg:text-[4.5rem] xl:text-[6.5rem] 2xl:text-[9rem] font-normal">PACKAGING</div>
-            </div>
+            <div className="hidden lg:flex absolute lg:right-70 xl:right-40 2xl:right-30 lg:top-30 xl:top-30 2xl:top-35 opacity-60 flex-col text-white leading-none pointer-events-none select-none z-0 space-y-4 lg:space-y-6 xl:space-y-8 2xl:space-y-10">
+  <div className="text-[2.5rem] md:text-[3rem] lg:text-[5.5rem] xl:text-[8rem] 2xl:text-[9rem] font-light">
+    KONNECT
+  </div>
+  <div className="text-[2.5rem] md:text-[3rem] lg:text-[5.5rem] xl:text-[8rem] 2xl:text-[9rem] font-normal">
+    PACKAGING
+  </div>
+</div>
+
           </div>
         </div>
       </div>

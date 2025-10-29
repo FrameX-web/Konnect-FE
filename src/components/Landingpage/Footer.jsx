@@ -108,16 +108,6 @@ function Footer() {
             <div className="col-span-1">
               <SectionTitle>Our company</SectionTitle>
               <ul>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => handlePopup("The Career page is still under construction. We're building something amazing for you!")}
-                    className="text-gray-300 text-sm transition-all duration-500 ease-out block py-2.5 px-3 -mx-3 rounded-lg relative overflow-hidden group hover:text-white hover:translate-x-2 transform hover:bg-gradient-to-r hover:from-[#E9C77F]/20 hover:to-[#E9C77F]/5 hover:shadow-lg hover:shadow-[#E9C77F]/10 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#E9C77F] before:to-transparent before:w-1 before:h-full before:left-0 before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100"
-                    style={{ fontFamily: "'Montserrat', sans-serif" }}
-                  >
-                    Career
-                  </button>
-                </li>
                 <CompanyLink to="/why-choose-us">Why Choose Us</CompanyLink>
                 <CompanyLink to="/vision-mission">Vision and Mission</CompanyLink>
                 <CompanyLink to="/analysis">Product Analysis</CompanyLink>
@@ -202,5 +192,5 @@ function Footer() {
 }
 
 export default Footer;
-       
+
 

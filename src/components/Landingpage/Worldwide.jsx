@@ -51,6 +51,18 @@ function Worldwide() {
       personTitle: "Head of Operations",
       email: "Sales@konnectpackaging.com",
       contact: ""
+    },
+    {
+      id: "2015:45",
+      name: "SLOVAKIA",
+      type: "OFFICE",
+      image: "/slovakia.png",
+      imageStyle: { width: '80%', height: '80%', left: '10%', top: '10%' },
+      description: "Delivering quality products across Slovakia",
+      personName: "TBD",
+      personTitle: "Head of Operations",
+      email: "",
+      contact: ""
     }
   ];
 
@@ -145,14 +157,17 @@ function Worldwide() {
                 transition: 'top 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
-              <div className="text-sm md:text-lg font-bold text-white leading-tight mb-1" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}>
+              <div 
+                className="text-xs md:text-[0.8rem] font-bold text-white leading-tight mb-1" 
+                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
+              >
                 {name}
               </div>
               <div
                 className={
                   name === "INDIA"
-                    ? "text-[6px] md:text-[9px] text-white font-medium"
-                    : "text-[10px] md:text-xs text-white font-medium"
+                    ? "text-[5px] md:text-[8px] text-white font-medium"
+                    : "text-[9px] md:text-[9px] text-white font-medium"
                 }
                 style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
               >
@@ -182,11 +197,11 @@ function Worldwide() {
                 transitionDelay: '0.2s'
               }}
             >
-              <div className="text-black font-bold text-[13px] md:text-base leading-tight" style={{ marginBottom: '-2px' }}>
+              <div className="text-black font-bold text-[12px] md:text-sm leading-tight" style={{ marginBottom: '-2px' }}>
                 {personName}
               </div>
               <p 
-                className="text-black text-[10px] md:text-sm leading-relaxed"
+                className="text-black text-[9px] md:text-xs leading-relaxed"
                 style={{
                   fontFamily: "'Montserrat', sans-serif",
                   marginTop: '-4px',
@@ -200,7 +215,7 @@ function Worldwide() {
                 <>
                   {email && (
                     <div
-                      className="text-black font-medium text-[10px] md:text-sm leading-normal w-full flex justify-center"
+                      className="text-black font-medium text-[9px] md:text-[0.8rem] leading-normal w-full flex justify-center"
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
                         marginBottom: '-4px',
@@ -240,13 +255,13 @@ function Worldwide() {
       {/* Removed map image and container */}
       
       {/* Cards grid */}
-      <div className="mt-8 md:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-[6%] max-w-[95%] md:max-w-[90%] mx-auto">
+      <div className="mt-8 md:mt-16 grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-[3%] max-w-[98%] md:max-w-[92%] mx-auto">
         {countries.map((country, index) => (
           <div 
             key={index} 
             className="w-full"
             style={{
-              maxWidth: '250px',
+              maxWidth: '220px',
               margin: '0 auto'
             }}
           >

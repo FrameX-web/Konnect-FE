@@ -217,10 +217,10 @@ function AwardsCertifications() {
       <div className="max-w-[1200px] mx-auto">
         {/* Top Banner */}
         <div className="bg-gradient-to-r from-[#E9C77F] to-[#FBE6B7] rounded-2xl p-6 lg:p-8 mb-12 hover:shadow-lg transition-shadow duration-300">
-          <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold text-black mb-4" style={{ fontFamily: 'Krona One, sans-serif' }}>
+          <h1 className="text-[4.5vw] sm:text-3xl lg:text-4xl font-bold text-black mb-4" style={{ fontFamily: 'Krona One, sans-serif' }}>
             Awards & Certifications
           </h1>
-          <p className="text-sm font-medium sm:text-base lg:text-lg text-black/80 leading-relaxed max-w-4xl">
+          <p className="text-[3vw] font-medium sm:text-base lg:text-lg text-black/80 leading-relaxed max-w-4xl">
             Recognized for excellence in sustainable packaging solutions, 
             Konnect holds industry certifications that validate our innovation and 
             ESG commitment.

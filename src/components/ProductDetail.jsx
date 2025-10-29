@@ -15,6 +15,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const [show360, setShow360] = React.useState(false);
   const [showVideo, setShowVideo] = React.useState(false);
+  const [showComingSoon, setShowComingSoon] = React.useState(false);
 
   // Scroll to top when productId changes
   useEffect(() => {
@@ -314,22 +315,16 @@ const ProductDetail = () => {
     };
   }, []);
 
-  // Update the Watch Now button onClick:
-  // Find the Watch Now button and update its onClick:
-  <button 
-    className="group relative overflow-hidden bg-[#E9C77F]"
-    onClick={handleVideoOpen}
-  >
-  // ...existing button content...
-  </button>
-
-  // Update the Video Player Modal:
-  {showVideo && productVideos[product.id] && (
-    <VideoPlayer
-      videoUrl={productVideos[product.id]}
-      onClose={handleVideoClose}
-    />
-  )}
+  // Add handler for Watch Now button
+  const handleWatchNow = React.useCallback(() => {
+    if (productVideos[product.id]) {
+      setShowVideo(true);
+      document.body.style.overflow = 'hidden';
+    } else {
+      setShowComingSoon(true);
+      setTimeout(() => setShowComingSoon(false), 3000);
+    }
+  }, [product]);
 
   if (!product) {
     return (
@@ -414,22 +409,20 @@ const ProductDetail = () => {
               </div>
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-700"></div>
             </button>
-            {/* Show WATCH NOW button for any product with a video URL */}
-            {productVideos[product.id] && (
-              <button 
-                className="group relative overflow-hidden bg-[#E9C77F] hover:bg-[#E9C77F] text-white px-4 py-3.5 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex-1 border border-amber-500/30 ml-2"
-                onClick={handleVideoOpen}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative flex items-center gap-2">
-                  <div className="p-1 bg-white/10 rounded-md group-hover:bg-white/20 transition-colors duration-300">
-                    <FaPlay className="w-3.5 h-3.5 text-white transform group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <span className="text-xs sm:text-sm font-medium">WATCH NOW</span>
+            {/* Show WATCH NOW button for all products */}
+            <button 
+              className="group relative overflow-hidden bg-[#E9C77F] hover:bg-[#E9C77F] text-white px-4 py-3.5 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex-1 border border-amber-500/30 ml-2"
+              onClick={handleWatchNow}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative flex items-center gap-2">
+                <div className="p-1 bg-white/10 rounded-md group-hover:bg-white/20 transition-colors duration-300">
+                  <FaPlay className="w-3.5 h-3.5 text-white transform group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-black/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-700"></div>
-              </button>
-            )}
+                <span className="text-xs sm:text-sm font-medium">WATCH NOW</span>
+              </div>
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-black/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-700"></div>
+            </button>
           </div>
         </div>
 
@@ -667,6 +660,46 @@ const ProductDetail = () => {
           videoUrl={productVideos[product.id]}
           onClose={handleVideoClose}
         />
+      )}
+
+      {/* Coming Soon Popup */}
+      {showComingSoon && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fadeIn"
+          onClick={() => setShowComingSoon(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-8 max-w-md mx-4 shadow-2xl transform animate-scaleIn relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowComingSoon(false)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-300 group"
+              aria-label="Close"
+            >
+              <svg 
+                className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors duration-200" 
+                fill="none" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth="2" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+
+            <div className="text-center">
+              <div className="mb-4 text-6xl">🎬</div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-3 font-['Krona_One']">Coming Soon!</h3>
+              <p className="text-gray-600 font-['Montserrat'] text-lg">
+                Stay tuned for this product's video. We're working on something amazing!
+              </p>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

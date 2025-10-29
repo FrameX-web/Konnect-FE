@@ -11,10 +11,10 @@ const Header = () => {
   const [isGalleryPopupOpen, setIsGalleryPopupOpen] = useState(false);
 
   const navButtonStyle =
-    'font-krona text-black font-medium text-xs xl:text-sm 2xl:text-[12px] px-4 lg:px-5 xl:px-6 2xl:px-4 py-2 xl:py-2.2 bg-white rounded-full shadow-sm hover:shadow-lg hover:bg-[#f8f8f8] cursor-pointer transition-all duration-200';
+    'font-krona text-black font-medium bg-white rounded-full shadow-sm hover:shadow-lg hover:bg-[#f8f8f8] cursor-pointer transition-all duration-200 whitespace-nowrap';
 
   const dropdownItemStyle =
-    'block truncate whitespace-nowrap px-3 xl:px-4 py-1.5 xl:py-2 text-[11px] xl:text-xs 2xl:text-[12px] text-gray-700 hover:bg-gray-100 transition-all duration-150 font-montserrat';
+    'block truncate whitespace-nowrap text-gray-700 hover:bg-gray-100 transition-all duration-150 font-montserrat';
 
   const toggleDropdown = (dropdown) => {
     setActiveDropdown((prev) => (prev === dropdown ? null : dropdown));
@@ -88,56 +88,247 @@ const Header = () => {
 
   return (
     <>
-      <header className="w-full px-4 lg:px-6 xl:px-8 py-3 lg:py-4 xl:py-5 2xl:py-6 bg-transparent relative z-50 flex items-center min-h-[72px]">
+      <header className="w-full bg-transparent relative z-50 flex items-center" style={{
+        padding: 'clamp(0.75rem, 1.5vw, 1.5rem) clamp(1rem, 2vw, 2rem)',
+        minHeight: 'clamp(60px, 8vw, 80px)'
+      }}>
         <nav className="flex items-center justify-between max-w-full mx-auto w-full">
-          <a className="flex items-center cursor-pointer" href="/">
-            <img src="/logo.png" alt="Konnect Packaging" className="h-12 lg:h-14 xl:h-16 2xl:h-18" />
+          <a className="flex items-center cursor-pointer flex-shrink-0" href="/">
+            <img 
+              src="/logo.png" 
+              alt="Konnect Packaging" 
+              style={{
+                height: 'clamp(2.5rem, 4vw, 4rem)'
+              }}
+            />
           </a>
 
-          <div className="hidden lg:flex items-center space-x-2 lg:space-x-3 xl:space-x-4 2xl:space-x-5 rounded-4xl px-1.5 lg:px-2 py-1 bg-white/40 h-full">
-            <a href="/" className={navButtonStyle}>Home</a>
+          <div 
+            className="hidden lg:flex items-center rounded-4xl bg-white/40 h-full flex-shrink-0"
+            style={{
+              gap: 'clamp(0.25rem, 0.8vw, 1rem)',
+              padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.375rem, 0.8vw, 0.75rem)'
+            }}
+          >
+            <a 
+              href="/" 
+              className={navButtonStyle}
+              style={{
+                fontSize: 'clamp(0.65rem, 1vw, 0.8rem)',
+                padding: 'clamp(0.375rem, 0.8vw, 0.6rem) clamp(0.75rem, 1.5vw, 1.25rem)'
+              }}
+            >
+              Home
+            </a>
 
             <div className="relative h-full flex items-center">
-              <button onClick={() => toggleDropdown('about')} className={`${navButtonStyle} flex items-center space-x-1 h-full`} type="button">
+              <button 
+                onClick={() => toggleDropdown('about')} 
+                className={`${navButtonStyle} flex items-center h-full`}
+                style={{
+                  fontSize: 'clamp(0.65rem, 1vw, 0.8rem)',
+                  padding: 'clamp(0.375rem, 0.8vw, 0.6rem) clamp(0.75rem, 1.5vw, 1.25rem)',
+                  gap: 'clamp(0.125rem, 0.3vw, 0.25rem)'
+                }}
+                type="button"
+              >
                 <span>About us</span>
-                <ChevronDown className="w-3 h-3 xl:w-4 xl:h-4" />
+                <ChevronDown style={{ width: 'clamp(0.75rem, 1.2vw, 1rem)', height: 'clamp(0.75rem, 1.2vw, 1rem)' }} />
               </button>
-              <div className={`absolute top-full mt-2 w-48 xl:w-62 2xl:w-66 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999] overflow-hidden transition-all duration-500 ease-in-out ${activeDropdown === 'about' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="py-2">
-                  <a href="/our-story" className={dropdownItemStyle}>Our Story</a>
-                  <a href="/vision-values" className={dropdownItemStyle}>Vision & Values</a>
-                  <a href="/leadership" className={dropdownItemStyle}>Leadership Message</a>
-                  <a href="/global-footprint" onClick={handleGlobalFootprintClick} className={dropdownItemStyle}>Our Global Footprint</a>
-                  <a href="/awards-certifications" onClick={handleAwardsCertificationsClick} className={dropdownItemStyle}>Awards & Certifications</a>
-                  <a href="/future" className={dropdownItemStyle}>Future-Proof Protection</a>
-                  <a href="#" onClick={handleGalleryClick} className={dropdownItemStyle}>Gallery</a>
+              <div className={`absolute top-full mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999] overflow-hidden transition-all duration-500 ease-in-out ${activeDropdown === 'about' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                style={{
+                  width: 'clamp(12rem, 20vw, 16rem)'
+                }}
+              >
+                <div style={{ padding: 'clamp(0.375rem, 0.6vw, 0.5rem)' }}>
+                  <a 
+                    href="/our-story" 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Our Story
+                  </a>
+                  <a 
+                    href="/vision-values" 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Vision & Values
+                  </a>
+                  <a 
+                    href="/leadership" 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Leadership Message
+                  </a>
+                  <a 
+                    href="/global-footprint" 
+                    onClick={handleGlobalFootprintClick} 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Our Global Footprint
+                  </a>
+                  <a 
+                    href="/awards-certifications" 
+                    onClick={handleAwardsCertificationsClick} 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Awards & Certifications
+                  </a>
+                  <a 
+                    href="/future" 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Future-Proof Protection
+                  </a>
+                  <a 
+                    href="#" 
+                    onClick={handleGalleryClick} 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Gallery
+                  </a>
                 </div>
               </div>
             </div>
 
-            <button onClick={scrollToProducts} className={navButtonStyle}>Products</button>
+            <button 
+              onClick={scrollToProducts} 
+              className={navButtonStyle}
+              style={{
+                fontSize: 'clamp(0.65rem, 1vw, 0.8rem)',
+                padding: 'clamp(0.375rem, 0.8vw, 0.6rem) clamp(0.75rem, 1.5vw, 1.25rem)'
+              }}
+            >
+              Products
+            </button>
 
             <div className="relative h-full flex items-center">
-              <button onClick={() => toggleDropdown('ecosectors')} className={`${navButtonStyle} flex items-center space-x-1 h-full`} type="button">
+              <button 
+                onClick={() => toggleDropdown('ecosectors')} 
+                className={`${navButtonStyle} flex items-center h-full`}
+                style={{
+                  fontSize: 'clamp(0.65rem, 1vw, 0.8rem)',
+                  padding: 'clamp(0.375rem, 0.8vw, 0.6rem) clamp(0.75rem, 1.5vw, 1.25rem)',
+                  gap: 'clamp(0.125rem, 0.3vw, 0.25rem)'
+                }}
+                type="button"
+              >
                 <span>EcoSectors</span>
-                <ChevronDown className="w-3 h-3 xl:w-4 xl:h-4" />
+                <ChevronDown style={{ width: 'clamp(0.75rem, 1.2vw, 1rem)', height: 'clamp(0.75rem, 1.2vw, 1rem)' }} />
               </button>
-              <div className={`absolute top-full mt-2 w-56 xl:w-80 2xl:w-84 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999] overflow-hidden transition-all duration-500 ease-in-out ${activeDropdown === 'ecosectors' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="py-2">
-                  <a href="/industries" className={dropdownItemStyle}>Industries We Serve</a>
-                  <a href="/eco-sustainability" className={dropdownItemStyle}>Eco-Friendly Sustainability</a>
-                  <a href="/custom-solutions" className={dropdownItemStyle}>Custom Solutions & Innovation</a>
+              <div className={`absolute top-full mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-[9999] overflow-hidden transition-all duration-500 ease-in-out ${activeDropdown === 'ecosectors' ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                style={{
+                  width: 'clamp(14rem, 22vw, 20rem)'
+                }}
+              >
+                <div style={{ padding: 'clamp(0.375rem, 0.6vw, 0.5rem)' }}>
+                  <a 
+                    href="/industries" 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Industries We Serve
+                  </a>
+                  <a 
+                    href="/eco-sustainability" 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Eco-Friendly Sustainability
+                  </a>
+                  <a 
+                    href="/custom-solutions" 
+                    className={dropdownItemStyle}
+                    style={{
+                      fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+                      padding: 'clamp(0.25rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.75rem)'
+                    }}
+                  >
+                    Custom Solutions & Innovation
+                  </a>
                 </div>
               </div>
             </div>
 
-            <a href="/testimonials" className={navButtonStyle}>Testimonials</a>
-            <a href="/blogs" className={navButtonStyle}>Blog & Faqs</a>
+            <a 
+              href="/testimonials" 
+              className={navButtonStyle}
+              style={{
+                fontSize: 'clamp(0.65rem, 1vw, 0.8rem)',
+                padding: 'clamp(0.375rem, 0.8vw, 0.6rem) clamp(0.75rem, 1.5vw, 1.25rem)'
+              }}
+            >
+              Testimonials
+            </a>
+            <a 
+              href="/blogs" 
+              className={navButtonStyle}
+              style={{
+                fontSize: 'clamp(0.65rem, 1vw, 0.8rem)',
+                padding: 'clamp(0.375rem, 0.8vw, 0.6rem) clamp(0.75rem, 1.5vw, 1.25rem)'
+              }}
+            >
+              Faq
+            </a>
           </div>
 
-          <a href="/contact" className="hidden lg:flex items-center space-x-1.5 xl:space-x-2 bg-white/40 px-3 lg:px-2 xl:px-1 xl:pr-3  py-1.5 xl:py-1 rounded-full shadow-sm hover:shadow-lg hover:bg-white/60 cursor-pointer transition-colors duration-150 h-full">
-            <img src="/contactlogo.png" alt="Contact" className="w-6 h-6 xl:w-7 xl:h-7 2xl:w-8 2xl:h-8" />
-            <span className="text-black font-normal text-xs xl:text-sm 2xl:text-[14px]">Contact</span>
+          <a 
+            href="/contact" 
+            className="hidden lg:flex items-center bg-white/40 rounded-full shadow-sm hover:shadow-lg hover:bg-white/60 cursor-pointer transition-colors duration-150 h-full flex-shrink-0"
+            style={{
+              gap: 'clamp(0.25rem, 0.5vw, 0.5rem)',
+              padding: 'clamp(0.25rem, 0.5vw, 0.375rem) clamp(0.5rem, 1vw, 0.75rem)'
+            }}
+          >
+            <img 
+              src="/contactlogo.png" 
+              alt="Contact" 
+              style={{
+                width: 'clamp(1.25rem, 2vw, 2rem)',
+                height: 'clamp(1.25rem, 2vw, 2rem)'
+              }}
+            />
+            <span 
+              className="text-black font-normal"
+              style={{
+                fontSize: 'clamp(0.65rem, 1vw, 0.875rem)'
+              }}
+            >
+              Contact
+            </span>
           </a>
 
           <button onClick={toggleMobileMenu} className="lg:hidden flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/40 rounded-full shadow-sm hover:shadow-lg hover:bg-white/60 transition-all duration-200 active:scale-95" type="button" aria-label="Toggle menu">
@@ -230,7 +421,7 @@ const Header = () => {
                   </div>
 
                   <a href="/testimonials" onClick={closeMobileMenu} className="block text-black font-medium text-base sm:text-lg py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg hover:bg-gray-100 transition-colors">Testimonials</a>
-                  <a href="/blogs" onClick={closeMobileMenu} className="block text-black font-medium text-base sm:text-lg py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg hover:bg-gray-100 transition-colors">Blog & Faqs</a>
+                  <a href="/blogs" onClick={closeMobileMenu} className="block text-black font-medium text-base sm:text-lg py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg hover:bg-gray-100 transition-colors">Faq</a>
 
                   <a
                     href="/contact"
