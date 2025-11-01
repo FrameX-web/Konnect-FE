@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Plus, Minus } from "lucide-react";
 import BackButton from "./BackButton";
 
@@ -284,6 +284,74 @@ function Blogs() {
 			[id]: !prev[id],
 		}));
 	};
+
+	useEffect(() => {
+		if (typeof document === 'undefined') return;
+
+		const upsertTag = (selector, createFn) => {
+			const existing = document.head.querySelector(selector);
+			if (existing) return existing;
+			const el = createFn();
+			document.head.appendChild(el);
+			return el;
+		};
+		const setMeta = ({ name, property, content }) => {
+			const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+			const el = upsertTag(selector, () => {
+				const m = document.createElement('meta');
+				if (name) m.setAttribute('name', name);
+				if (property) m.setAttribute('property', property);
+				return m;
+			});
+			el.setAttribute('content', content);
+		};
+		const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+			? window.location.href.split('#')[0]
+			: 'https://www.konnectpackaging.com/faq';
+
+		document.title = 'FAQ: VCI Packaging & Corrosion Protection | Konnect Packaging';
+
+		// Canonical
+		const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+		canonical.setAttribute('rel', 'canonical');
+		canonical.setAttribute('href', canonicalUrl);
+		if (!canonical.parentElement) document.head.appendChild(canonical);
+
+		// Meta
+		setMeta({ name: 'description', content: 'Find quick answers about Konnect Packaging’s VCI packaging, certifications (ROHS, CE, ZED), exports, customization, and protection duration.' });
+		setMeta({ name: 'robots', content: 'index,follow' });
+		setMeta({ property: 'og:title', content: 'FAQ: VCI Packaging & Corrosion Protection | Konnect Packaging' });
+		setMeta({ property: 'og:description', content: 'Answers on eco-friendly materials, exports, customization, and VCI protection duration.' });
+		setMeta({ property: 'og:type', content: 'website' });
+		setMeta({ property: 'og:url', content: canonicalUrl });
+		setMeta({ property: 'og:image', content: '/hero/bg/1.png' });
+		setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+		setMeta({ name: 'twitter:title', content: 'FAQ: VCI Packaging & Corrosion Protection' });
+		setMeta({ name: 'twitter:description', content: 'Konnect Packaging answers about materials, exports, and VCI protection.' });
+		setMeta({ name: 'twitter:image', content: '/hero/bg/1.png' });
+
+		// FAQ JSON-LD
+		const faqLd = {
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: faqData.map((q) => ({
+				'@type': 'Question',
+				name: q.question,
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: q.answer
+				}
+			}))
+		};
+		let script = document.getElementById('ld-faq');
+		if (!script) {
+			script = document.createElement('script');
+			script.type = 'application/ld+json';
+			script.id = 'ld-faq';
+			document.head.appendChild(script);
+		}
+		script.text = JSON.stringify(faqLd);
+	}, []);
 
 	return (
 		<div className="flex justify-center min-h-screen bg-white pb-8 pt-0 md:pt-0 max-md:pt-20" style={{ fontFamily: 'Montserrat, sans-serif' }}>

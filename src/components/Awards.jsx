@@ -124,6 +124,73 @@ function AwardsCertifications() {
     }
   }, [isMobile, isLoaded, isAnimating, currentIndex, isHovered]);
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/awards-certifications';
+
+    document.title = 'Awards & Certifications | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Explore Konnect Packaging’s awards and certifications including ROHS, CE, ZED, GPSD, PQC, and US FDA.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Awards & Certifications | Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'ROHS, CE, ZED, GPSD, PQC, and US FDA certifications validating our sustainable packaging.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/award.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Awards & Certifications' });
+    setMeta({ name: 'twitter:description', content: 'Industry-recognized certifications that validate quality and safety.' });
+    setMeta({ name: 'twitter:image', content: '/award.png' });
+
+    const listLd = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      itemListElement: certificates.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'CreativeWork',
+          name: c.title,
+          description: c.description,
+          image: c.image
+        }
+      }))
+    };
+    let script = document.getElementById('ld-awards');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-awards';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(listLd);
+  }, []);
+
   const handleNext = () => {
     if (isAnimating) return;
     setIsAnimating(true);

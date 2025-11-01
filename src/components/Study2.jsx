@@ -30,6 +30,80 @@ function Study2() {
     }
   ];
 
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/our-story';
+
+    document.title = 'Our Story | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Founded in innovation and built for the future—discover Konnect Packaging’s journey, vision, and ESG-driven impact.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Our Story | Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'How Konnect Packaging blends innovation, compliance, and sustainability to protect and perform.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/story2.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Our Story' });
+    setMeta({ name: 'twitter:description', content: 'A purpose-driven journey in sustainable, protective packaging.' });
+    setMeta({ name: 'twitter:image', content: '/story2.png' });
+
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: 'Our Story',
+      url: canonicalUrl,
+      description: 'Konnect Packaging’s timeline and values powering sustainable protection.',
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: storyFeatures.map((f, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Thing',
+            name: f.title,
+            description: f.description,
+            image: f.icon
+          }
+        }))
+      }
+    };
+    let script = document.getElementById('ld-our-story');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-our-story';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(ld);
+  }, []);
+
   return (
     <div className="w-full py-16 px-6 lg:px-12" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       {/* Desktop View: Only show the image, fit to screen */}

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload } from 'lucide-react';
 import Select from 'react-select';
@@ -90,6 +90,69 @@ function Analysis() {
   const selectedCountry = countryOptions.find(
     (option) => option.label === formData.country
   );
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/analysis';
+
+    document.title = 'Product Analysis & Packaging Consultation | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Upload a product image and get packaging analysis and recommendations from Konnect Packaging experts.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Product Analysis & Packaging Consultation' });
+    setMeta({ property: 'og:description', content: 'Expert review of your product for optimal packaging and protection.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/hero/bg/2.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Product Analysis & Packaging Consultation' });
+    setMeta({ name: 'twitter:description', content: 'Upload an image and get packaging guidance.' });
+
+    const serviceLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Product Analysis & Packaging Consultation',
+      provider: {
+        '@type': 'Organization',
+        name: 'Konnect Packaging'
+      },
+      areaServed: 'Worldwide',
+      description: 'Expert analysis of product design, material, and functionality to recommend optimal packaging solutions.'
+    };
+    let script = document.getElementById('ld-analysis-service');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-analysis-service';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(serviceLd);
+  }, []);
 
   return (
     <div className="w-full min-h-screen bg-white p-4  md:p-6 lg:p-8">

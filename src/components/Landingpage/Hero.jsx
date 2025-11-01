@@ -53,12 +53,28 @@ const Hero = ({ scrollToProducts }) => {
 
   const navigate = useNavigate();
 
-  // Add: safe viewport handling for pixel-perfect height at any zoom/orientation
-  const getVhUnit = () => window.innerHeight / 100;
-  const getIsLg = () => window.matchMedia('(min-width: 1024px)').matches;
+  // SSR‑safe helpers
+  const getVhUnit = () => (typeof window !== 'undefined' ? window.innerHeight / 100 : 1);
+  const getIsLg = () => (typeof window !== 'undefined' ? window.matchMedia('(min-width: 1024px)').matches : false);
 
   const [vh, setVh] = useState(getVhUnit());
   const [isLg, setIsLg] = useState(getIsLg());
+
+  // Reduced motion preference
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  );
+
+  // Interval/timeout refs to avoid leaks and stale closures
+  const imageIntervalRef = useRef(null);
+  const imageTimeoutRef = useRef(null);
+  const textIntervalRef = useRef(null);
+  const textTimeoutRef = useRef(null);
+  const imgIndexRef = useRef(0);
+
+  useEffect(() => {
+    imgIndexRef.current = imgIndex;
+  }, [imgIndex]);
 
   useEffect(() => {
     const onResize = () => {
@@ -74,34 +90,67 @@ const Hero = ({ scrollToProducts }) => {
     };
   }, []);
 
-  // Derived stable heights (keep layout same, just resilient to zoom/mobile UI)
-  const containerMinH = `${(isLg ? 110 : 65) * vh}px`; // mirrors lg:min-h-[110vh] / min-h-[65vh]
-  const headerOffsetPx = isLg ? 150 : 80; // mirrors calc offsets used in classes
-  const gridMinH = `${((isLg ? 100 : 65) * vh) - headerOffsetPx}px`; // mirrors lg:calc(100vh-150px) / calc(65vh-80px)
-
+  // Listen to prefers-reduced-motion changes
   useEffect(() => {
-    const imageInterval = setInterval(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+
+  // Derived stable heights
+  const containerMinH = `${(isLg ? 110 : 65) * vh}px`;
+  const headerOffsetPx = isLg ? 150 : 80;
+  const gridMinH = `${((isLg ? 100 : 65) * vh) - headerOffsetPx}px`;
+
+  // REPLACE: image rotation effect (set once, respect reduced motion)
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    if (imageIntervalRef.current) clearInterval(imageIntervalRef.current);
+    imageIntervalRef.current = setInterval(() => {
       setIsAnimating(true);
-      setTimeout(() => {
-        setPrevImgIndex(imgIndex);
+      if (imageTimeoutRef.current) clearTimeout(imageTimeoutRef.current);
+      imageTimeoutRef.current = setTimeout(() => {
+        // prev image = current index before increment, next = incremented
+        setPrevImgIndex(imgIndexRef.current);
         setImgIndex((prev) => (prev + 1) % HERO_IMAGES.length);
         setIsAnimating(false);
-      }, 900); // match duration of animation
+      }, 900);
     }, 4000);
-    return () => clearInterval(imageInterval);
-  }, [imgIndex]);
+    return () => {
+      clearInterval(imageIntervalRef.current);
+      clearTimeout(imageTimeoutRef.current);
+    };
+  }, [prefersReducedMotion]);
 
+  // REPLACE: text rotation effect (fix timing, set once, respect reduced motion)
   useEffect(() => {
-    const textInterval = setInterval(() => {
+    if (prefersReducedMotion) return;
+    if (textIntervalRef.current) clearInterval(textIntervalRef.current);
+    textIntervalRef.current = setInterval(() => {
       setTextAnimating(true);
-      setTimeout(() => {
-        setTextIndex(nextTextIndex);
-        setNextTextIndex((nextTextIndex + 1) % TITLES.length);
+      if (textTimeoutRef.current) clearTimeout(textTimeoutRef.current);
+      // match CSS duration ~1000ms
+      textTimeoutRef.current = setTimeout(() => {
+        setTextIndex((prev) => (prev + 1) % TITLES.length);
+        setNextTextIndex((prev) => (prev + 1) % TITLES.length);
         setTextAnimating(false);
-      }, 5000);
+      }, 1000);
     }, 5000);
-    return () => clearInterval(textInterval);
-  }, [nextTextIndex]);
+    return () => {
+      clearInterval(textIntervalRef.current);
+      clearTimeout(textTimeoutRef.current);
+    };
+  }, [prefersReducedMotion]);
+
+  // Preload the next hero image to minimize flicker
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const next = (imgIndex + 1) % HERO_IMAGES.length;
+    const pre = new Image();
+    pre.src = HERO_IMAGES[next];
+  }, [imgIndex, prefersReducedMotion]);
 
   const renderHeroImage = (src, className, z) => (
     <img
@@ -110,6 +159,7 @@ const Hero = ({ scrollToProducts }) => {
       alt="Konnect Packaging Bags"
       decoding="async"
       loading="eager"
+      sizes="(min-width:1024px) 50vw, 90vw"
       draggable={false}
       className={`
         w-full h-auto object-contain transform transform-gpu origin-center
@@ -130,7 +180,6 @@ const Hero = ({ scrollToProducts }) => {
       className="min-h-[65vh] lg:min-h-[110vh] rounded-[1rem] lg:rounded-[3rem] font-['Krona_One'] overflow-hidden"
       style={{
         background: 'linear-gradient(135deg, #FAE5B5 0%, #EECF8E 100%)',
-        // Add: inline minHeight using safe vh to eliminate zoom/orientation jumps
         minHeight: containerMinH
       }}
     >
@@ -138,7 +187,6 @@ const Hero = ({ scrollToProducts }) => {
       <div className="max-w-7xl mx-auto px-2 lg:px-8 py-2 lg:py-8">
         <div
           className="flex flex-col lg:grid grid-cols-1 lg:grid-cols-2 gap-1 lg:gap-16 items-center min-h-[calc(65vh-80px)] lg:min-h-[calc(100vh-150px)]"
-          // Add: inline minHeight using safe vh (preserves same layout, more stable)
           style={{ minHeight: gridMinH }}
         >
           {/* Left Column - Product Image */}
@@ -167,13 +215,21 @@ const Hero = ({ scrollToProducts }) => {
 
           {/* Right Column - Main Content */}
           <div className="order-1 lg:order-2 flex flex-col items-start lg:items-start text-left lg:text-left relative">
+            {/* Desktop badge: make it a keyboard-accessible button */}
             <div className="hidden lg:block absolute 2xl:-top-25 lg:-left-130 lg:-top-20 xl:-top-20 xl:-left-160  2xl:-left-180 z-30">
-              <img
-                src="/hero/1.png"
-                alt="Certification Badge"
-                className="w-32 lg:w-44 xl:w-40 2xl:w-46 h-auto object-contain transition-transform duration-500 hover:scale-105 cursor-pointer"
+              <button
+                type="button"
+                aria-label="View awards and certifications"
                 onClick={() => navigate('/awards-certifications')}
-              />
+                className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                style={{ background: 'transparent' }}
+              >
+                <img
+                  src="/hero/1.png"
+                  alt="Awards and Certifications"
+                  className="w-32 lg:w-44 xl:w-40 2xl:w-46 h-auto object-contain transition-transform duration-500 hover:scale-105 cursor-pointer"
+                />
+              </button>
             </div>
 
             <div className="z-20 relative lg:-top-30 w-full">
@@ -181,30 +237,42 @@ const Hero = ({ scrollToProducts }) => {
                 KONNECT PACKAGING
               </div>
 
-              {/* Title Animation */}
-              <div className="relative overflow-hidden h-[20vw] lg:h-[5rem] xl:h-[7.5rem] 2xl:h-[7.5rem] w-full lg:w-[30rem] xl:w-[40rem] 2xl:w-[40rem]">
-                <div className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
+              {/* Title region: hide offscreen layer from screen readers; live update */}
+              <div className="relative overflow-hidden h-[20vw] lg:h-[5rem] xl:h-[7.5rem] 2xl:h-[7.5rem] w-full lg:w-[30rem] xl:w-[40rem] 2xl:w-[40rem]" aria-live="polite" aria-atomic="true">
+                <div
+                  className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}
+                  aria-hidden={textAnimating}
+                >
                   <h1 className="text-[7vw] lg:text-[2rem] xl:text-[3rem] font-normal text-black leading-snug lg:leading-tight font-['Krona_One'] break-words max-w-full">
                     {TITLES[textIndex].title}
                   </h1>
                 </div>
-                <div className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
+                <div
+                  className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
+                  aria-hidden={!textAnimating}
+                >
                   <h1 className="text-[7vw] lg:text-[2rem] xl:text-[3rem] font-normal text-black leading-snug lg:leading-tight font-['Krona_One'] break-words max-w-full">
                     {TITLES[nextTextIndex].title}
                   </h1>
                 </div>
               </div>
 
-              {/* Subtitle Animation */}
+              {/* Subtitle region: hide offscreen layer from screen readers */}
               <div className="relative overflow-hidden h-[10vw] lg:h-[5rem] xl:h-[4rem] 2xl:h-12 w-full xl:w-[50rem] 2xl:w-[40vw] mb-1 2xl:mb-12">
-                <div className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
+                <div
+                  className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}
+                  aria-hidden={textAnimating}
+                >
                   <p className="text-black 2xl:text-nowrap xl:text-nowrap font-medium text-[2.5vw] lg:text-[0.8rem] xl:text-[0.8rem] 2xl:text-[0.9rem] leading-snug lg:leading-relaxed max-w-full lg:max-w-md px-1 font-['Montserrat'] break-words">
                     {TITLES[textIndex].subtitle}
                   </p>
                 </div>
-                <div className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
-                   <p className="text-black 2xl:text-nowrap xl:text-nowrap font-medium text-[2.5vw] lg:text-[0.8rem] xl:text-[0.8rem] 2xl:text-[0.9rem] leading-snug lg:leading-relaxed max-w-full lg:max-w-md px-1 font-['Montserrat'] break-words">
-                   {TITLES[nextTextIndex].subtitle}
+                <div
+                  className={`absolute top-0 left-0 w-full transition-all duration-1000 ease-in-out ${textAnimating ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
+                  aria-hidden={!textAnimating}
+                >
+                  <p className="text-black 2xl:text-nowrap xl:text-nowrap font-medium text-[2.5vw] lg:text-[0.8rem] xl:text-[0.8rem] 2xl:text-[0.9rem] leading-snug lg:leading-relaxed max-w-full lg:max-w-md px-1 font-['Montserrat'] break-words">
+                    {TITLES[nextTextIndex].subtitle}
                   </p>
                 </div>
               </div>
@@ -220,7 +288,7 @@ const Hero = ({ scrollToProducts }) => {
                       if (el) el.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="bg-black text-white 2xl:pr-[0.5vw] xl:pr-[0.5rem] xl:px-[1rem] xl:py-[0.5rem] px-[2vw] py-[1.5vw] lg:py-2.5 2xl:py-2 rounded-full flex items-center space-x-1 hover:bg-neutral-900 transition-all duration-300 font-['Krona_One'] font-normal text-[2.7vw] lg:text-sm xl:text-base transition-transform duration-500 hover:scale-105"
+                  className="bg-black text-white 2xl:pr-[0.5vw] xl:pr-[0.5rem] xl:px-[1rem] xl:py-[0.5rem] px-[2vw] py-[1.5vw] lg:py-2.5 2xl:py-2 rounded-full flex items-center space-x-1 hover:bg-neutral-900 transition-all duration-300 font-['Krona_One'] font-normal text-[2.7vw] lg:text-sm xl:text-base hover:scale-105"
                 >
                   <span>Explore Our Products</span>
                   <img
@@ -231,13 +299,21 @@ const Hero = ({ scrollToProducts }) => {
                 </button>
               </div>
 
+              {/* Mobile badge: make it a keyboard-accessible button */}
               <div className="flex justify-end pt-2 lg:hidden mb-1">
-                <img
-                  src="/hero/1.png"
-                  alt="Certification Badge"
-                  className="w-[35vw] h-auto object-contain transition-transform duration-500 hover:scale-105 cursor-pointer"
+                <button
+                  type="button"
+                  aria-label="View awards and certifications"
                   onClick={() => navigate('/awards-certifications')}
-                />
+                  className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                  style={{ background: 'transparent' }}
+                >
+                  <img
+                    src="/hero/1.png"
+                    alt="Awards and Certifications"
+                    className="w-[35vw] h-auto object-contain transition-transform duration-500 hover:scale-105 cursor-pointer"
+                  />
+                </button>
               </div>
             </div>
 

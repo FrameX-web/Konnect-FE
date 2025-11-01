@@ -53,6 +53,79 @@ function Eco() {
     </div>
   );
 
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/eco-sustainability';
+
+    document.title = 'Eco-Friendly & Sustainable Packaging | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: "Konnect Packaging's eco-friendly sustainability: recyclable materials, RoHS compliance, ZED & CE certifications, and long-lasting VCI protection reducing waste." });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Eco-Friendly & Sustainable Packaging' });
+    setMeta({ property: 'og:description', content: 'Greener future through recyclable VCI packaging, ZED certification, and waste reduction.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/eco.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Eco-Friendly & Sustainable Packaging' });
+    setMeta({ name: 'twitter:description', content: 'Sustainable practices with recyclable materials and ZED certification.' });
+    setMeta({ name: 'twitter:image', content: '/eco.png' });
+
+    const ecoLd = {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: 'Eco-Friendly Sustainability',
+      url: canonicalUrl,
+      description: 'Promoting a greener future through eco-friendly and sustainable packaging practices.',
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: sustainabilityFeatures.map((f, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Thing',
+            name: f.title,
+            description: f.description,
+            image: f.image
+          }
+        }))
+      }
+    };
+    let script = document.getElementById('ld-eco');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-eco';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(ecoLd);
+  }, []);
+
   return (
     <div className="w-full max-w-full mx-auto bg-white py-16 px-6 lg:px-12 relative" style={{ fontFamily: 'Inter, sans-serif' }}>
       {/* Desktop Tree Image - Top Right (Hidden on mobile/tablet) */}

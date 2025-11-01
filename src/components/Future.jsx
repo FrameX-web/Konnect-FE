@@ -1,6 +1,67 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function FutureProof() {
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/future';
+
+    document.title = 'Future‑Proof Protection | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: "Safeguard products today and secure your business for tomorrow with Konnect Packaging's VCI and sustainable protection solutions." });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Future‑Proof Protection | Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'Smart, sustainable corrosion protection that reduces losses and future‑proofs supply chains.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/hero/bg/2.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Future‑Proof Protection' });
+    setMeta({ name: 'twitter:description', content: 'VCI protection and sustainable solutions that defend value and deliver innovation.' });
+    setMeta({ name: 'twitter:image', content: '/hero/bg/2.png' });
+
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Future‑Proof Protection',
+      url: canonicalUrl,
+      description: 'Smart, sustainable corrosion protection for modern supply chains.'
+    };
+    let script = document.getElementById('ld-future');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-future';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(ld);
+  }, []);
+
   return (
     <div className="w-full min-h-screen bg-white p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto pt-8">

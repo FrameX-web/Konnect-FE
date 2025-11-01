@@ -68,6 +68,80 @@ const Global = () => {
     </div>
   );
 
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/global-footprint';
+
+    document.title = 'Global Footprint | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Based in India and expanding into Europe, Konnect Packaging delivers export‑ready, sustainable packaging aligned with global ESG standards.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Global Footprint | Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'Our presence across India and Europe with sustainable, compliant packaging solutions.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/worldmap.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Global Footprint' });
+    setMeta({ name: 'twitter:description', content: 'Sustainable, export‑ready packaging for global markets.' });
+    setMeta({ name: 'twitter:image', content: '/worldmap.png' });
+
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: 'Our Global Footprint',
+      url: canonicalUrl,
+      description: 'Presence across India and Europe delivering sustainable, export‑ready packaging.',
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: footprintItems.map((f, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Thing',
+            name: f.title,
+            description: f.description,
+            image: f.icon
+          }
+        }))
+      }
+    };
+    let script = document.getElementById('ld-global-footprint');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-global-footprint';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(ld);
+  }, []);
+
   return (
     <div 
       className="box-border px-7 pt-32 pb-16 mx-auto my-0 w-full  bg-white max-w-[90%] relative max-md:px-5 max-md:pt-20 max-md:pb-12 max-sm:px-4 max-sm:pt-16 max-sm:pb-8" 

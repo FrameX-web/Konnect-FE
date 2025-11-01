@@ -60,6 +60,79 @@ const VisionValues = () => {
     }
   ];
 
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/vision-values';
+
+    document.title = 'Vision & Values | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Our vision and core values: eco-first, innovation-driven, ESG-aligned, customer-centric, and operational excellence for scalable, sustainable growth.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Vision & Values | Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'Innovative, sustainable, and scalable packaging principles that guide our work.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/vv/2.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Vision & Values' });
+    setMeta({ name: 'twitter:description', content: 'Our guiding principles: sustainability, innovation, trust, and excellence.' });
+    setMeta({ name: 'twitter:image', content: '/vv/2.png' });
+
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: 'Vision & Values',
+      url: canonicalUrl,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: (values || []).map((v, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Thing',
+            name: v.title,
+            description: v.description,
+            image: v.icon
+          }
+        }))
+      }
+    };
+    let script = document.getElementById('ld-vision-values');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-vision-values';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(ld);
+  }, []);
+
   return (
     <div className="bg-white py-12 px-8" style={{ fontFamily: 'Montserrat, sans-serif' }}>
       <div className="max-w-7xl mx-auto">

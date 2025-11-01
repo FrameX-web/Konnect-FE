@@ -68,6 +68,76 @@ const Choose = () => {
     </div>
   );
 
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/why-choose-us';
+
+    document.title = 'Why Choose Konnect Packaging | Quality, Customization, Sustainability';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Premium materials, custom solutions, eco-friendly approach, advanced manufacturing, global reach, and reliable support from Konnect Packaging.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Why Choose Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'Discover our quality, sustainability, and global service strengths.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/hero/bg/3.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Why Choose Konnect Packaging' });
+    setMeta({ name: 'twitter:description', content: 'Quality, customization, sustainability, and support.' });
+
+    const aboutLd = {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: 'Why Choose Konnect Packaging',
+      url: canonicalUrl,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: features.map((f, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Thing',
+            name: f.title,
+            description: f.description
+          }
+        }))
+      }
+    };
+    let script = document.getElementById('ld-about');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-about';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(aboutLd);
+  }, []);
+
   return (
     <div
       className="box-border px-7 pt-32 pb-16 mx-auto my-0 w-full bg-white max-w-[1440px] max-md:px-5 max-md:pt-20 max-md:pb-12 max-sm:px-4 max-sm:pt-16 max-sm:pb-8"

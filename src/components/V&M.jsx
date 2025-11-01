@@ -86,93 +86,145 @@ function VisionAndMission() {
     "Build long-term partnerships with brands around the world."
   ];
 
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/vision-mission';
+
+    document.title = 'Vision & Mission | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Our vision: lead innovative, sustainable packaging. Our mission: deliver high-quality, customized, eco-friendly solutions with reliable support.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Vision & Mission | Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'Where we are heading and how we deliver value every day with sustainable, innovative packaging.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/vv/1.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Vision & Mission' });
+    setMeta({ name: 'twitter:description', content: 'Our path and purpose in sustainable, high-performance packaging.' });
+    setMeta({ name: 'twitter:image', content: '/vv/1.png' });
+
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: 'Vision & Mission',
+      url: canonicalUrl,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            item: {
+              '@type': 'Thing',
+              name: 'Vision',
+              description: (Array.isArray(visionPoints) ? visionPoints.join(' ') : '')
+            }
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            item: {
+              '@type': 'Thing',
+              name: 'Mission',
+              description: (Array.isArray(missionPoints) ? missionPoints.join(' ') : '')
+            }
+          }
+        ]
+      }
+    };
+    let script = document.getElementById('ld-vision-mission');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-vision-mission';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(ld);
+  }, []);
+
   return (
-    <div className="relative mx-auto my-0 w-full bg-gray-50 min-h-screen max-w-full max-md:p-5 max-sm:p-4" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-      {/* Title Section - Keeping as is */}
-      <div className="absolute bg-gradient-to-tr from-[#E9C77F] to-[#FBE6B7] h-[171px] left-1/2 transform -translate-x-1/2 rounded-[30px] top-[104px] w-[1382px] max-md:h-[120px] max-md:top-[84px] max-md:w-[calc(100%_-_40px)] max-sm:rounded-3xl max-sm:h-[100px] max-sm:top-[74px] max-sm:w-[calc(100%_-_30px)]" />
-      <div className="absolute text-6xl text-gray-800 h-[75px] left-1/2 transform -translate-x-1/2 top-[152px] text-center max-md:text-4xl max-md:top-[120px] max-sm:text-2xl text-nowrap max-sm:top-[100px]" style={{ fontFamily: 'Krona One, sans-serif' }}>
-        Vision and Mission
-      </div>
+    <div className="w-full min-h-screen bg-white py-12 px-4 md:px-6 lg:px-8" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-gradient-to-tr from-[#E9C77F] to-[#FBE6B7] rounded-3xl p-6 md:p-8 mb-10 md:mb-12">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl text-black mb-2 font-['Krona_One',sans-serif]">
+            Vision & Mission
+          </h1>
+          <p className="text-sm md:text-base lg:text-lg text-black/90">
+            Our path and purpose in sustainable, high‑performance packaging.
+          </p>
+        </div>
 
-      {/* Main Content */}
-      <div className="pt-[300px] px-8 pb-16 max-md:pt-[220px] max-md:px-6 max-sm:pt-[180px] max-sm:px-4">
-        <div className="max-w-6xl mx-auto">
-          
-          {/* Vision Section */}
-          <div className="mb-16 max-md:mb-12 max-sm:mb-8">
-            <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
-              {/* Vision Header */}
-              <div className="bg-gradient-to-r from-[#E9C77F] to-[#FBE6B7] p-8 max-md:p-6 max-sm:p-5">
-                <div className="flex items-center space-x-6 max-sm:space-x-4">
-                  <div className="w-20 h-20 bg-gray-800 backdrop-blur-sm rounded-2xl flex items-center justify-center max-sm:w-16 max-sm:h-16">
-                    <EyeIcon />
-                  </div>
-                  <div className="flex-1">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-2 max-md:text-3xl max-sm:text-2xl">
-                      Our Vision
-                    </h2>
-                    <p className="text-gray-900 font-medium text-xl max-md:text-base max-sm:text-sm">
-                      Where we're heading and what we aspire to achieve
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Vision Content */}
-              <div className="p-8 max-md:p-6 max-sm:p-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-md:gap-4">
-                  {visionPoints.map((point, index) => (
-                    <div key={index} className="flex items-start space-x-4 group hover:bg-gray-50 p-4 rounded-xl transition-all duration-200 max-sm:space-x-3 max-sm:p-3">
-                      <CheckmarkIcon />
-                      <div className="flex-1">
-                        <p className="text-gray-700 text-xl leading-relaxed font-medium group-hover:text-gray-900 transition-colors duration-200 max-md:text-base max-sm:text-sm">
-                          {point}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {/* Vision + Mission */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
+          {/* Vision */}
+          <section
+            aria-labelledby="vision-title"
+            className="rounded-3xl border border-black/10 bg-white shadow-sm p-6 md:p-8"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <EyeIcon />
+              <h2 id="vision-title" className="text-xl md:text-2xl lg:text-3xl font-semibold text-black font-['Krona_One',sans-serif]">
+                Our Vision
+              </h2>
             </div>
-          </div>
+            <ul className="space-y-3 md:space-y-4">
+              {visionPoints.map((point, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <CheckmarkIcon />
+                  <span className="text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed">{point}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-          {/* Mission Section */}
-          <div className="mb-16 max-md:mb-12 max-sm:mb-8">
-            <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
-              {/* Mission Header */}
-              <div className="bg-gradient-to-r from-[#FBE6B7] to-[#E9C77F] p-8 max-md:p-6 max-sm:p-5">
-                <div className="flex items-center space-x-6 max-sm:space-x-4">
-                  <div className="w-20 h-20 bg-gray-800 backdrop-blur-sm rounded-2xl flex items-center justify-center max-sm:w-16 max-sm:h-16">
-                    <MissionIcon />
-                  </div>
-                  <div className="flex-1">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-2 max-md:text-3xl max-sm:text-2xl">
-                      Our Mission
-                    </h2>
-                    <p className="text-gray-900 font-medium text-xl max-md:text-base max-sm:text-sm">
-                      How we deliver value and make a difference every day
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Mission Content */}
-              <div className="p-8 max-md:p-6 max-sm:p-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-md:gap-4">
-                  {missionPoints.map((point, index) => (
-                    <div key={index} className="flex items-start space-x-4 group hover:bg-gray-50 p-4 rounded-xl transition-all duration-200 max-sm:space-x-3 max-sm:p-3">
-                      <CheckmarkIcon />
-                      <div className="flex-1">
-                        <p className="text-gray-700 text-xl font-medium leading-relaxed group-hover:text-gray-900 transition-colors duration-200 max-md:text-base max-sm:text-sm">
-                          {point}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          {/* Mission */}
+          <section
+            aria-labelledby="mission-title"
+            className="rounded-3xl border border-black/10 bg-white shadow-sm p-6 md:p-8"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <MissionIcon />
+              <h2 id="mission-title" className="text-xl md:text-2xl lg:text-3xl font-semibold text-black font-['Krona_One',sans-serif]">
+                Our Mission
+              </h2>
             </div>
-          </div>
+            <ul className="space-y-3 md:space-y-4">
+              {missionPoints.map((point, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <CheckmarkIcon />
+                  <span className="text-sm md:text-base lg:text-lg text-gray-800 leading-relaxed">{point}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
       </div>
     </div>

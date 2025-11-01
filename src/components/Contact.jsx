@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Phone, Mail } from 'lucide-react';
 import BackButton from './BackButton';
 import Toast from './Toast';
@@ -72,6 +72,79 @@ const Contact = () => {
   const selectedCountry = countryOptions.find(
     (option) => option.label === formData.country
   );
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/contact';
+
+    document.title = 'Contact Konnect Packaging | Enquiries & Support';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Get in touch with Konnect Packaging for product enquiries, quotes, and support. Phone: +91-7774031665, Email: info@konnectpackaging.com.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Contact Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'Reach our team for VCI packaging and sustainable solutions.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/hero/bg/1.png' });
+    setMeta({ name: 'twitter:card', content: 'summary' });
+    setMeta({ name: 'twitter:title', content: 'Contact Konnect Packaging' });
+    setMeta({ name: 'twitter:description', content: 'We’re here to help with your packaging needs.' });
+
+    const contactLd = {
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      name: 'Contact Konnect Packaging',
+      url: canonicalUrl,
+      about: {
+        '@type': 'Organization',
+        name: 'Konnect Packaging',
+        contactPoint: [{
+          '@type': 'ContactPoint',
+          telephone: '+91-7774031665',
+          email: 'info@konnectpackaging.com',
+          contactType: 'customer support',
+          availableLanguage: ['en']
+        }]
+      },
+      potentialAction: {
+        '@type': 'ContactAction',
+        target: canonicalUrl
+      }
+    };
+    let script = document.getElementById('ld-contact');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-contact';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(contactLd);
+  }, []);
 
   return (
     <div className="min-h-screen w-full p-4 relative" style={{ fontFamily: 'Montserrat, sans-serif' }}>

@@ -249,6 +249,85 @@ function Stories() {
     </div>
   );
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/testimonials';
+
+    document.title = 'Testimonials & Client Stories | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Hear from global clients who trust Konnect Packaging for reliability, innovation, and performance in VCI and sustainable packaging.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Testimonials & Client Stories | Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'Real feedback and results from businesses using our protective and sustainable packaging.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/testimonials/1.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Testimonials & Client Stories' });
+    setMeta({ name: 'twitter:description', content: 'Global trust. Proven impact. See what clients say about Konnect Packaging.' });
+    setMeta({ name: 'twitter:image', content: '/testimonials/1.png' });
+
+    // JSON-LD
+    const parseDate = (d) => {
+      const t = Date.parse(d);
+      return Number.isNaN(t) ? undefined : new Date(t).toISOString();
+    };
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Testimonials & Client Stories',
+      url: canonicalUrl,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: (testimonialsData || []).map((t, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Review',
+            name: `Client testimonial from ${t.name}`,
+            reviewBody: t.testimonial,
+            author: { '@type': 'Person', name: t.name },
+            datePublished: parseDate(t.badge),
+            locationCreated: t.location
+          }
+        }))
+      }
+    };
+    let script = document.getElementById('ld-testimonials');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-testimonials';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(ld);
+  }, []);
+
   return (
     <div className="w-full max-w-[1440px] mx-auto bg-white py-16 px-6 lg:px-12" style={{ fontFamily: 'Montserrat, sans-serif' }}>
       {/* Header Section */}

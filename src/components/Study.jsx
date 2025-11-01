@@ -80,6 +80,80 @@ const Study = () => {
     </div>
   );
 
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const upsertTag = (selector, createFn) => {
+      const existing = document.head.querySelector(selector);
+      if (existing) return existing;
+      const el = createFn();
+      document.head.appendChild(el);
+      return el;
+    };
+    const setMeta = ({ name, property, content }) => {
+      const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+      const el = upsertTag(selector, () => {
+        const m = document.createElement('meta');
+        if (name) m.setAttribute('name', name);
+        if (property) m.setAttribute('property', property);
+        return m;
+      });
+      el.setAttribute('content', content);
+    };
+    const canonicalUrl = (typeof window !== 'undefined' && window.location?.href)
+      ? window.location.href.split('#')[0]
+      : 'https://www.konnectpackaging.com/custom-solutions';
+
+    document.title = 'Custom Solutions & Innovation | Konnect Packaging';
+
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', canonicalUrl);
+    if (!canonical.parentElement) document.head.appendChild(canonical);
+
+    setMeta({ name: 'description', content: 'Purpose-built packaging solutions: configuration wizard, tailored export packaging, and R&D-driven innovation from Konnect Packaging.' });
+    setMeta({ name: 'robots', content: 'index,follow' });
+    setMeta({ property: 'og:title', content: 'Custom Solutions & Innovation | Konnect Packaging' });
+    setMeta({ property: 'og:description', content: 'Engineered, export-ready, and R&D-backed packaging for real-world performance.' });
+    setMeta({ property: 'og:type', content: 'website' });
+    setMeta({ property: 'og:url', content: canonicalUrl });
+    setMeta({ property: 'og:image', content: '/hero/bg/3.png' });
+    setMeta({ name: 'twitter:card', content: 'summary_large_image' });
+    setMeta({ name: 'twitter:title', content: 'Custom Solutions & Innovation' });
+    setMeta({ name: 'twitter:description', content: 'Wizard-driven selection, OEM-tailored packs, and sustained R&D innovation.' });
+    setMeta({ name: 'twitter:image', content: '/hero/bg/3.png' });
+
+    // JSON-LD
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Custom Solutions & Innovation',
+      url: canonicalUrl,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: (solutions || []).map((s, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Service',
+            name: s.title,
+            description: [s.description, ...(s.features || [])].join(' '),
+            provider: { '@type': 'Organization', name: 'Konnect Packaging' },
+            areaServed: 'Worldwide'
+          }
+        }))
+      }
+    };
+    let script = document.getElementById('ld-custom-solutions');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'ld-custom-solutions';
+      document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(ld);
+  }, []);
+
   return (
     <div className="box-border px-7 pt-32 pb-16 mx-auto my-0 w-full bg-white max-w-[1440px] max-md:px-5 max-md:pt-20 max-md:pb-12 max-sm:px-4 max-sm:pt-16 max-sm:pb-8" style={{fontFamily: 'Montserrat, sans-serif'}}>
       <div className="box-border bg-gradient-to-tr from-[#E9C77F] to-[#FBE6B7] px-6 pt-12 pb-6 mb-12 w-full min-h-[17rem] max-w-full rounded-3xl max-md:px-4 max-md:py-8 max-md:mb-8 max-md:min-h-auto max-sm:px-3 max-sm:py-6 max-sm:mb-6">
