@@ -18,7 +18,9 @@ function Analysis() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countryOptions] = useState(countryList().getData());
 
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:5000';
+  const BACKEND_URL = (import.meta.env.VITE_BACKEND_API_URL && import.meta.env.VITE_BACKEND_API_URL.trim())
+    ? import.meta.env.VITE_BACKEND_API_URL.replace(/\/+$/, '')
+    : (import.meta.env.DEV ? 'http://localhost:5000' : 'https://konnect-be.vercel.app');
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {

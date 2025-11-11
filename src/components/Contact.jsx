@@ -29,8 +29,10 @@ const Contact = () => {
     }));
   };
 
-  // Use the correct environment variable for backend API base URL
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:5000';
+  // Use dev backend in development, prod in production; allow override via VITE_BACKEND_API_URL
+  const BACKEND_URL = (import.meta.env.VITE_BACKEND_API_URL && import.meta.env.VITE_BACKEND_API_URL.trim())
+    ? import.meta.env.VITE_BACKEND_API_URL.replace(/\/+$/, '')
+    : (import.meta.env.DEV ? 'http://localhost:5000' : 'https://konnect-be.vercel.app');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
