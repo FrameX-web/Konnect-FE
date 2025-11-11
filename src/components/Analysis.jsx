@@ -66,7 +66,7 @@ function Analysis() {
     data.append('file', uploadedFile);
 
     try {
-      const res = await fetch(`${BACKEND_URL}/analytics`, {
+      const res = await fetch(`${BACKEND_URL}/api/analytics`, {
         method: 'POST',
         body: data
       });
