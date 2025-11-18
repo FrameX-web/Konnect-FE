@@ -52,18 +52,18 @@ function Worldwide() {
       email: "Sales@konnectpackaging.com",
       contact: ""
     },
-    {
-      id: "2015:45",
-      name: "SLOVAKIA",
-      type: "OFFICE",
-      image: "/slovakia.png",
-      imageStyle: { width: '80%', height: '80%', left: '10%', top: '10%' },
-      description: "Delivering quality products across Slovakia",
-      personName: "TBD",
-      personTitle: "Head of Operations",
-      email: "",
-      contact: ""
-    }
+   {
+  id: "2015:45",
+  name: "SLOVAKIA",
+  type: "OFFICE",
+  image: "/slovakia.png",
+  imageStyle: { width: '80%', height: '80%', left: '10%', top: '10%' },
+  description: "Delivering quality products across Slovakia",
+  personName: "Pida Juraj",
+  personTitle: "Head of Operations",
+  email: "info.slovakia@konnectpackaging.com",
+  contact: "+421 944 350 482"
+}
   ];
 
   // Reusable CountryCard component
@@ -215,7 +215,7 @@ function Worldwide() {
                 <>
                   {email && (
                     <div
-                      className="text-black font-medium text-[9px] md:text-[0.8rem] leading-normal w-full flex justify-center"
+                      className="text-black font-medium text-[9px] md:text-[0.7rem] leading-normal w-full flex justify-center"
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
                         marginBottom: '-4px',
