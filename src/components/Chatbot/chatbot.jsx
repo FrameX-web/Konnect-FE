@@ -35,6 +35,31 @@ ABOUT KONNECT PACKAGING WEBSITE & COMPANY:
 - Based in Borgaon, Chhindwara, Madhya Pradesh, India (Pin code: 480106).
 - KONNECT is committed to packaging excellence, quality, and customer satisfaction.
 
+OUR OFFICES WORLDWIDE:
+- India (Headquarter):
+  - Description: Konnect Packaging Proudly Rooted in India, Delivering Globally.
+  - Contact: Parth Chandra, Head of Operations - India
+  - Email: info@konnectpackaging.com
+  - Phone: +91-7774031665
+- France:
+  - Description: Delivering quality products across France.
+  - Contact: Omar Azzam, Head of Operations – France
+  - Phone: +33 7 83 53 35 12
+- Serbia:
+  - Description: Delivering quality products across Serbia.
+  - Contact: Marko Ristovski, Head of Operations
+  - Email: marko@konnectpackaging.com
+  - Phone: +381693226316
+- Lithuania:
+  - Description: Delivering quality products across Lithuania.
+  - Contact: Suchitra Gupta, Head of Operations
+  - Email: Sales@konnectpackaging.com
+- Slovakia:
+  - Description: Delivering quality products across Slovakia.
+  - Contact: Pida Juraj, Head of Operations
+  - Email: info.slovakia@konnectpackaging.com
+  - Phone: +421 944 350 482
+
 PRODUCTS & SERVICES:
 - Main product categories include:
   - VCI Kraft Paper: Corrosion protection for ferrous and non-ferrous metals.
