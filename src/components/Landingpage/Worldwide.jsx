@@ -14,7 +14,8 @@ function Worldwide() {
       personName: "Parth Chandra",
       personTitle: "Head of Operations - India",
       email: "info@konnectpackaging.com",
-      contact: "+917774031655"
+      contact: "+917774031655",
+      address: ""
     },
     {
       id: "2015:50",
@@ -26,7 +27,8 @@ function Worldwide() {
       personName: "Omar Azzam",
       personTitle: "Head of Operations – France",
       email: "",
-      contact: "+33 7 83 53 35 12"
+      contact: "+33 7 83 53 35 12",
+      address: ""
     },
     {
       id: "2015:37",
@@ -38,7 +40,8 @@ function Worldwide() {
       personName: "Marko Ristovski",
       personTitle: "Head of Operations",
       email: "marko@konnectpackaging.com",
-      contact: "+381693226316"
+      contact: "+381693226316",
+      address: ""
     },
     {
       id: "2015:42",
@@ -50,7 +53,8 @@ function Worldwide() {
       personName: "Suchitra Gupta",
       personTitle: "Head of Operations",
       email: "Sales@konnectpackaging.com",
-      contact: ""
+      contact: "",
+      address: "Ramybės g. 4-70, Vilnius, 02103, Lithuania"
     },
    {
   id: "2015:45",
@@ -62,13 +66,14 @@ function Worldwide() {
   personName: "Pida Juraj",
   personTitle: "Head of Operations",
   email: "info.slovakia@konnectpackaging.com",
-  contact: "+421 944 350 482"
+  contact: "+421 944 350 482",
+  address: "SK-067 73 Ubl’a 202\nSlovak Republic"
 }
   ];
 
   // Reusable CountryCard component
   const CountryCard = ({ country }) => {
-    const { id, name, type, image, imageStyle, description, personName, personTitle, email, contact } = country;
+    const { id, name, type, image, imageStyle, description, personName, personTitle, email, contact, address } = country;
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -77,7 +82,7 @@ function Worldwide() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
-          paddingBottom: isHovered ? '140%' : '100%',
+          paddingBottom: isHovered ? '165%' : '100%',
           transition: 'padding-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
@@ -115,7 +120,7 @@ function Worldwide() {
           <div 
             className="absolute top-0 left-0 w-full"
             style={{
-              height: isHovered ? '70%' : '100%',
+              height: isHovered ? '60%' : '100%',
               transition: 'height 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
@@ -179,7 +184,7 @@ function Worldwide() {
           <div 
             className="absolute bottom-0 left-0 w-full"
             style={{
-              height: isHovered ? '30%' : '0%',
+              height: isHovered ? '40%' : '0%',
               opacity: isHovered ? 1 : 0,
               transition: 'height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-out',
               transitionDelay: '0.1s',
@@ -210,30 +215,62 @@ function Worldwide() {
               >
                 {personTitle}
               </p>
+              <div className="h-px bg-black/20 w-12 mx-auto" />
               {/* Show email and contact for any country if present and only on hover */}
               {isHovered && (
                 <>
                   {email && (
                     <div
-                      className="text-black font-medium text-[9px] md:text-[0.7rem] leading-normal w-full flex justify-center"
+                      className="text-black font-medium text-[9px] md:text-[0.6rem] leading-normal w-full flex justify-center"
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
-                        marginBottom: '-4px',
-                        textAlign: 'center'
+                        marginBottom: '2px',
+                        textAlign: 'center',
+                        maxWidth: '100%',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        display: 'inline-block',
+                        width: '100%',
+                        whiteSpace: 'normal',
+                        overflowWrap: 'anywhere',
+                        wordBreak: 'break-word'
                       }}
                     >
                       {email}
                     </div>
                   )}
-                  {contact && (
+                  {address && (
                     <div
-                      className="text-black font-medium text-[10px] md:text-sm leading-relaxed w-full flex justify-center"
+                      className="text-black font-semibold text-[9px] md:text-[0.75rem] leading-snug w-full flex justify-center"
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        whiteSpace: 'pre-line',
+                        lineHeight: '1.25',
+                        maxWidth: '92%',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        padding: '6px 10px',
+                        background: 'rgba(255,255,255,0.75)',
+                        borderRadius: '8px',
+                        border: '1px solid rgba(0,0,0,0.1)',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                        marginBottom: '6px'
                       }}
                     >
-                      contact: {contact}
+                      {`${address}`}
+                    </div>
+                  )}
+                  {contact && (
+                    <div
+                      className="text-black font-medium text-[9px] md:text-[0.7rem] leading-relaxed w-full flex justify-center"
+                      style={{
+                        fontFamily: "'Montserrat', sans-serif",
+                        textAlign: 'center',
+                        marginTop: '4px'
+                      }}
+                    >
+                      Contact: {contact}
                     </div>
                   )}
                 </>
