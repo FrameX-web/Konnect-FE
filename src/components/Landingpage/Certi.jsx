@@ -68,65 +68,63 @@ const certifications = [
   }
 ];
 
-// Reusable Card component with fixed sizes for zoom stability
+// Reusable Card component with responsive sizes
 const CertificationCard = ({ certification }) => {
   const { id, title, description } = certification;
 
   return (
     <article
-      className="relative mx-auto duration-400 ease-in-out"
+      className="relative mx-auto w-full transition-all duration-400 ease-in-out"
       style={{
-        width: '550px',
-        height: '320px',
-        maxWidth: '90vw'
+        maxWidth: 'min(550px, 90vw)',
+        aspectRatio: '1.72',
+        height: 'auto'
       }}
       aria-labelledby={`cert-${id}-title`}
     >
       {/* Card background with rounded corners and gradient */}
       <div 
-        className="w-full h-full rounded-[20px] border-2 border-black/60"
+        className="absolute inset-0 rounded-xl sm:rounded-2xl lg:rounded-3xl border-2 border-black/60"
         style={{
           background: 'linear-gradient(to top right, #FFD57F, #F6DFAB)'
         }}
         aria-hidden="true"
-      ></div>
+      />
       
-      {/* Title - using clamp for smooth scaling */}
+      {/* Title - responsive sizing with Tailwind breakpoints */}
       <div 
         id={`cert-${id}-title`}
-        className="absolute left-0 right-0 text-center text-black font-bold"
-        style={{
-          top: '30px',
-          fontSize: 'clamp(20px, 3vw, 32px)'
-        }}
+        className="absolute left-0 right-0 text-center text-black font-bold px-4
+                   text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-2xl 2xl:text-3xl
+                   top-2 sm:top-3 md:top-4 lg:top-5 xl:top-6"
       >
         {title}
       </div>
       
       {/* Horizontal line under title with fade effect */}
       <div 
-        className="absolute left-[30px] right-[30px]"
+        className="absolute h-0.5
+                   left-5 right-5 sm:left-6 sm:right-6 md:left-8 md:right-8 lg:left-10 lg:right-10
+                   top-8 sm:top-14 md:top-16 lg:top-20 xl:top-15"
         style={{
-          top: '80px',
-          height: '2px',
           background: 'linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.8) 70%, rgba(0,0,0,0))'
         }}
         aria-hidden="true"
-      ></div>
+      />
       
-      {/* Description text container with fixed height */}
+      {/* Description text container with responsive positioning */}
       <div 
-        className="absolute left-[25px] right-[25px] flex items-center justify-center"
-        style={{
-          top: '110px',
-          height: '140px'
-        }}
+        className="absolute flex items-center justify-center
+                   px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10
+                   top-16 sm:top-20 md:top-24 lg:top-28 xl:top-32
+                   bottom-16 sm:bottom-20 md:bottom-24 lg:bottom-28 xl:bottom-32"
       >
         <p
-          className="font-medium text-black text-center leading-[1.4] px-4 overflow-hidden"
+          className="font-medium text-black text-center overflow-hidden
+                     text-[2.5vw] sm:text-xs md:text-sm lg:text-[1vw] xl:text-[1vw] 2xl:text-lg
+                     leading-snug sm:leading-normal md:leading-relaxed"
           style={{ 
-            fontFamily: "'Montserrat', sans-serif",
-            fontSize: 'clamp(14px, 1.5vw, 18px)'
+            fontFamily: "'Montserrat', sans-serif"
           }}
         >
           {description}
@@ -135,8 +133,8 @@ const CertificationCard = ({ certification }) => {
       
       {/* Check mark icon at the bottom of the card */}
       <div 
-        className="absolute left-1/2 transform -translate-x-1/2"
-        style={{ bottom: '15px' }}
+        className="absolute left-1/2 -translate-x-1/2
+                   bottom-2 sm:bottom-3 md:bottom-4 lg:bottom-5 xl:bottom-6"
       >
         <img 
           src="/hero/check.png" 
@@ -144,10 +142,7 @@ const CertificationCard = ({ certification }) => {
           loading="lazy"
           width="140"
           height="140"
-          style={{
-            width: 'clamp(100px, 10vw, 140px)',
-            height: 'auto'
-          }}
+          className="w-16 h-auto sm:w-20 md:w-24 lg:w-28 xl:w-24 2xl:w-30"
         />
       </div>
     </article>
