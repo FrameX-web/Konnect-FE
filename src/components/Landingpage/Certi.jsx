@@ -121,7 +121,7 @@ const CertificationCard = ({ certification }) => {
       >
         <p
           className="font-medium text-black text-center
-                     text-[0.55rem] sm:text-sm md:text-base lg:text-lg
+                     text-[0.55rem] sm:text-sm md:text-base lg:text-[1rem]
                      leading-relaxed"
           style={{ 
             fontFamily: "'Montserrat', sans-serif"
