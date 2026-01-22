@@ -100,27 +100,27 @@ function Worldwide() {
           <div 
             className="absolute z-10"
             style={{
-              top: '8px',
-              right: '12px',
+              top: '6px',
+              right: '10px',
               display: 'flex',
               flexDirection: 'row',
-              gap: '4px',
+              gap: '3px',
               opacity: isHovered ? 1 : 0,
               transform: isHovered ? 'scale(1)' : 'scale(0)',
               transition: 'opacity 0.3s ease-out, transform 0.3s ease-out',
               transitionDelay: '0.1s'
             }}
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
-            <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
-            <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
+            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-black"></div>
+            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-black"></div>
+            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-black"></div>
           </div>
 
           {/* Circular section container - maintains circular area for map and country name */}
           <div 
             className="absolute top-0 left-0 w-full"
             style={{
-              height: isHovered ? '60%' : '100%',
+              height: isHovered ? '55%' : '100%',
               transition: 'height 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
@@ -158,12 +158,12 @@ function Worldwide() {
                 top: '48%',
                 transform: 'translate(-50%, -50%)',
                 textAlign: 'center',
-                width: '70%',
+                width: '85%',
                 transition: 'top 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
               <div 
-                className="text-xs md:text-[0.8rem] font-bold text-white leading-tight mb-1" 
+                className="text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-bold text-white leading-tight mb-0.5" 
                 style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
               >
                 {name}
@@ -171,8 +171,8 @@ function Worldwide() {
               <div
                 className={
                   name === "INDIA"
-                    ? "text-[5px] md:text-[8px] text-white font-medium"
-                    : "text-[9px] md:text-[9px] text-white font-medium"
+                    ? "text-[5px] sm:text-[6px] md:text-[7px] lg:text-[8px] text-white font-medium"
+                    : "text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] text-white font-medium"
                 }
                 style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.7)' }}
               >
@@ -184,14 +184,14 @@ function Worldwide() {
           <div 
             className="absolute bottom-0 left-0 w-full"
             style={{
-              height: isHovered ? '40%' : '0%',
+              height: isHovered ? '45%' : '0%',
               opacity: isHovered ? 1 : 0,
               transition: 'height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-out',
               transitionDelay: '0.1s',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0 16px'
+              padding: '0 10px'
             }}
           >
             <div 
@@ -202,29 +202,29 @@ function Worldwide() {
                 transitionDelay: '0.2s'
               }}
             >
-              <div className="text-black font-bold text-[12px] md:text-sm leading-tight" style={{ marginBottom: '-2px' }}>
+              <div className="text-black font-bold text-[10px] sm:text-[11px] md:text-xs lg:text-sm leading-tight mb-0.5" style={{ marginBottom: '0px' }}>
                 {personName}
               </div>
               <p 
-                className="text-black text-[9px] md:text-xs leading-relaxed"
+                className="text-black text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs leading-snug"
                 style={{
                   fontFamily: "'Montserrat', sans-serif",
-                  marginTop: '-4px',
-                  marginBottom: '0px'
+                  marginTop: '0px',
+                  marginBottom: '3px'
                 }}
               >
                 {personTitle}
               </p>
-              <div className="h-px bg-black/20 w-12 mx-auto" />
+              <div className="h-px bg-black/20 w-8 sm:w-10 md:w-12 lg:w-14 mx-auto mb-2" />
               {/* Show email and contact for any country if present and only on hover */}
               {isHovered && (
                 <>
                   {email && (
                     <div
-                      className="text-black font-medium text-[9px] md:text-[0.6rem] leading-normal w-full flex justify-center"
+                      className="text-black font-medium text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] leading-snug w-full flex justify-center"
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
-                        marginBottom: '2px',
+                        marginBottom: '3px',
                         textAlign: 'center',
                         maxWidth: '100%',
                         marginLeft: 'auto',
@@ -241,21 +241,21 @@ function Worldwide() {
                   )}
                   {address && (
                     <div
-                      className="text-black font-semibold text-[9px] md:text-[0.75rem] leading-snug w-full flex justify-center"
+                      className="text-black font-semibold text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] leading-snug w-full flex justify-center"
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
                         textAlign: 'center',
                         whiteSpace: 'pre-line',
-                        lineHeight: '1.25',
-                        maxWidth: '92%',
+                        lineHeight: '1.3',
+                        maxWidth: '95%',
                         marginLeft: 'auto',
                         marginRight: 'auto',
-                        padding: '6px 10px',
+                        padding: '4px 6px',
                         background: 'rgba(255,255,255,0.75)',
-                        borderRadius: '8px',
+                        borderRadius: '5px',
                         border: '1px solid rgba(0,0,0,0.1)',
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                        marginBottom: '6px'
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                        marginBottom: '3px'
                       }}
                     >
                       {`${address}`}
@@ -263,11 +263,11 @@ function Worldwide() {
                   )}
                   {contact && (
                     <div
-                      className="text-black font-medium text-[9px] md:text-[0.7rem] leading-relaxed w-full flex justify-center"
+                      className="text-black font-medium text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] leading-snug w-full flex justify-center"
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
                         textAlign: 'center',
-                        marginTop: '4px'
+                        marginTop: '2px'
                       }}
                     >
                       Contact: {contact}
@@ -283,8 +283,8 @@ function Worldwide() {
   };
 
   return (
-    <div className="relative w-full py-[5%] px-[2%] max-w-full mx-auto" style={{ fontFamily: "'Krona One', sans-serif" }}>
-      <h1 className="text-xl md:text-5xl text-center text-black w-full mx-auto mb-[5%] font-normal">
+    <div className="relative w-full py-[5%] px-[3%] sm:px-[2%] max-w-full mx-auto" style={{ fontFamily: "'Krona One', sans-serif" }}>
+      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center text-black w-full mx-auto mb-[5%] font-normal px-2">
         Our Offices Worldwide
       </h1>
       
@@ -292,13 +292,13 @@ function Worldwide() {
       {/* Removed map image and container */}
       
       {/* Cards grid */}
-      <div className="mt-8 md:mt-16 grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-[3%] max-w-[98%] md:max-w-[92%] mx-auto">
+      <div className="mt-8 md:mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 md:gap-6 lg:gap-[3%] max-w-[95%] sm:max-w-[90%] md:max-w-[92%] mx-auto px-2 sm:px-4" style={{ paddingRight: 'max(1rem, env(safe-area-inset-right))' }}>
         {countries.map((country, index) => (
           <div 
             key={index} 
             className="w-full"
             style={{
-              maxWidth: '220px',
+              maxWidth: '100%',
               margin: '0 auto'
             }}
           >

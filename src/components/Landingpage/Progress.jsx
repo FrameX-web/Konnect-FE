@@ -165,50 +165,56 @@ const Progress = () => {
 
         {/* Cards - fixed max-width for consistency */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 xl:gap-16 justify-items-center">
-          {progressData.map((item, index) => (
-            <div 
-              key={index} 
-              className="flex flex-col items-center w-full"
-              style={{ maxWidth: '378px' }} // Fixed max-width
-            >
-              <div
-                className="relative w-full rounded-[30px] flex flex-col items-center py-6 px-4 transition duration-700 hover:scale-105"
-                style={{
-                  background: 'linear-gradient(to top right, #E7C478, #FDE9BD)'
-                }}
+          {progressData.map((item, index) => {
+            const isLastItem = index === progressData.length - 1;
+            
+            return (
+              <div 
+                key={index} 
+                className={`flex flex-col items-center w-full ${
+                  isLastItem && progressData.length === 3 ? 'md:col-span-2 lg:col-span-1' : ''
+                }`}
+                style={{ maxWidth: '378px' }}
               >
-                {/* Progress Circle */}
-                <div className="mb-4">
-                  <CircularProgress
-                    percentage={item.progressPercentage}
-                    targetNumber={item.number}
-                  />
-                </div>
+                <div
+                  className="relative w-full rounded-[30px] flex flex-col items-center py-6 px-4 transition duration-700 hover:scale-105"
+                  style={{
+                    background: 'linear-gradient(to top right, #E7C478, #FDE9BD)'
+                  }}
+                >
+                  {/* Progress Circle */}
+                  <div className="mb-4">
+                    <CircularProgress
+                      percentage={item.progressPercentage}
+                      targetNumber={item.number}
+                    />
+                  </div>
 
-                {/* Title - fixed font size */}
-                <div className="mt-2 mb-3">
-                  <h3 
-                    className="font-normal text-black text-center"
-                    style={{ fontSize: 'clamp(16px, 1.2vw, 18px)' }} // Smooth scaling
-                  >
-                    {item.title}
-                  </h3>
-                </div>
-
-                {/* Description container */}
-                <div className="w-[95%] mx-auto">
-                  <div className="border-[1.5px] border-black rounded-b-[30px] py-3 px-5">
-                    <p 
-                      className="text-black text-center leading-relaxed font-['Montserrat'] font-medium"
-                      style={{ fontSize: 'clamp(12px, 0.9vw, 14px)' }} // Smooth scaling for description
+                  {/* Title - fixed font size */}
+                  <div className="mt-2 mb-3">
+                    <h3 
+                      className="font-normal text-black text-center"
+                      style={{ fontSize: 'clamp(16px, 1.2vw, 18px)' }} // Smooth scaling
                     >
-                      {item.description}
-                    </p>
+                      {item.title}
+                    </h3>
+                  </div>
+
+                  {/* Description container */}
+                  <div className="w-[95%] mx-auto">
+                    <div className="border-[1.5px] border-black rounded-b-[30px] py-3 px-5">
+                      <p 
+                        className="text-black text-center leading-relaxed font-['Montserrat'] font-medium"
+                        style={{ fontSize: 'clamp(12px, 0.9vw, 14px)' }} // Smooth scaling for description
+                      >
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

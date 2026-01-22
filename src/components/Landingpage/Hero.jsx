@@ -163,7 +163,7 @@ const Hero = ({ scrollToProducts }) => {
       draggable={false}
       className={`
         w-full h-auto object-contain transform transform-gpu origin-center
-        absolute top-[-60px] md:top-0 lg:top-30 left-2 md:left-0
+        absolute top-[-90px] md:top-[-120px] lg:top-40 left-2 md:left-0
         transition-all duration-[900ms] ease-in-out will-change-transform
         ${className}
       `}

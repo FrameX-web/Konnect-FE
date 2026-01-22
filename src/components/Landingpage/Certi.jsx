@@ -95,8 +95,8 @@ const CertificationCard = ({ certification }) => {
       <div 
         id={`cert-${id}-title`}
         className="absolute left-0 right-0 text-center text-black font-bold px-4
-                   text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-2xl 2xl:text-3xl
-                   top-2 sm:top-3 md:top-4 lg:top-5 xl:top-6"
+                   text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl
+                   top-3 sm:top-4 md:top-5 lg:top-6"
       >
         {title}
       </div>
@@ -105,7 +105,7 @@ const CertificationCard = ({ certification }) => {
       <div 
         className="absolute h-0.5
                    left-5 right-5 sm:left-6 sm:right-6 md:left-8 md:right-8 lg:left-10 lg:right-10
-                   top-8 sm:top-14 md:top-16 lg:top-20 xl:top-15"
+                   top-10 sm:top-12 md:top-14 lg:top-16"
         style={{
           background: 'linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.8) 70%, rgba(0,0,0,0))'
         }}
@@ -115,14 +115,14 @@ const CertificationCard = ({ certification }) => {
       {/* Description text container with responsive positioning */}
       <div 
         className="absolute flex items-center justify-center
-                   px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10
-                   top-16 sm:top-20 md:top-24 lg:top-28 xl:top-32
-                   bottom-16 sm:bottom-20 md:bottom-24 lg:bottom-28 xl:bottom-32"
+                   px-6 sm:px-8 md:px-10 lg:px-12
+                   top-14 sm:top-16 md:top-20 lg:top-24
+                   bottom-14 sm:bottom-16 md:bottom-20 lg:bottom-24"
       >
         <p
-          className="font-medium text-black text-center overflow-hidden
-                     text-[2.5vw] sm:text-xs md:text-sm lg:text-[1vw] xl:text-[1vw] 2xl:text-lg
-                     leading-snug sm:leading-normal md:leading-relaxed"
+          className="font-medium text-black text-center
+                     text-[0.55rem] sm:text-sm md:text-base lg:text-lg
+                     leading-relaxed"
           style={{ 
             fontFamily: "'Montserrat', sans-serif"
           }}
@@ -134,7 +134,7 @@ const CertificationCard = ({ certification }) => {
       {/* Check mark icon at the bottom of the card */}
       <div 
         className="absolute left-1/2 -translate-x-1/2
-                   bottom-2 sm:bottom-3 md:bottom-4 lg:bottom-5 xl:bottom-6"
+                   bottom-3 sm:bottom-4 md:bottom-5 lg:bottom-6"
       >
         <img 
           src="/hero/check.png" 
@@ -142,7 +142,7 @@ const CertificationCard = ({ certification }) => {
           loading="lazy"
           width="140"
           height="140"
-          className="w-16 h-auto sm:w-20 md:w-24 lg:w-28 xl:w-24 2xl:w-30"
+          className="w-14 h-auto sm:w-18 md:w-24 lg:w-24"
         />
       </div>
     </article>
@@ -249,11 +249,11 @@ function Certi() {
       </h2>
 
       {/* Desktop view - use Carousel with infinite auto-scroll */}
-      <div className="hidden sm:flex w-full justify-center items-center" role="region" aria-label="Certifications carousel">
+      <div className="hidden sm:flex w-full justify-center items-center px-8 md:px-12 py-12" role="region" aria-label="Certifications carousel">
         <div 
-          className="mx-auto"
+          className="mx-auto w-full"
           style={{
-            width: 'clamp(500px, 70vw, 700px)'
+            maxWidth: 'min(700px, 85vw)'
           }}
         >
           <Carousel slides={carouselSlides} infinite autoScroll autoScrollInterval={3500} />
@@ -261,12 +261,12 @@ function Certi() {
       </div>
 
       {/* Mobile view - use Carousel with infinite auto-scroll */}
-      <div className="sm:hidden w-full px-4 py-8" role="region" aria-label="Certifications carousel mobile">
-        <div className="relative overflow-visible w-full py-8 flex flex-col items-center justify-center">
+      <div className="sm:hidden w-full px-8 py-12" role="region" aria-label="Certifications carousel mobile">
+        <div className="relative w-full flex items-center justify-center">
           <div 
-            className="mx-auto relative"
+            className="mx-auto w-full"
             style={{
-              width: 'min(90vw, 400px)'
+              maxWidth: 'min(400px, 85vw)'
             }}
           >
             <Carousel slides={carouselSlides} infinite autoScroll autoScrollInterval={3500} />

@@ -105,7 +105,7 @@ function Study2() {
   }, []);
 
   return (
-    <div className="w-full py-16 px-6 lg:px-12" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <div className="w-full py-8 md:py-12 px-4 md:px-6 lg:px-12" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       {/* Desktop View: Only show the image, fit to screen */}
       <div className="hidden lg:flex fixed inset-0 w-screen h-screen z-50 bg-white items-center justify-start">
         <BackButton />
@@ -117,69 +117,49 @@ function Study2() {
         />
       </div>
 
-      {/* Mobile View: Show original content */}
+      {/* Mobile & Tablet View */}
       <div className="block lg:hidden">
-        <div className="max-w-[100vw] mx-auto lg:grid lg:grid-cols-2 gap-16 lg:items-center">
-          {/* Left Side - Our Story */}
-          <div className="relative mb-12 lg:mb-0">
-            {/* Rectangle background image - hidden on mobile */}
+        <div className="max-w-full mx-auto">
+          {/* Header with background */}
+          <div className="relative mb-8 md:mb-12">
+            {/* Background image - top left for both mobile and tablet */}
             <div
-              className="hidden lg:block absolute inset-0 w-[120vh] -top-40 -left-26 h-[120vh] -translate-x-16 -translate-y-8"
-              style={{
-                backgroundImage: "url('/rectangle.png')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                zIndex: 0,
-              }}
-            ></div>
-            
-            {/* Mobile background rectangle image */}
-            <div
-              className="lg:hidden absolute -top-22 -right-4 w-[50vh] h-[50vh]"
+              className="lg:hidden absolute -top-8 left-0 w-[60vh] h-[45vh] md:h-[55vh]"
               style={{
                 backgroundImage: "url('/storyback.png')",
                 backgroundSize: "cover",
-                backgroundPosition: "center",
+                backgroundPosition: "top left",
                 backgroundRepeat: "no-repeat",
                 zIndex: 0,
               }}
             ></div>
             
-                <div className="relative z-10 lg:pl-8">
-                    <img
-                    src="/story.png"
-                    alt="Konnect Packaging"
-                    className="w-full max-w-[450px] h-auto lg:h-130 mb-12"
-                    />
-                  </div>
+            <div className="relative z-10">
+              <img
+                src="/story.png"
+                alt="Konnect Packaging"
+                className="w-full max-w-[450px] h-auto"
+              />
+            </div>
           </div>
 
-          {/* Right Side - Features */}
-          <div className="space-y-8 lg:space-y-11 relative">
-            {storyFeatures.map((feature, index) => {
-              const isFirstOrLast = index === 0 || index === storyFeatures.length - 1;
-              const overlayClass = isFirstOrLast ? "lg:-ml-32 lg:pr-12 relative z-20" : "";
-              
-              return (
-                <div key={feature.id} className={`flex items-start gap-4 lg:gap-6 ${overlayClass}`}>
-                  {/* Icon as image */}
-                  <div className="flex-shrink-0 w-12 h-12 lg:w-16 lg:h-16 flex items-center justify-center bg-transparent">
-                    <img src={feature.icon}/>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="flex-1 pt-1">
-                    <h3 className="text-lg lg:text-xl font-medium text-black mb-2 lg:mb-3 leading-tight">
-                      {feature.title}
-                    </h3>
-                    <p className="text-sm font-medium lg:text-base text-black/80 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
+          {/* Features */}
+          <div className="space-y-5 md:space-y-6 relative z-10">
+            {storyFeatures.map((feature) => (
+              <div key={feature.id} className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14">
+                  <img src={feature.icon} alt="" />
                 </div>
-              );
-            })}
+                <div className="flex-1">
+                  <h3 className="text-base md:text-lg font-medium text-black mb-2 leading-tight">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm md:text-base font-medium text-black/80 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

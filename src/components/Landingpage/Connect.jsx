@@ -1,7 +1,8 @@
 import * as React from "react";
 import "@fontsource/krona-one";
 import "@fontsource/montserrat"; // Import Montserrat font
-import { FaWhatsapp, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaWhatsapp, FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 function Connect() {
   React.useEffect(() => {
@@ -44,16 +45,18 @@ function Connect() {
         >
           Join us for updates on VCI packaging, corrosion protection tips, and sustainable packaging insights.
         </p>
-        <nav className="grid grid-cols-2 gap-3 self-center mt-8 w-full text-sm text-white md:flex md:flex-row md:flex-wrap md:gap-3 md:justify-between md:mt-12 md:text-base lg:mt-16 lg:gap-5 lg:max-w-[1155px]" aria-label="Social links">
+        <nav className="grid grid-cols-2 gap-3 mt-8 w-full text-sm text-white md:grid md:grid-cols-3 md:gap-4 md:mt-12 md:text-base lg:flex lg:flex-row lg:gap-5 lg:mt-16 lg:max-w-[1155px]" aria-label="Social links">
           <a
-            href="#"
+            href="https://wa.me/919270949635"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Chat with Konnect Packaging on WhatsApp"
             title="WhatsApp — Konnect Packaging"
             className="flex items-center gap-1.5 px-6 py-1.5 whitespace-nowrap bg-black rounded-3xl justify-center
-            md:px-8 md:py-1.5 md:min-w-[170px] md:h-[48px] lg:min-w-[190px] lg:h-[54px]
+            md:px-8 md:py-2.5 md:min-w-[170px] lg:min-w-[190px] lg:h-[54px]
             cursor-pointer transition-all duration-300 hover:bg-gray-800 hover:scale-105 hover:shadow-lg"
           >
-            <FaWhatsapp className="w-[24px] h-[24px] md:w-[30px] md:h-[30px]" aria-hidden="true" />
+            <FaWhatsapp className="w-6 h-6 md:w-8 md:h-8 text-white" aria-hidden="true" />
             <span className="basis-auto">WhatsApp</span>
           </a>
           <a
@@ -61,10 +64,10 @@ function Connect() {
             aria-label="Follow Konnect Packaging on Facebook"
             title="Facebook — Konnect Packaging"
             className="flex items-center gap-1.5 px-6 py-1.5 bg-black rounded-3xl justify-center
-            md:px-8 md:py-1.5 md:min-w-[170px] md:h-[48px] lg:min-w-[190px] lg:h-[54px]
+            md:px-8 md:py-2.5 md:min-w-[170px] lg:min-w-[190px] lg:h-[54px]
             cursor-pointer transition-all duration-300 hover:bg-gray-800 hover:scale-105 hover:shadow-lg"
           >
-            <FaFacebook className="w-[24px] h-[24px] md:w-[30px] md:h-[30px]" aria-hidden="true" />
+            <FaFacebook className="w-6 h-6 md:w-8 md:h-8 text-white" aria-hidden="true" />
             <span>Facebook</span>
           </a>
           <a
@@ -72,10 +75,10 @@ function Connect() {
             aria-label="Follow Konnect Packaging on Instagram"
             title="Instagram — Konnect Packaging"
             className="flex items-center gap-1.5 px-6 py-1.5 whitespace-nowrap bg-black rounded-3xl justify-center
-            md:px-8 md:py-1.5 md:min-w-[170px] md:h-[48px] lg:min-w-[190px] lg:h-[54px]
+            md:px-8 md:py-2.5 md:min-w-[170px] lg:min-w-[190px] lg:h-[54px]
             cursor-pointer transition-all duration-300 hover:bg-gray-800 hover:scale-105 hover:shadow-lg"
           >
-            <FaInstagram className="w-6 h-6 md:w-7 md:h-7" aria-hidden="true" />
+            <FaInstagram className="w-6 h-6 md:w-8 md:h-8 text-white" aria-hidden="true" />
             <span className="basis-auto">Instagram</span>
           </a>
           <a
@@ -83,21 +86,21 @@ function Connect() {
             aria-label="Connect with Konnect Packaging on LinkedIn"
             title="LinkedIn — Konnect Packaging"
             className="flex items-center gap-1.5 px-6 py-1.5 bg-black rounded-3xl justify-center
-            md:px-8 md:py-1.5 md:min-w-[170px] md:h-[48px] lg:min-w-[190px] lg:h-[54px]
+            md:px-8 md:py-2.5 md:min-w-[170px] lg:min-w-[190px] lg:h-[54px]
             cursor-pointer transition-all duration-300 hover:bg-gray-800 hover:scale-105 hover:shadow-lg"
           >
-            <FaLinkedin className="w-[24px] h-[24px] md:w-[27px] md:h-[27px]" aria-hidden="true" />
+            <FaLinkedin className="w-6 h-6 md:w-8 md:h-8 text-white" aria-hidden="true" />
             <span>LinkedIn</span>
           </a>
           <a
             href="#"
-            aria-label="Follow Konnect Packaging on X (Twitter)"
-            title="X (Twitter) — Konnect Packaging"
-            className="col-span-2 flex items-center gap-1.5 px-6 py-1.5 whitespace-nowrap bg-black rounded-3xl justify-center
-            md:col-span-1 md:px-8 md:py-1.5 md:min-w-[170px] md:h-[48px] lg:min-w-[190px] lg:h-[54px]
+            aria-label="Follow Konnect Packaging on X (formerly Twitter)"
+            title="X — Konnect Packaging"
+            className="flex items-center gap-1.5 px-6 py-1.5 whitespace-nowrap bg-black rounded-3xl justify-center col-span-2 md:col-span-1
+            md:px-8 md:py-2.5 md:min-w-[170px] lg:min-w-[190px] lg:h-[54px]
             cursor-pointer transition-all duration-300 hover:bg-gray-800 hover:scale-105 hover:shadow-lg"
           >
-            <FaTwitter className="w-5 h-5" aria-hidden="true" />
+            <FaXTwitter className="w-6 h-6 md:w-8 md:h-8 text-white" aria-hidden="true" />
             <span>Twitter</span>
           </a>
         </nav>

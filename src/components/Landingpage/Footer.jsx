@@ -6,9 +6,9 @@ import {
   FaWhatsapp, 
   FaFacebookF, 
   FaInstagram, 
-  FaLinkedinIn, 
-  FaTwitter 
+  FaLinkedinIn
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { MdEmail, MdPhone } from "react-icons/md";
 import Popup from "./Popup"; // Import the new Popup component
 
@@ -21,9 +21,11 @@ const LightText = ({ children, className = "" }) => (
   <p className={`text-gray-300 text-sm mb-2 leading-relaxed ${className}`} style={{ fontFamily: "'Montserrat', sans-serif" }}>{children}</p>
 );
 
-const SocialIcon = ({ icon: Icon, label }) => (
+const SocialIcon = ({ icon: Icon, label, href = "#" }) => (
   <a 
-    href="#" 
+    href={href}
+    target={href !== "#" ? "_blank" : undefined}
+    rel={href !== "#" ? "noopener noreferrer" : undefined}
     aria-label={label} 
     className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center text-gray-400 hover:text-white hover:border-[#E9C77F] hover:bg-[#E9C77F]/10 transition-all duration-300 ease-out transform hover:scale-105"
     style={{ fontFamily: "'Montserrat', sans-serif" }}
@@ -34,12 +36,12 @@ const SocialIcon = ({ icon: Icon, label }) => (
 
 const ContactItem = ({ icon: Icon, href, children }) => (
   <div className="flex items-center gap-3 mb-4 group" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-    <div className="text-[#E9C77F]">
+    <div className="text-[#E9C77F] flex-shrink-0">
       <Icon size={20} />
     </div>
     <a 
       href={href} 
-      className="text-white text-sm hover:text-[#E9C77F] transition-colors duration-300"
+      className="text-white text-sm hover:text-[#E9C77F] transition-colors duration-300 break-all"
     >
       {children}
     </a>
@@ -83,7 +85,7 @@ function Footer() {
         // Remove fontFamily here so only SectionTitle and credit use Krona One
       >
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-6 lg:gap-12">
             {/* Logo Section */}
             <div className="col-span-1 flex flex-col justify-center h-full md:h-[220px]">
               <div className="flex flex-col relative z-10 items-start">
@@ -137,17 +139,34 @@ function Footer() {
             {/* Location Section */}
             <div className="col-span-1">
               <SectionTitle>location</SectionTitle>
-              <LightText>
-                Plot no J/60; KONNECT packaging<br />
-                International LLP,<br />
-                Borgaon, Chhinwara,<br />
-                Madhya Pradesh- pin<br />
-                code- 480106, India
-              </LightText>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-[#E9C77F] text-xs font-semibold mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>India (HQ)</p>
+                  <LightText className="text-xs leading-relaxed">
+                    Plot no J/60, KONNECT packaging<br />
+                    International LLP, Borgaon, Chhinwara,<br />
+                    Madhya Pradesh- 480106, India
+                  </LightText>
+                </div>
+                <div>
+                  <p className="text-[#E9C77F] text-xs font-semibold mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>Lithuania</p>
+                  <LightText className="text-xs leading-relaxed">
+                    Ramybės g. 4-70, Vilnius,<br />
+                    02103, Lithuania
+                  </LightText>
+                </div>
+                <div>
+                  <p className="text-[#E9C77F] text-xs font-semibold mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>Slovakia</p>
+                  <LightText className="text-xs leading-relaxed">
+                    SK-067 73 Ubl'a 202,<br />
+                    Slovak Republic
+                  </LightText>
+                </div>
+              </div>
             </div>
 
             {/* Contact Section */}
-            <div className="col-span-1">
+            <div className="col-span-1 overflow-hidden">
               <SectionTitle>contact</SectionTitle>
               <LightText className="mb-2 text-[0.7rem]">For general enquires and information</LightText>
               <ContactItem icon={MdEmail} href="mailto:info@konnectpackaging.com">
@@ -176,11 +195,11 @@ function Footer() {
               </div>
               <div className="flex justify-center md:justify-end space-x-6 order-1 md:order-2">
                 <SocialIcon icon={FaYoutube} label="YouTube" />
-                <SocialIcon icon={FaWhatsapp} label="WhatsApp" />
+                <SocialIcon icon={FaWhatsapp} label="WhatsApp" href="https://wa.me/919270949635" />
                 <SocialIcon icon={FaFacebookF} label="Facebook" />
                 <SocialIcon icon={FaInstagram} label="Instagram" />
                 <SocialIcon icon={FaLinkedinIn} label="LinkedIn" />
-                <SocialIcon icon={FaTwitter} label="Twitter" />
+                <SocialIcon icon={FaXTwitter} label="X (Twitter)" />
               </div>
             </div>
           </div>

@@ -6,6 +6,7 @@ import '@fontsource/montserrat/400.css';
 function Stories() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -42,40 +43,40 @@ function Stories() {
 
   const testimonialsData = [
     {
-      id: 'fahrettin',
-      name: 'Fahrettin Yılmaz',
-      position: 'Packaging Lead',
-      initial: 'F',
-      testimonial: "The quality of VCI laminates and their moisture-barrier technology has extended our product shelf life significantly. Konnect is our go-to partner.",
-      badge: 'Aug 3, 2020',
-      location: 'Ankara, Turkey'
+      id: 'rajesh',
+      name: 'Rajesh Kumar',
+      position: 'Supply Chain Manager',
+      initial: 'R',
+      testimonial: "Konnect's VCI packaging has been a game-changer for our automotive exports. The anti-corrosion protection is exceptional, and we've seen zero damage claims in the last 18 months. Highly reliable partner.",
+      badge: 'Jan 15, 2024',
+      location: 'Mumbai, India'
     },
     {
-      id: 'ankur',
-      name: 'Ankur Mehta',
-      position: 'Procurement Head',
-      initial: 'A',
-      testimonial: "Konnect's anti-corrosion packaging helped us reduce product damage during export by over 80%. Their team truly understands logistics-grade protection.",
-      badge: 'June 18, 2021',
-      location: 'Stuttgart, Germany'
+      id: 'martin',
+      name: 'Martin Novák',
+      position: 'Procurement Director',
+      initial: 'M',
+      testimonial: "Working with Konnect has streamlined our packaging operations significantly. Their custom solutions and timely delivery have helped us meet strict European compliance standards without any hassle.",
+      badge: 'Oct 22, 2023',
+      location: 'Bratislava, Slovakia'
     },
     {
-      id: 'om',
-      name: 'Om Pawar',
-      position: 'Multimedia designer',
-      initial: 'O',
-      testimonial: "From material selection to delivery timelines, Konnect has been reliable and responsive. Their custom solutions fit perfectly with our OEM processes.",
-      badge: 'Mar 9, 2023',
+      id: 'priya',
+      name: 'Priya Sharma',
+      position: 'Operations Head',
+      initial: 'P',
+      testimonial: "The quality consistency and technical support from Konnect is outstanding. Their moisture-barrier packaging has extended our product shelf life by 40%. A true partner in our growth journey.",
+      badge: 'Mar 8, 2024',
       location: 'Pune, India'
     },
     {
-      id: 'claire',
-      name: 'Claire van Dijk',
-      position: 'Director',
-      initial: 'C',
-      testimonial: "We've worked with many suppliers, but Konnect stands out for its innovation and quality. Their R&D-backed packaging gave us a competitive edge in Europe.",
-      badge: 'Nov 25, 2022',
-      location: 'Rotterdam, Netherlands'
+      id: 'jana',
+      name: 'Jana Kováčová',
+      position: 'Logistics Manager',
+      initial: 'J',
+      testimonial: "Konnect's sustainable packaging solutions align perfectly with our ESG goals. Their R&D team worked closely with us to develop eco-friendly alternatives without compromising on protection quality.",
+      badge: 'Dec 5, 2023',
+      location: 'Košice, Slovakia'
     }
   ];
 
@@ -90,23 +91,24 @@ function Stories() {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Initialize position to show first 3 cards (offset by 3 due to prepended items)
+  // Initialize position to show first cards (offset by prepended items)
   useEffect(() => {
     if (carouselRef.current) {
       setCurrentIndex(0);
       const cardWidthPercent = 100 / extendedTestimonials.length;
-      const initialOffset = 3 * cardWidthPercent;
+      const initialOffset = (isMobile ? 3 : isTablet ? 3 : 3) * cardWidthPercent;
       carouselRef.current.style.transition = 'none';
       carouselRef.current.style.transform = `translateX(-${initialOffset}%)`;
       setTimeout(() => setIsLoaded(true), 50);
     }
-  }, [isMobile, extendedTestimonials.length]);
+  }, [isMobile, isTablet, extendedTestimonials.length]);
 
   // Auto-advance carousel on desktop every 3 seconds, pause on hover
   useEffect(() => {
@@ -209,7 +211,7 @@ function Stories() {
   };
 
   const FeatureCard = ({ title, description, image }) => (
-    <div className="bg-white border-2 border-black/60 rounded-[20px] p-8 pt-14 relative">
+    <div className="bg-white border-2 border-black/60 rounded-[20px] p-6 md:p-8 pt-12 md:pt-14 relative">
       <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-white border-2 border-black rounded-full flex items-center justify-center overflow-hidden">
         <img 
           src={image} 
@@ -217,34 +219,34 @@ function Stories() {
           className="w-7 h-7 object-cover"
         />
       </div>
-      <div className="text-center mb-6">
-        <h3 className="text-3xl font-bold text-black">{title}</h3>
+      <div className="text-center mb-4 md:mb-6">
+        <h3 className="text-2xl md:text-3xl font-bold text-black">{title}</h3>
       </div>
-      <p className="text-gray-900 leading-normal font-medium text-center">
+      <p className="text-gray-900 text-sm md:text-base leading-normal font-medium text-center">
         {description}
       </p>
     </div>
   );
 
   const TestimonialCard = ({ name, position, initial, testimonial, badge, location }) => (
-    <div className="bg-gradient-to-br from-[#E9C77F] to-[#FBE6B7] rounded-[20px] p-8 relative">
-      <div className="flex items-center mb-6">
-        <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white text-xl font-bold mr-4">
+    <div className="bg-gradient-to-br from-[#E9C77F] to-[#FBE6B7] rounded-[20px] p-6 md:p-8 relative">
+      <div className="flex items-center mb-4 md:mb-6">
+        <div className="w-10 h-10 md:w-12 md:h-12 bg-black rounded-full flex items-center justify-center text-white text-lg md:text-xl font-bold mr-3 md:mr-4">
           {initial}
         </div>
         <div>
-          <h4 className="text-xl font-bold text-black">{name}</h4>
-          <p className="text-sm text-black">{position}</p>
+          <h4 className="text-lg md:text-xl font-bold text-black">{name}</h4>
+          <p className="text-xs md:text-sm text-black">{position}</p>
         </div>
       </div>
-      <p className="text-black text-sm leading-relaxed  mb-6">
+      <p className="text-black text-xs md:text-sm leading-relaxed mb-4 md:mb-6">
         {testimonial}
       </p>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center space-x-2">
-          <span className="bg-black text-white px-3 py-1 rounded-full text-xs">{badge}</span>
+          <span className="bg-black text-white px-2 md:px-3 py-1 rounded-full text-[0.65rem] md:text-xs">{badge}</span>
         </div>
-        <span className="bg-white text-black px-3 py-1 rounded-full text-xs font-medium">{location}</span>
+        <span className="bg-white text-black px-2 md:px-3 py-1 rounded-full text-[0.65rem] md:text-xs font-medium">{location}</span>
       </div>
     </div>
   );
@@ -375,7 +377,7 @@ function Stories() {
             ref={carouselRef}
             className={`flex ${isLoaded ? 'transition-transform duration-500 ease-in-out' : ''}`}
             style={{
-              width: `${extendedTestimonials.length * 100 / (isMobile ? 1 : 3)}%`,
+              width: `${extendedTestimonials.length * 100 / (isMobile ? 1 : isTablet ? 2 : 3)}%`,
               opacity: isLoaded ? 1 : 0,
               transition: isLoaded ? 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out' : 'none',
             }}

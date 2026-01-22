@@ -8,7 +8,6 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isGalleryPopupOpen, setIsGalleryPopupOpen] = useState(false);
 
   const navButtonStyle =
     'font-krona text-black font-medium bg-white rounded-full shadow-sm hover:shadow-lg hover:bg-[#f8f8f8] cursor-pointer transition-all duration-200 whitespace-nowrap';
@@ -77,13 +76,13 @@ const Header = () => {
   const handleGalleryClick = (e) => {
     e.preventDefault();
     setActiveDropdown(null);
-    setIsGalleryPopupOpen(true);
+    window.location.href = '/gallery';
   };
 
   const handleMobileGalleryClick = (e) => {
     e.preventDefault();
     closeMobileMenu();
-    setIsGalleryPopupOpen(true);
+    window.location.href = '/gallery';
   };
 
   return (
@@ -437,12 +436,6 @@ const Header = () => {
           </div>
         )}
       </header>
-      {/* Popup for Gallery under construction */}
-      <Popup
-        open={isGalleryPopupOpen}
-        onClose={() => setIsGalleryPopupOpen(false)}
-        message="Gallery is under construction."
-      />
     </>
   );
 };

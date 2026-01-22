@@ -78,6 +78,7 @@ const CertificateCarouselCard = CertificateCard;
 function AwardsCertifications() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -96,6 +97,7 @@ function AwardsCertifications() {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -111,7 +113,7 @@ function AwardsCertifications() {
       carouselRef.current.style.transform = `translateX(-${initialOffset}%)`;
       setTimeout(() => setIsLoaded(true), 50);
     }
-  }, [isMobile, extendedCertificates.length]);
+  }, [isMobile, isTablet, extendedCertificates.length]);
 
   useEffect(() => {
     if (!isMobile && isLoaded && !isHovered) {
@@ -346,7 +348,7 @@ function AwardsCertifications() {
                 ref={carouselRef}
                 className={`flex ${isLoaded ? 'transition-transform duration-500 ease-in-out' : ''}`}
                 style={{
-                  width: `${extendedCertificates.length * 100 / (isMobile ? 1 : 3)}%`,
+                  width: `${extendedCertificates.length * 100 / (isMobile ? 1 : isTablet ? 2 : 3)}%`,
                   opacity: isLoaded ? 1 : 0,
                   transition: isLoaded ? 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out' : 'none',
                 }}

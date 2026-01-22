@@ -24,6 +24,7 @@ import BlogFaqComponent from './components/Blogs'
 import LeadershipTeam from './components/Leader'
 import Analysis from './components/Analysis'
 import FutureProof from './components/Future'
+import Gallery from './components/Gallery'
 import Admin from './components/admin/Admin'
 
 // New Routes wrapper to force remounting via location.key
@@ -117,6 +118,12 @@ function AppRoutes() {
           <>
             <BackButton />
             <FutureProof/>
+          </>
+        } />
+        <Route path="/gallery" element={
+          <>
+            <BackButton />
+            <Gallery />
           </>
         } />
         <Route path="/admin" element={<Admin />} />
