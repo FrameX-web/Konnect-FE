@@ -3,6 +3,7 @@ import '@fontsource/krona-one/400.css'
 import { lazy, Suspense, useState } from 'react'
 import ChatbotButton from './components/Chatbot/ChatbotButton'
 import Chatbot from './components/Chatbot/chatbot'
+import WelcomePopup from './components/WelcomePopup'
 import { createPortal } from 'react-dom'
 
 // Preload components for instant navigation
@@ -128,6 +129,7 @@ function AppRoutes() {
         } />
         <Route path="/admin" element={<Admin />} />
       </Routes>
+      <WelcomePopup />
       <ChatbotPortal />
     </>
   );

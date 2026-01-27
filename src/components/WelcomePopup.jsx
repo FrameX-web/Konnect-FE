@@ -7,8 +7,11 @@ import '@fontsource/krona-one/400.css';
 import '@fontsource/montserrat/400.css';
 
 const WelcomePopup = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+  const [highlight, setHighlight] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -20,19 +23,22 @@ const WelcomePopup = () => {
   const [countryOptions] = useState(countryList().getData());
 
   useEffect(() => {
-    const hasVisited = localStorage.getItem('hasVisitedBefore');
-    if (!hasVisited) {
-      setTimeout(() => {
-        setIsVisible(true);
-        setTimeout(() => setIsAnimating(true), 50);
-      }, 1500);
-    }
+    setTimeout(() => {
+      setShowButton(true);
+      setTimeout(() => setHighlight(true), 600);
+      setTimeout(() => setHighlight(false), 2600);
+    }, 1000);
   }, []);
+
+  const handleOpenPopup = () => {
+    setIsPopupOpen(true);
+    setTimeout(() => setIsAnimating(true), 50);
+  };
 
   const handleClose = () => {
     setIsAnimating(false);
     setTimeout(() => {
-      setIsVisible(false);
+      setIsPopupOpen(false);
     }, 300);
   };
 
@@ -68,9 +74,75 @@ const WelcomePopup = () => {
 
   const selectedCountry = countryOptions.find(option => option.label === formData.country);
 
-  if (!isVisible) return null;
-
   return (
+    <>
+      {/* Floating Button */}
+      <div
+        className="fixed z-[9998] transition-all duration-500 ease-out"
+        style={{
+          right: showButton ? '0' : '-80px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          fontFamily: 'Montserrat, sans-serif',
+          opacity: showButton ? 1 : 0
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <button
+          onClick={handleOpenPopup}
+          className="relative rounded-l-full shadow-lg flex items-center overflow-hidden transition-all duration-300 ease-out hover:shadow-xl"
+          style={{
+            background: 'linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%)',
+            height: 'clamp(45px, 12vw, 60px)',
+            width: isHovered ? 'min(220px, 55vw)' : 'clamp(45px, 12vw, 60px)',
+            animation: highlight ? 'gentle-bounce 0.5s ease-in-out 4' : 'none'
+          }}
+          aria-label="Open contact form"
+        >
+          <div 
+            className="flex items-center justify-center flex-shrink-0"
+            style={{
+              width: 'clamp(45px, 12vw, 60px)',
+              height: 'clamp(45px, 12vw, 60px)'
+            }}
+          >
+            <span 
+              className="font-bold text-white"
+              style={{ fontSize: 'clamp(18px, 5vw, 24px)' }}
+            >
+              !
+            </span>
+          </div>
+          <div
+            className="hidden md:block pr-4 whitespace-nowrap transition-opacity duration-500 ease-out"
+            style={{
+              opacity: isHovered ? 1 : 0
+            }}
+          >
+            <span className="text-[11px] font-semibold text-white leading-tight">
+              Need Help? Let's Connect!
+            </span>
+          </div>
+        </button>
+      </div>
+
+      {/* Keyframe Animation */}
+      <style>
+        {`
+          @keyframes gentle-bounce {
+            0%, 100% {
+              transform: translateX(0);
+            }
+            50% {
+              transform: translateX(-10px);
+            }
+          }
+        `}
+      </style>
+
+      {/* Popup Modal */}
+      {isPopupOpen && (
     <div 
       className="fixed inset-0 flex items-center justify-center p-4 transition-opacity duration-300"
       style={{ 
@@ -106,10 +178,10 @@ const WelcomePopup = () => {
             className="text-xl sm:text-2xl font-bold text-black mb-2 text-center"
             style={{ fontFamily: 'Krona One, sans-serif', letterSpacing: '1px' }}
           >
-            WELCOME!
+            GET IN TOUCH
           </h2>
           <p className="text-center text-black/80 mb-4 sm:mb-6 text-xs sm:text-sm px-2">
-            Get in touch with us for premium packaging solutions
+            Share your details and we'll reach out to you shortly
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -210,6 +282,8 @@ const WelcomePopup = () => {
         </div>
       </div>
     </div>
+      )}
+    </>
   );
 };
 

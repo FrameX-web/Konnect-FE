@@ -8,7 +8,6 @@ import Certifiation from './Certi'
 import Connect from './Connect'
 import Ribbon from './Ribbon'
 import Footer from './Footer'
-import WelcomePopup from '../WelcomePopup'
 import React, { useEffect } from 'react';
 
 const LandingPage = () => {
@@ -132,7 +131,6 @@ const LandingPage = () => {
 
   return (
     <>
-      <WelcomePopup />
       {/* Semantic header with hero */}
       <header role="banner" aria-label="Konnect Packaging hero section">
         <div className="w-[95%] mx-auto mt-8 rounded-[3rem] overflow-hidden">
