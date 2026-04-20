@@ -62,6 +62,10 @@ const CompanyLink = ({ to, children }) => (
 );
 
 function Footer() {
+  const whatsappUrl = "https://wa.me/919270949635";
+  const instagramUrl = "https://www.instagram.com/konnect.packaging?igsh=MTBmcW9yamprYjF5bw==";
+  const linkedInUrl = "https://www.linkedin.com/company/konnect-packaging-international-llp/";
+
   // Popup state
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupMsg, setPopupMsg] = useState("");
@@ -195,10 +199,10 @@ function Footer() {
               </div>
               <div className="flex justify-center md:justify-end space-x-6 order-1 md:order-2">
                 <SocialIcon icon={FaYoutube} label="YouTube" />
-                <SocialIcon icon={FaWhatsapp} label="WhatsApp" href="https://wa.me/919270949635" />
+                <SocialIcon icon={FaWhatsapp} label="WhatsApp" href={whatsappUrl} />
                 <SocialIcon icon={FaFacebookF} label="Facebook" />
-                <SocialIcon icon={FaInstagram} label="Instagram" />
-                <SocialIcon icon={FaLinkedinIn} label="LinkedIn" />
+                <SocialIcon icon={FaInstagram} label="Instagram" href={instagramUrl} />
+                <SocialIcon icon={FaLinkedinIn} label="LinkedIn" href={linkedInUrl} />
                 <SocialIcon icon={FaXTwitter} label="X (Twitter)" />
               </div>
             </div>

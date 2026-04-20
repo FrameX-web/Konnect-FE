@@ -42,6 +42,12 @@ const HERO_IMAGES = [
   "/hero/bg/5.png"
 ];
 
+const HERO_RIBBON_ITEMS = Array.from({ length: 8 }, (_, index) => ({
+  id: index,
+  location: "May 7 - 13, Düsseldorf, Germany",
+  event: "Meet Us at Interpack 2026"
+}));
+
 const Hero = ({ scrollToProducts }) => {
   const [imgIndex, setImgIndex] = useState(0);
   const [prevImgIndex, setPrevImgIndex] = useState(HERO_IMAGES.length - 1);
@@ -184,6 +190,44 @@ const Hero = ({ scrollToProducts }) => {
       }}
     >
       <Header />
+      <button
+        type="button"
+        onClick={() => navigate('/interpack-2026')}
+        className="relative z-40 mt-1 w-full lg:mt-2 overflow-hidden border-y border-[#ecd9a8]/70 bg-[linear-gradient(90deg,#173f79_0%,#21569f_48%,#173f79_100%)] shadow-[0_8px_24px_rgba(10,32,66,0.22)] text-left cursor-pointer transition-opacity hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3d182]"
+        aria-label="Open Interpack 2026 event details"
+      >
+        <style>
+          {`
+            @keyframes hero-ribbon-scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+          `}
+        </style>
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-[#f5ddb0]/80 to-transparent" aria-hidden="true" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-[#f5ddb0]/80 to-transparent" aria-hidden="true" />
+
+        <div
+          className="flex w-max min-w-full items-center py-1.5 md:py-2"
+          style={{
+            animation: prefersReducedMotion ? "none" : "hero-ribbon-scroll 22s linear infinite"
+          }}
+          aria-label="Interpack event announcement"
+          role="status"
+        >
+          {HERO_RIBBON_ITEMS.concat(HERO_RIBBON_ITEMS).map((item, index) => (
+            <div
+              key={`${item.id}-${index}`}
+              className="mx-4 md:mx-6 lg:mx-8 flex items-center whitespace-nowrap text-[10px] md:text-sm lg:text-base"
+              style={{ fontFamily: "'Montserrat', sans-serif" }}
+            >
+              <span className="font-semibold tracking-[0.02em] text-[#f7f9ff]">{item.location}</span>
+              <span className="mx-2 md:mx-3 text-[#f0cb7a]">✦</span>
+              <span className="font-bold tracking-[0.02em] text-[#fff7de]">{item.event}</span>
+            </div>
+          ))}
+        </div>
+      </button>
       <div className="max-w-7xl mx-auto px-2 lg:px-8 py-2 lg:py-8">
         <div
           className="flex flex-col lg:grid grid-cols-1 lg:grid-cols-2 gap-1 lg:gap-16 items-center min-h-[calc(65vh-80px)] lg:min-h-[calc(100vh-150px)]"

@@ -11,6 +11,9 @@ import Footer from './Footer'
 import React, { useEffect } from 'react';
 
 const LandingPage = () => {
+  const instagramUrl = 'https://www.instagram.com/konnect.packaging?igsh=MTBmcW9yamprYjF5bw==';
+  const linkedInUrl = 'https://www.linkedin.com/company/konnect-packaging-international-llp/';
+
   // SEO: inject/update head tags and JSON-LD
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -82,8 +85,8 @@ const LandingPage = () => {
       logo: '/logo.png',
       sameAs: [
         'https://www.facebook.com/',
-        'https://www.instagram.com/',
-        'https://www.linkedin.com/',
+        instagramUrl,
+        linkedInUrl,
         'https://twitter.com/'
       ],
       contactPoint: [{

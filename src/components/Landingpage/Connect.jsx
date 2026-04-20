@@ -5,6 +5,10 @@ import { FaWhatsapp, FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6";
 
 function Connect() {
+  const whatsappUrl = "https://wa.me/919270949635";
+  const instagramUrl = "https://www.instagram.com/konnect.packaging?igsh=MTBmcW9yamprYjF5bw==";
+  const linkedInUrl = "https://www.linkedin.com/company/konnect-packaging-international-llp/";
+
   React.useEffect(() => {
     if (typeof document === 'undefined') return;
     const data = {
@@ -14,8 +18,8 @@ function Connect() {
       url: (typeof window !== 'undefined' && window.location?.origin) ? window.location.origin : 'https://www.konnectpackaging.com/',
       sameAs: [
         'https://www.facebook.com/',
-        'https://www.instagram.com/',
-        'https://www.linkedin.com/',
+        instagramUrl,
+        linkedInUrl,
         'https://twitter.com/'
       ]
     };
@@ -47,7 +51,7 @@ function Connect() {
         </p>
         <nav className="grid grid-cols-2 gap-3 mt-8 w-full text-sm text-white md:grid md:grid-cols-3 md:gap-4 md:mt-12 md:text-base lg:flex lg:flex-row lg:gap-5 lg:mt-16 lg:max-w-[1155px]" aria-label="Social links">
           <a
-            href="https://wa.me/919270949635"
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat with Konnect Packaging on WhatsApp"
@@ -71,7 +75,9 @@ function Connect() {
             <span>Facebook</span>
           </a>
           <a
-            href="#"
+            href={instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Follow Konnect Packaging on Instagram"
             title="Instagram — Konnect Packaging"
             className="flex items-center gap-1.5 px-6 py-1.5 whitespace-nowrap bg-black rounded-3xl justify-center
@@ -82,7 +88,9 @@ function Connect() {
             <span className="basis-auto">Instagram</span>
           </a>
           <a
-            href="#"
+            href={linkedInUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Connect with Konnect Packaging on LinkedIn"
             title="LinkedIn — Konnect Packaging"
             className="flex items-center gap-1.5 px-6 py-1.5 bg-black rounded-3xl justify-center

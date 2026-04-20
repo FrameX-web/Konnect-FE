@@ -27,6 +27,7 @@ import Analysis from './components/Analysis'
 import FutureProof from './components/Future'
 import Gallery from './components/Gallery'
 import Admin from './components/admin/Admin'
+import InterpackEvent from './components/InterpackEvent'
 
 // New Routes wrapper to force remounting via location.key
 function AppRoutes() {
@@ -128,6 +129,12 @@ function AppRoutes() {
           </>
         } />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/interpack-2026" element={
+          <>
+            <BackButton />
+            <InterpackEvent />
+          </>
+        } />
       </Routes>
       <WelcomePopup />
       <ChatbotPortal />
