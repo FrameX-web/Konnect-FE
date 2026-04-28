@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /KONNECT-2.pdf
+Disallow: /*.pdf$
