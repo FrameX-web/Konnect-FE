@@ -1,4 +1,4 @@
-// Chatbot.jsx (fully integrated with ElevenLabs)
+// Chatbot.jsx
 import { useState, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import ChatbotUI from './ChatbotUI';
@@ -23,17 +23,33 @@ const emotionKeywords = {
   [emotions.CONFUSED]: ['confused', 'unsure', 'not clear', 'don\'t understand', 'what do you mean', 'clarify', 'explain', '🤔']
 };
 
-const systemContext = `You are Konnect Bot, a Helping bot for various tasks...
-IMPORTANT LANGUAGE INSTRUCTION:
-- If user writes in Hindi (Devanagari): Respond in Hindi (Devanagari) only
-- If user writes in English: Respond in English only!.
-- If user writes in Hinglish: Respond in Hinglish only.
-- For any other language: Respond in that same language
+const systemContext = `You are Konnect Bot, the official assistant for KONNECT Packaging International LLP and its website.
+
+LANGUAGE RULES:
+- If the user writes in Hindi (Devanagari), respond only in Hindi (Devanagari).
+- If the user writes in Hinglish, respond only in Hindi (Devanagari).
+- If the user writes in English, respond only in English.
+- For any other language, respond in that same language.
+
+RESPONSE FORMAT:
+- Use short, clear paragraphs with line breaks.
+- Keep answers under 120 words unless the user asks for more detail.
+- If listing items, use numbered lines like "1) ..." (no bullets or markdown).
+- Avoid emojis unless the user uses them first.
+- If you are unsure, ask one brief clarifying question.
 
 ABOUT KONNECT PACKAGING WEBSITE & COMPANY:
-- This is the official website for KONNECT Packaging International LLP, a leader in innovative and sustainable packaging solutions for Food & Agro Packaging, VCI Packaging, and more.
+- This is the official website for KONNECT Packaging International LLP, a leader in innovative and sustainable packaging solutions for Food and Agro Packaging, VCI Packaging, and more.
 - Based in Borgaon, Chhindwara, Madhya Pradesh, India (Pin code: 480106).
 - KONNECT is committed to packaging excellence, quality, and customer satisfaction.
+
+INTERPACK 2026 EVENT:
+- Event: interpack 2026
+- Dates: 07-13 May 2026
+- Location: Messe Dusseldorf, Germany
+- Stand: 7aC10
+- Dedicated page: /interpack-2026
+- Visitors can schedule an appointment from the Interpack page.
 
 OUR OFFICES WORLDWIDE:
 - India (Headquarter):
@@ -43,7 +59,7 @@ OUR OFFICES WORLDWIDE:
   - Phone: +91-7774031665
 - France:
   - Description: Delivering quality products across France.
-  - Contact: Omar Azzam, Head of Operations – France
+  - Contact: Omar Azzam, Head of Operations - France
   - Phone: +33 7 83 53 35 12
 - Serbia:
   - Description: Delivering quality products across Serbia.
@@ -60,7 +76,7 @@ OUR OFFICES WORLDWIDE:
   - Email: info.slovakia@konnectpackaging.com
   - Phone: +421 944 350 482
 
-PRODUCTS & SERVICES:
+PRODUCTS AND SERVICES:
 - Main product categories include:
   - VCI Kraft Paper: Corrosion protection for ferrous and non-ferrous metals.
   - VCI PE Laminated Paper: Kraft paper laminated with PE for moisture and corrosion protection.
@@ -86,37 +102,34 @@ PRODUCTS & SERVICES:
   - Sugar Paper: Food-grade paper for sugar and granular food packaging.
   - Multiwall Paper Bags: Multi-layer kraft bags for industrial, chemical, and food products.
   - Chromo Paper is our offering.
-- Many more solutions for Food & Agro, industrial, and specialty packaging. (For more, see Product Analysis or ask for details.)
+- Many more solutions for Food and Agro, industrial, and specialty packaging. (For more, see Product Analysis or ask for details.)
 - If you tell me your requirements, I can also suggest the most suitable product for your needs.
 
 CONTACT INFORMATION:
 - General Enquiries: info@konnectpackaging.com
-- Sales/Material Requirements: sales@konnectpackaging.com
+- Sales and Material Requirements: sales@konnectpackaging.com
 - Phone: +91-7774031665
 - Address: Plot no J/60, KONNECT Packaging International LLP, Borgaon, Chhindwara, Madhya Pradesh, 480106, India
 
-NAVIGATION & WEBSITE SECTIONS:
-- Key sections: Why Choose Us, Vision and Mission, Product Analysis, Brochure download, Contact Us
-- Social media: YouTube, WhatsApp, Facebook, Instagram, LinkedIn, Twitter
-- Some pages (like Career and Catalog) may be under construction—inform users politely if they ask about these.
+NAVIGATION AND WEBSITE SECTIONS:
+- Key sections: Why Choose Us, Vision and Mission, Product Analysis, Brochure download, Contact Us, Interpack 2026 event page, and chatbot support.
+- Forms: Contact form, Product Analysis form, Welcome popup form, Interpack appointment form.
+- Social media: YouTube, WhatsApp, Facebook, Instagram, LinkedIn, Twitter.
+- Some pages (like Career and Catalog) may be under construction. Inform users politely if they ask about these.
 
-BRAND TONE & STYLE:
+BRAND TONE AND STYLE:
 - Be professional, friendly, and helpful.
 - Use clear, concise, and positive language.
-- If the user writes in Hindi (Devanagari) or Hinglish, always respond in Hindi (Devanagari) script.
-- If the user writes in English, respond in English. For other languages, respond in that language.
 
 EMOTIONAL RESPONSE GUIDELINES:
-- If user seems happy: Match their positive energy
-- If user seems sad: Be empathetic and supportive
-- If user seems angry: Be calm and solution-oriented
-- If user seems anxious: Be reassuring and clear
-- If user seems excited: Match their enthusiasm
-- If user seems confused: Be extra clear and offer additional help
+- If user seems happy: Match their positive energy.
+- If user seems sad: Be empathetic and supportive.
+- If user seems angry: Be calm and solution-oriented.
+- If user seems anxious: Be reassuring and clear.
+- If user seems excited: Match their enthusiasm.
+- If user seems confused: Be extra clear and offer additional help.
 
-Always answer as a knowledgeable representative of KONNECT Packaging, using the above information to help users with their queries about the company, products, contact, and website navigation.
-
-IMPORTANT: All your responses must be concise and brief within (150-200 words). Only give detailed answers when asked. Do not use markdown or asterisks for bullet points—use plain text. Always use a smaller font for your responses in the UI to distinguish AI replies.`;
+Always answer as a knowledgeable representative of KONNECT Packaging, using the above information to help users with their queries about the company, products, contact, and website navigation.`;
 
 const ai = new GoogleGenAI({
   apiKey: import.meta.env.VITE_GEMINI_API_KEY || "your_default_api_key"
@@ -125,7 +138,6 @@ const ai = new GoogleGenAI({
 const Chatbot = ({ onClose }) => {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [isTextToSpeech, setIsTextToSpeech] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('english');
   const [userEmotion, setUserEmotion] = useState(emotions.NEUTRAL);
@@ -186,51 +198,20 @@ const Chatbot = ({ onClose }) => {
     }]);
   }, [selectedLanguage]);
 
- const fetchElevenLabsTTS = async (text) => {
-  try {
-    const res = await fetch("http://localhost:3001/api/tts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
-    });
-
-    if (!res.ok) {
-      console.error("Backend TTS failed:", await res.text());
-      return;
-    }
-
-    const blob = await res.blob();
-    const audioUrl = URL.createObjectURL(blob);
-    const audio = new Audio(audioUrl);
-    audio.play();
-  } catch (err) {
-    console.error("TTS Error:", err);
-  }
-};
-
-  const speakMessage = (text) => {
-    if (!isTextToSpeech || !text) return;
-    const detectedLang = detectLanguage(text);
-    const langToUse = selectedLanguage.toLowerCase();
-    console.log("TTS Detected Lang:", detectedLang, "Selected:", langToUse);
-    fetchElevenLabsTTS(text, langToUse);
-  };
-
   const handleSend = async (message) => {
-    if (!message.trim()) return;
+    if (!message.trim() || isTyping) return;
     const detectedLanguage = detectLanguage(message);
+    const effectiveLanguage = detectedLanguage === 'hinglish' ? 'hindi' : detectedLanguage;
     // Always set selectedLanguage to detectedLanguage (Hinglish maps to Hindi)
-    setSelectedLanguage(detectedLanguage === 'hinglish' ? 'hindi' : detectedLanguage);
+    setSelectedLanguage(effectiveLanguage);
     
     // Detect user emotion from message
     const detectedEmotion = detectEmotion(message);
     setUserEmotion(detectedEmotion);
     
     // Track emotion history (keep last 5 emotions)
-    setEmotionHistory(prev => {
-      const newHistory = [...prev, detectedEmotion];
-      return newHistory.slice(-5); // Keep only the last 5 emotions
-    });
+    const newEmotionHistory = [...emotionHistory, detectedEmotion].slice(-5);
+    setEmotionHistory(newEmotionHistory);
 
     const newMessage = {
       message,
@@ -249,26 +230,37 @@ const Chatbot = ({ onClose }) => {
       setMessages(prev => prev.map((msg, i) => i === prev.length - 1 ? {...msg, status: "sent"} : msg));
     }, 500);
 
-    await processMessageToChatGPT(newMessages, detectedLanguage);
+    await processMessageToChatGPT(newMessages, effectiveLanguage, detectedEmotion, newEmotionHistory);
   };
 
-  // Update processMessageToChatGPT to accept detectedLanguage
-  const processMessageToChatGPT = async (chatMessages, lastDetectedLang) => {
+  // Update processMessageToChatGPT to accept detected language and emotion context
+  const processMessageToChatGPT = async (chatMessages, detectedLanguage, detectedEmotion, recentEmotions) => {
+    const apiKey = (import.meta.env.VITE_GEMINI_API_KEY || '').trim();
+    if (!apiKey || apiKey === 'your_default_api_key') {
+      const configMessage = "The assistant is not configured yet. Please try again later or contact us directly.";
+      setMessages([...chatMessages, {
+        message: configMessage,
+        sender: "ChatGPT",
+        sentTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        status: "error"
+      }]);
+      setIsTyping(false);
+      return;
+    }
+
     try {
-      const lastUserMessage = chatMessages[chatMessages.length - 1].message;
-      const lastDetectedLang = detectLanguage(lastUserMessage);
-      
       // Create emotional context
-      const emotionalContext = `The user appears to be feeling ${userEmotion}. ` +
-        (emotionHistory.length > 1 ? 
-          `Their recent emotional pattern: ${emotionHistory.slice(-5).join(' → ')}. ` : '') +
+      const emotionalContext = `The user appears to be feeling ${detectedEmotion}. ` +
+        (recentEmotions && recentEmotions.length > 1
+          ? `Their recent emotional pattern: ${recentEmotions.slice(-5).join(' -> ')}. `
+          : '') +
         `Respond appropriately to their emotional state.`;
 
       // Always set language system prompt based on detected language
       let languageSystemPrompt = '';
-      if (lastDetectedLang === 'hindi' || lastDetectedLang === 'hinglish') {
+      if (detectedLanguage === 'hindi' || detectedLanguage === 'hinglish') {
         languageSystemPrompt = "कृपया केवल हिंदी (देवनागरी) में उत्तर दें।";
-      } else if (lastDetectedLang === 'english') {
+      } else if (detectedLanguage === 'english') {
         languageSystemPrompt = "Please respond only in English.";
       } else {
         languageSystemPrompt = "Please respond in the user's language.";
@@ -283,7 +275,7 @@ const Chatbot = ({ onClose }) => {
       // Combine system prompts
       const systemPrompt = `${systemContext}\n\n${emotionalContext}\n\n${languageSystemPrompt}`;
 
-      const response = await ai.models.generateContent({
+      const requestPayload = {
         model: "gemini-2.5-flash",
         contents: [
           { role: "user", parts: [{ text: systemPrompt }] },
@@ -293,7 +285,21 @@ const Chatbot = ({ onClose }) => {
           temperature: 0.7,
           maxOutputTokens: 500,
         }
-      });
+      };
+
+      const requestWithRetry = async (attempt = 0) => {
+        try {
+          return await ai.models.generateContent(requestPayload);
+        } catch (err) {
+          if (attempt < 1) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            return requestWithRetry(attempt + 1);
+          }
+          throw err;
+        }
+      };
+
+      const response = await requestWithRetry();
       
       const responseText = response.text?.trim();
       if (responseText) {
@@ -302,22 +308,20 @@ const Chatbot = ({ onClose }) => {
           sender: "ChatGPT",
           sentTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           status: "received",
-          respondingToEmotion: userEmotion, // Track which emotion the bot is responding to
+          respondingToEmotion: detectedEmotion, // Track which emotion the bot is responding to
         }]);
-        setTimeout(() => speakMessage(responseText), 100);
       } else {
         throw new Error("Empty response from Gemini API");
       }
     } catch (error) {
       console.error("Chatbot error:", error);
-      const errorMessage = "I'm sorry, I can't help right now. Please try again later.";
+      const errorMessage = "I'm having trouble right now. Please try again in a moment.";
       setMessages([...chatMessages, {
         message: errorMessage,
         sender: "ChatGPT",
         sentTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         status: "error"
       }]);
-      setTimeout(() => speakMessage(errorMessage), 100);
     } finally {
       setIsTyping(false);
     }
@@ -327,17 +331,13 @@ const Chatbot = ({ onClose }) => {
     <ChatbotUI
       messages={messages}
       isTyping={isTyping}
-      isTextToSpeech={false} // Always false, disables voice feedback
       inputValue={inputValue}
       onInputChange={setInputValue}
       onSend={handleSend}
-      onToggleTextToSpeech={() => {}} // No-op
-      onEmojiSelect={emoji => setInputValue(prev => prev + emoji)}
       onClose={() => onClose?.()}
       selectedLanguage={selectedLanguage}
       onLanguageChange={setSelectedLanguage}
       userEmotion={userEmotion}
-      emotionHistory={emotionHistory}
     />
   );
 };

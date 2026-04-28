@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { X, Volume2, VolumeX, Send, MessageSquare, Mic, MicOff, HelpCircle } from 'lucide-react';
+import { X, Send, MessageSquare, HelpCircle } from 'lucide-react';
 import '@fontsource/montserrat'; // Ensure Montserrat is loaded
 
 // Theme constants
@@ -13,19 +13,15 @@ const FONT = "'Montserrat', Arial, sans-serif";
 const ChatbotUI = ({
   messages,
   isTyping,
-  isTextToSpeech,
   inputValue,
   onInputChange,
   onSend,
-  onToggleTextToSpeech,
   onClose,
   selectedLanguage,
   onLanguageChange,
-  userEmotion,
-  emotionHistory
+  userEmotion
 }) => {
   const messageEndRef = useRef(null);
-  const containerRef = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showLanguageOptions, setShowLanguageOptions] = useState(false);
   const [showEmotionTooltip, setShowEmotionTooltip] = useState(false);
@@ -43,10 +39,11 @@ const ChatbotUI = ({
     return () => clearTimeout(timer);
   }, []);
 
+  const isSendDisabled = !inputValue.trim() || isTyping;
+
   const handleSend = () => {
-    if (inputValue.trim()) {
-      onSend(inputValue);
-    }
+    if (!inputValue.trim() || isTyping) return;
+    onSend(inputValue);
   };
 
   // Message component
@@ -88,17 +85,20 @@ const ChatbotUI = ({
             <MessageSquare size={12} color={BLACK} /> {/* reduced from 16 */}
           </div>
         )}
-        <div style={{ maxWidth: '75%' }}>
+        <div style={{ maxWidth: '78%' }}>
           <div style={{
             background: isUser
               ? '#181818'
               : 'rgba(255,255,255,0.97)',
             color: isUser ? GOLD_SOLID : BLACK,
             borderRadius: isUser ? '1.5rem 1.5rem 0.25rem 1.5rem' : '1.5rem 1.5rem 1.5rem 0.25rem',
-            padding: '0.95rem 1.2rem',
+            padding: '0.85rem 1.1rem',
             fontFamily: FONT,
-            fontSize: isUser ? '1rem' : '0.92rem', // Lower font size for AI response
+            fontSize: isUser ? '0.95rem' : '0.9rem',
             fontWeight: 500,
+            lineHeight: 1.5,
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
             boxShadow: isUser
               ? '0 2px 8px rgba(238,207,142,0.10)'
               : '0 2px 8px rgba(30,41,59,0.07)',
@@ -116,7 +116,7 @@ const ChatbotUI = ({
             )}
           </div>
           <div style={{
-            fontSize: '0.85rem',
+            fontSize: '0.75rem',
             marginTop: 6,
             color: isUser ? GOLD_SOLID : '#bfa76a',
             textAlign: isUser ? 'right' : 'left',
@@ -153,13 +153,13 @@ const ChatbotUI = ({
 
   return (
     <div
-      ref={containerRef}
       style={{
         background: WHITE,
         borderRadius: '2rem',
         boxShadow: '0 16px 48px -8px #EECF8E44, 0 0 0 1.5px #EECF8E22 inset',
         overflow: 'hidden',
-        height: 600,
+        height: 'min(600px, 80vh)',
+        width: '100%',
         maxWidth: 420,
         display: 'flex',
         flexDirection: 'column',
@@ -181,7 +181,7 @@ const ChatbotUI = ({
           justifyContent: 'space-between',
           fontFamily: FONT,
           fontWeight: 700,
-          fontSize: '1.1rem',
+          fontSize: '1rem',
           borderBottom: '1.5px solid #EECF8E22',
           position: 'relative'
         }}
@@ -200,10 +200,10 @@ const ChatbotUI = ({
             <MessageSquare size={14} color={BLACK} /> {/* reduced from 18 */}
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: '1.05rem', color: GOLD_SOLID, fontFamily: FONT }}>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: GOLD_SOLID, fontFamily: FONT }}>
               {selectedLanguage.toLowerCase() === 'hindi' ? "Konnect" : "Konnect"}
             </div>
-            <div style={{ fontWeight: 500, fontSize: '0.9rem', color: '#fff', opacity: 0.8, display: 'flex', alignItems: 'center', gap: 8, fontFamily: FONT }}>
+            <div style={{ fontWeight: 500, fontSize: '0.82rem', color: '#fff', opacity: 0.8, display: 'flex', alignItems: 'center', gap: 8, fontFamily: FONT }}>
               {/* Removed language indicator */}
               {userEmotion && userEmotion !== 'neutral' && (
                 <div style={{ position: 'relative' }}>
@@ -353,7 +353,7 @@ const ChatbotUI = ({
           flex: 1,
           background: 'rgba(255,255,255,0.93)',
           overflowY: 'auto',
-          padding: '1.2rem 1.1rem 1rem 1.1rem',
+          padding: '1.1rem 1.1rem 1rem 1.1rem',
           fontFamily: FONT
         }}
       >
@@ -392,7 +392,7 @@ const ChatbotUI = ({
               borderRadius: '1.5rem 1.5rem 1.5rem 0.25rem',
               boxShadow: '0 2px 8px #EECF8E22',
               fontFamily: FONT,
-              fontSize: '1rem',
+              fontSize: '0.95rem',
               color: BLACK,
               display: 'flex',
               gap: 8
@@ -429,7 +429,7 @@ const ChatbotUI = ({
             type="text"
             value={inputValue}
             onChange={(e) => onInputChange(e.target.value)}
-            onKeyPress={(e) => {
+            onKeyDown={(e) => {
               if (e.key === 'Enter') handleSend();
             }}
             placeholder={selectedLanguage.toLowerCase() === 'hindi' ? "अपना संदेश यहां टाइप करें..." : "Type your message..."}
@@ -441,7 +441,8 @@ const ChatbotUI = ({
               background: WHITE,
               color: BLACK,
               fontFamily: FONT,
-              fontSize: '1rem',
+              fontSize: '0.95rem',
+              lineHeight: 1.4,
               outline: 'none',
               marginRight: 8,
               boxShadow: '0 2px 6px #EECF8E11 inset'
@@ -449,7 +450,7 @@ const ChatbotUI = ({
           />
           <button
             onClick={handleSend}
-            disabled={!inputValue.trim()}
+            disabled={isSendDisabled}
             style={{
               padding: 12,
               borderRadius: 12,
@@ -457,8 +458,8 @@ const ChatbotUI = ({
               color: BLACK,
               border: 'none',
               outline: 'none',
-              cursor: inputValue.trim() ? 'pointer' : 'not-allowed',
-              opacity: inputValue.trim() ? 1 : 0.6,
+              cursor: isSendDisabled ? 'not-allowed' : 'pointer',
+              opacity: isSendDisabled ? 0.6 : 1,
               fontWeight: 700
             }}
             aria-label="Send message"
@@ -485,16 +486,13 @@ const ChatbotUI = ({
 ChatbotUI.propTypes = {
   messages: PropTypes.array.isRequired,
   isTyping: PropTypes.bool.isRequired,
-  isTextToSpeech: PropTypes.bool.isRequired,
   inputValue: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired,
   onSend: PropTypes.func.isRequired,
-  onToggleTextToSpeech: PropTypes.func.isRequired,
   onClose: PropTypes.func,
   selectedLanguage: PropTypes.string.isRequired,
   onLanguageChange: PropTypes.func.isRequired,
-  userEmotion: PropTypes.string,
-  emotionHistory: PropTypes.array
+  userEmotion: PropTypes.string
 };
 
 export default ChatbotUI;
