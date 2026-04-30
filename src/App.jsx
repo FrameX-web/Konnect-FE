@@ -5,6 +5,7 @@ import ChatbotButton from './components/Chatbot/ChatbotButton'
 import Chatbot from './components/Chatbot/chatbot'
 import WelcomePopup from './components/WelcomePopup'
 import { createPortal } from 'react-dom'
+import SeoManager from './components/SEO'
 
 // Preload components for instant navigation
 import LandingPage from './components/Landingpage/LandingPage'
@@ -34,6 +35,7 @@ function AppRoutes() {
   const location = useLocation();
   return (
     <>
+      <SeoManager />
       <Routes location={location}>
         <Route path="/product/:productId" element={<ProductDetail key={location.key} />} />
         <Route path="/" element={<LandingPage />} />

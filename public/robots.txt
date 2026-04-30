@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /Konnect Packaging.pdf
 Disallow: /*.pdf$
+
+Sitemap: https://www.konnectpackaging.com/sitemap.xml
