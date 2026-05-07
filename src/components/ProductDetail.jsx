@@ -295,6 +295,13 @@ const ProductDetail = () => {
     9: "1pMCLQpYJwLLsQIK82T0yrdkvWmnHdRpY", // VCI Desiccant
     10: "17JZNCu39vD1mxW2tgeFvzz7Tr6sswrdV", // VCI Masterbatch
     11: "1KQI0dkKex_58S1yisLyz2WpL2ynHJnRF", // VCI Power Stretch Film
+    14: "1FUQNPQrNpMRV1Dr0oPoHmRb77sMPYmn_", // SMP Bags
+    15: "1GgP4zU9YbuSwoNMq_CgRFb7vqYF1E5em", // Bulk Tea Packaging Bags
+    18: "1CAeVox1LkioNycy0XYjkhjH-ijcPUedE", // Paper Aluminum Pouches
+    19: "1qZh0Ji9mhQCvsxtUXwlvngb6Zyi7D2fg", // Standing Pouches
+    20: "1iu0pPqCH_4kI8PUEEH0qQopLP_AOjJng", // HDPE Laminated Paper
+    21: "1oza4DTmKqlJatSHMNIMsdHWnZYziQbWl", // Sugar Paper
+    22: "1EtiW7nGw2_S6QwW-K7IscBeJOtFHmad-", // Multiwall Paper Bags
     // Add more video IDs for other products
   };
 
