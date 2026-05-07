@@ -284,14 +284,17 @@ const ProductDetail = () => {
 
   // Video URL mapping
   const productVideos = {
-    1: "1miL2ycwDWZ2cHcr1HWxMucDuAXkohE59", // VCI Kraft Paper
-    4: "1rKziZkSpHM1ikzq0KkcC0hM5yw6US6bS", // VCI LDPE Film
-    15: "1k1uPOtgB5VbpjzamC3BmfqgPJZPP6Yn9", // Bulk Tea Packaging Bags
-    20: "1fCmFhk4SuZuMp3caUahVG_nVJTCQn53z", // HDPE Laminated Paper Bags
-    21: "1vjBEydTTxG50-xVGwMZKCZBA3IRzv7uJ", // Sugar Paper
-    19: "15mwUKOB5j11vbFclj8cbpOnVziePBK0h", // Standing Pouches
-    17: "1QPyPUD2xubPeDqhvRLL-3DdlZVeKTq9Q", // Wax-Coated Paper
-    14: "1EDZaYbw3Gzup2j3v-HquigV0gQf_8F4J", // SMP Bags
+    1: "1Z0sYhyb2oXH2mzaRwm9U6BJCr7wObQ3N", // VCI Kraft Paper
+    2: "1Mc72XAF0TdSL-ONqB9Q2JDovsrhafHnO", // VCI PE Laminated Paper
+    3: "1pZ9NOsm0hUjP3vGjA0WU9CeacD68E1cQ", // VCI 3-Ply Paper
+    4: "17K8wE6eWcq_zSpjnMx2aVKihSkPI51Ck", // VCI LDPE Film
+    5: "1-h9ishp_LyAgN_FClKiOvS9hyq6D0O0a", // VCI Strength Fabric
+    6: "10WkJNGUH-d6C5fkXABLN2X-YDTzeT0zH", // VCI MET PET Laminated Paper
+    7: "1jMVO9U41sF8hHxd_Vn3b0c7EomR5JuQj", // VCI 4-Ply Fabric
+    8: "1cuSIHrPhxhpTxU7dwzWKcv3tslr9mOah", // VCI Shrink Film
+    9: "1pMCLQpYJwLLsQIK82T0yrdkvWmnHdRpY", // VCI Desiccant
+    10: "17JZNCu39vD1mxW2tgeFvzz7Tr6sswrdV", // VCI Masterbatch
+    11: "1KQI0dkKex_58S1yisLyz2WpL2ynHJnRF", // VCI Power Stretch Film
     // Add more video IDs for other products
   };
 
