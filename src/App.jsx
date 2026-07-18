@@ -1,5 +1,5 @@
-// import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-// import '@fontsource/krona-one/400.css'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import '@fontsource/krona-one/400.css'
 // import { lazy, Suspense, useState } from 'react'
 // import ChatbotButton from './components/Chatbot/ChatbotButton'
 // import Chatbot from './components/Chatbot/chatbot'
@@ -7,7 +7,7 @@
 // import { createPortal } from 'react-dom'
 // import SeoManager from './components/SEO'
 
-// // Preload components for instant navigation
+// Preload components for instant navigation
 // import LandingPage from './components/Landingpage/LandingPage'
 // import Contact from './components/Contact'
 // import IndustriesWeServe from './components/IndustriesWeServe'
@@ -30,119 +30,143 @@
 // import Admin from './components/admin/Admin'
 // import InterpackEvent from './components/InterpackEvent'
 
-// // New Routes wrapper to force remounting via location.key
-// function AppRoutes() {
-//   const location = useLocation();
-//   return (
-//     <>
-//       <SeoManager />
-//       <Routes location={location}>
-//         <Route path="/product/:productId" element={<ProductDetail key={location.key} />} />
-//         <Route path="/" element={<LandingPage />} />
-//         <Route path="/contact" element={
-//           <>
-//             <BackButton />
-//             <Contact />
-//           </>
-//         } />
-//         <Route path="/industries" element={
-//           <>
-//             <BackButton />
-//             <IndustriesWeServe />
-//           </>
-//         } />
-//         <Route path="/custom-solutions" element={
-//           <>
-//             <BackButton />
-//             <Study />
-//           </>
-//         } />
-//         <Route path="/why-choose-us" element={
-//           <>
-//             <BackButton />
-//             <Choose />
-//           </>
-//         } />
-//         <Route path="/global-footprint" element={
-//           <>
-//             <BackButton />
-//             <Global />
-//           </>
-//         } />
-//         <Route path="/vision-mission" element={
-//           <>
-//             <BackButton />
-//             <VM />
-//           </>
-//         } />
-//         <Route path="/testimonials" element={
-//           <>
-//             <BackButton />
-//             <Stories />
-//           </>
-//         } />
-//         <Route path="/eco-sustainability" element={
-//           <>
-//             <BackButton />
-//             <Eco />
-//           </>
-//         } />
-//         <Route path="/our-story" element={
-//           <>
-//             <BackButton />
-//             <Study2 />
-//           </>
-//         } />
-//         <Route path="/vision-values" element={
-//           <>
-//             <BackButton />
-//             <VisionValues />
-//           </>
-//         } />
-//         <Route path="/awards-certifications" element={
-//           <>
-//             <BackButton />
-//             <AwardsCertifications />
-//           </>
-//         } />
-//         <Route path="/blogs" element={<BlogFaqComponent />} />
-//         <Route path="/leadership" element={
-//           <>
-//             <BackButton />
-//             <LeadershipTeam />
-//           </>
-//         } />
-//          <Route path="/analysis" element={
-//           <>
-//             <BackButton />
-//             <Analysis />
-//           </>
-//         } />
-//         <Route path="/future" element={
-//           <>
-//             <BackButton />
-//             <FutureProof/>
-//           </>
-//         } />
-//         <Route path="/gallery" element={
-//           <>
-//             <BackButton />
-//             <Gallery />
-//           </>
-//         } />
-//         <Route path="/admin" element={<Admin />} />
-//         <Route path="/interpack-2026" element={
-//           <>
-//             <BackButton />
-//             <InterpackEvent />
-//           </>
-//         } />
-//       </Routes>
-//       <WelcomePopup />
-//       <ChatbotPortal />
-//     </>
-//   );
-// }
+// Simple maintenance / site-down page
+function SiteDown() {
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center bg-gray-950 text-white px-6">
+      <div className="max-w-lg text-center">
+        <h1 className="text-3xl md:text-4xl font-bold mb-4">
+          We'll be back soon
+        </h1>
+        <p className="text-gray-400 text-base md:text-lg leading-relaxed">
+          This site is currently undergoing scheduled maintenance. We
+          apologize for the inconvenience and appreciate your patience.
+          Please check back shortly.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// New Routes wrapper to force remounting via location.key
+function AppRoutes() {
+  const location = useLocation();
+  return (
+    <>
+      {/* <SeoManager /> */}
+      <Routes location={location}>
+        {/* All original routes commented out while site is down */}
+        {/*
+        <Route path="/product/:productId" element={<ProductDetail key={location.key} />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/contact" element={
+          <>
+            <BackButton />
+            <Contact />
+          </>
+        } />
+        <Route path="/industries" element={
+          <>
+            <BackButton />
+            <IndustriesWeServe />
+          </>
+        } />
+        <Route path="/custom-solutions" element={
+          <>
+            <BackButton />
+            <Study />
+          </>
+        } />
+        <Route path="/why-choose-us" element={
+          <>
+            <BackButton />
+            <Choose />
+          </>
+        } />
+        <Route path="/global-footprint" element={
+          <>
+            <BackButton />
+            <Global />
+          </>
+        } />
+        <Route path="/vision-mission" element={
+          <>
+            <BackButton />
+            <VM />
+          </>
+        } />
+        <Route path="/testimonials" element={
+          <>
+            <BackButton />
+            <Stories />
+          </>
+        } />
+        <Route path="/eco-sustainability" element={
+          <>
+            <BackButton />
+            <Eco />
+          </>
+        } />
+        <Route path="/our-story" element={
+          <>
+            <BackButton />
+            <Study2 />
+          </>
+        } />
+        <Route path="/vision-values" element={
+          <>
+            <BackButton />
+            <VisionValues />
+          </>
+        } />
+        <Route path="/awards-certifications" element={
+          <>
+            <BackButton />
+            <AwardsCertifications />
+          </>
+        } />
+        <Route path="/blogs" element={<BlogFaqComponent />} />
+        <Route path="/leadership" element={
+          <>
+            <BackButton />
+            <LeadershipTeam />
+          </>
+        } />
+        <Route path="/analysis" element={
+          <>
+            <BackButton />
+            <Analysis />
+          </>
+        } />
+        <Route path="/future" element={
+          <>
+            <BackButton />
+            <FutureProof/>
+          </>
+        } />
+        <Route path="/gallery" element={
+          <>
+            <BackButton />
+            <Gallery />
+          </>
+        } />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/interpack-2026" element={
+          <>
+            <BackButton />
+            <InterpackEvent />
+          </>
+        } />
+        */}
+
+        {/* Catch-all: show the site-down page for every route */}
+        <Route path="*" element={<SiteDown />} />
+      </Routes>
+      {/* <WelcomePopup /> */}
+      {/* <ChatbotPortal /> */}
+    </>
+  );
+}
 
 // function ChatbotPortal() {
 //   const [open, setOpen] = useState(false)
@@ -173,12 +197,12 @@
 //   )
 // }
 
-// function App() {
-//   return (
-//     <Router>
-//       <AppRoutes />
-//     </Router>
-//   )
-// }
+function App() {
+  return (
+    <Router>
+      <AppRoutes />
+    </Router>
+  )
+}
 
-// export default App
+export default App
