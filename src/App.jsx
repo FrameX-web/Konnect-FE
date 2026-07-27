@@ -1,62 +1,37 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import '@fontsource/krona-one/400.css'
-// import { lazy, Suspense, useState } from 'react'
-// import ChatbotButton from './components/Chatbot/ChatbotButton'
-// import Chatbot from './components/Chatbot/chatbot'
-// import WelcomePopup from './components/WelcomePopup'
-// import { createPortal } from 'react-dom'
-// import SeoManager from './components/SEO'
+import { lazy, Suspense, useState } from 'react'
+import ChatbotButton from './components/Chatbot/ChatbotButton'
+import Chatbot from './components/Chatbot/chatbot'
+import { createPortal } from 'react-dom'
 
 // Preload components for instant navigation
-// import LandingPage from './components/Landingpage/LandingPage'
-// import Contact from './components/Contact'
-// import IndustriesWeServe from './components/IndustriesWeServe'
-// import Study from './components/Study'
-// import Choose from './components/Choose'
-// import Global from './components/Global'
-// import VM from './components/V&M'
-// import Stories from './components/Stories'
-// import Eco from './components/Eco'
-// import Study2 from './components/Study2'
-// import BackButton from './components/BackButton'
-// import ProductDetail from './components/ProductDetail'
-// import VisionValues from './components/VisionValues'
-// import AwardsCertifications from './components/Awards'
-// import BlogFaqComponent from './components/Blogs'
-// import LeadershipTeam from './components/Leader'
-// import Analysis from './components/Analysis'
-// import FutureProof from './components/Future'
-// import Gallery from './components/Gallery'
-// import Admin from './components/admin/Admin'
-// import InterpackEvent from './components/InterpackEvent'
-
-// Simple maintenance / site-down page
-function SiteDown() {
-  return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-950 text-white px-6">
-      <div className="max-w-lg text-center">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">
-          We'll be back soon
-        </h1>
-        <p className="text-gray-400 text-base md:text-lg leading-relaxed">
-          This site is currently undergoing scheduled maintenance. We
-          apologize for the inconvenience and appreciate your patience.
-          Please check back shortly.
-        </p>
-      </div>
-    </div>
-  )
-}
+import LandingPage from './components/Landingpage/LandingPage'
+import Contact from './components/Contact'
+import IndustriesWeServe from './components/IndustriesWeServe'
+import Study from './components/Study'
+import Choose from './components/Choose'
+import Global from './components/Global'
+import VM from './components/V&M'
+import Stories from './components/Stories'
+import Eco from './components/Eco'
+import Study2 from './components/Study2'
+import BackButton from './components/BackButton'
+import ProductDetail from './components/ProductDetail'
+import VisionValues from './components/VisionValues'
+import AwardsCertifications from './components/Awards'
+import BlogFaqComponent from './components/Blogs'
+import LeadershipTeam from './components/Leader'
+import Analysis from './components/Analysis'
+import FutureProof from './components/Future'
+import Admin from './components/admin/Admin'
 
 // New Routes wrapper to force remounting via location.key
 function AppRoutes() {
   const location = useLocation();
   return (
     <>
-      {/* <SeoManager /> */}
       <Routes location={location}>
-        {/* All original routes commented out while site is down */}
-        {/*
         <Route path="/product/:productId" element={<ProductDetail key={location.key} />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/contact" element={
@@ -132,7 +107,7 @@ function AppRoutes() {
             <LeadershipTeam />
           </>
         } />
-        <Route path="/analysis" element={
+         <Route path="/analysis" element={
           <>
             <BackButton />
             <Analysis />
@@ -144,58 +119,41 @@ function AppRoutes() {
             <FutureProof/>
           </>
         } />
-        <Route path="/gallery" element={
-          <>
-            <BackButton />
-            <Gallery />
-          </>
-        } />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/interpack-2026" element={
-          <>
-            <BackButton />
-            <InterpackEvent />
-          </>
-        } />
-        */}
-
-        {/* Catch-all: show the site-down page for every route */}
-        <Route path="*" element={<SiteDown />} />
       </Routes>
-      {/* <WelcomePopup /> */}
-      {/* <ChatbotPortal /> */}
+      <ChatbotPortal />
     </>
   );
 }
 
-// function ChatbotPortal() {
-//   const [open, setOpen] = useState(false)
-//   return createPortal(
-//     <>
-//       <div style={{
-//         position: 'fixed',
-//         zIndex: 9999,
-//         bottom: 32,
-//         right: 32,
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'flex-end'
-//       }}>
-//         {open && (
-//           <div style={{
-//             marginBottom: 16,
-//             boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
-//             zIndex: 10000,
-//           }}>
-//             <Chatbot onClose={() => setOpen(false)} />
-//           </div>
-//         )}
-//         <ChatbotButton onClick={() => setOpen(true)} />
-//       </div>
-//     </>,
-//     document.body
-//   )
-// }
+function ChatbotPortal() {
+  const [open, setOpen] = useState(false)
+  return createPortal(
+    <>
+      <div style={{
+        position: 'fixed',
+        zIndex: 9999,
+        bottom: 32,
+        right: 32,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-end'
+      }}>
+        {open && (
+          <div style={{
+            marginBottom: 16,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+            zIndex: 10000,
+          }}>
+            <Chatbot onClose={() => setOpen(false)} />
+          </div>
+        )}
+        <ChatbotButton onClick={() => setOpen(true)} />
+      </div>
+    </>,
+    document.body
+  )
+}
 
 function App() {
   return (
